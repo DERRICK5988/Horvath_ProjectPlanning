@@ -1,0 +1,17 @@
+<mvc:View
+	controllerName="StaffingApp.horvath.controller.DetailDetail"
+	xmlns:f="sap.f"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc">
+	<f:DynamicPage toggleHeaderOnTitleClick="false">
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:heading>
+					<FlexBox wrap="Wrap" fitContainer="true" alignItems="Center">
+						<Title text="Test" wrapping="true" class="sapUiTinyMarginEnd"/>
+					</FlexBox>
+				</f:heading>
+			</f:DynamicPageTitle>
+		</f:title>
+	</f:DynamicPage>
+</mvc:View>

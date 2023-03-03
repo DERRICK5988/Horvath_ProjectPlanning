@@ -1,0 +1,146 @@
+<mvc:View controllerName="StaffingApp.horvath.controller.Detail"
+    xmlns="sap.m"
+    xmlns:semantic="sap.f.semantic"
+    xmlns:l="sap.ui.layout"
+    xmlns:t="sap.ui.table"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core" core:require="{ FloatType: 'sap/ui/model/type/Float'}">
+
+    <semantic:SemanticPage id="detailPage" busy="{detailView>/busy}" busyIndicatorDelay="{detailView>/delay}" showFooter="true">
+        <semantic:closeAction>
+            <semantic:CloseAction id="closeColumn" press=".onCloseDetailPress"/>
+        </semantic:closeAction>
+        <semantic:fullScreenAction>
+            <semantic:FullScreenAction id="enterFullScreen" visible="{= !${device>/system/phone} &amp;&amp; !${appView>/actionButtonsInfo/midColumn/fullScreen}}" press=".toggleFullScreen"/>
+        </semantic:fullScreenAction>
+        <semantic:exitFullScreenAction>
+            <semantic:ExitFullScreenAction id="exitFullScreen" visible="{= !${device>/system/phone} &amp;&amp; ${appView>/actionButtonsInfo/midColumn/fullScreen}}" press=".toggleFullScreen"/>
+        </semantic:exitFullScreenAction>
+        <semantic:titleHeading>
+            <Title text="{detailView>/ProjectName} ({detailView>/ProjectID})" wrapping="true" level="H1"/>
+        </semantic:titleHeading>
+        <!-- <semantic:titleCustomTextActions>
+            <Button text="Toggle Footer" press="toggleFooter"/>
+        </semantic:titleCustomTextActions> -->
+        <semantic:headerContent>
+            <l:HorizontalLayout allowWrapping="true">
+                <l:VerticalLayout class="sapUiMediumMarginEnd">
+                    <HBox justifyContent="Start" class="sapUiSmallMarginEnd">
+                        <Label text="Project Start Date: {path: 'detailView>/StartDate', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd.MM.yyyy', strictParsing: true , UTC: true }}"/>
+                    </HBox>
+                    <HBox justifyContent="Start" class="sapUiSmallMarginEnd">
+                        <Label text="Project End Date: {path: 'detailView>/EndDate', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd.MM.yyyy', strictParsing: true , UTC: true }}"/>
+                    </HBox>
+                </l:VerticalLayout>
+                <l:VerticalLayout>
+                    <ObjectAttribute title="Unassign Capacity"/>
+                    <ObjectStatus text="{detailView>/totalUnassignCap}" inverted="true" state="{= ${detailView>/totalUnassignCap} > 0 ? 'Error' : 'Success'}" />
+                </l:VerticalLayout>
+            </l:HorizontalLayout>
+        </semantic:headerContent>
+        <semantic:content>
+            <t:TreeTable id="idTreeTable" firstVisibleRowChanged="onScroll" rows="{path:'detailView>/resource', parameters: {arrayNames:['Node'], numberOfExpandedLevels: 1}}" rowSelectionChange="onRowSelectionChange" rowsUpdated="onRowsUpdated" columnResize="onColumnResize" toggleOpenState="onExpandRow" sort="onSort" ariaLabelledBy="title" rootLevel="0" busy="{detailView>/busy}" busyIndicatorDelay="{app>/busyIndicatorDelay}" selectionMode="None" showNoData="true" minAutoRowCount="5" visibleRowCountMode="Auto" rowHeight="30px" enableColumnReordering="false" showOverlay="{= ${app>/IsFilterChanged} &amp;&amp; ${app>/IsFilterBarOpen}}">
+                <t:rowSettingsTemplate>
+                    <t:RowSettings highlight="{rowHighlight}"/>
+                </t:rowSettingsTemplate>
+                <t:extension>
+                    <OverflowToolbar id="idToolbar" height="auto">
+                        <Title text="Resource ({= ${detailView>/resourcesCount}})"/>
+                        <ToolbarSpacer/>
+                        <l:VerticalLayout width="100px">
+                            <SegmentedButton selectedKey="{detailView>/selectedView}" selectionChange="onSegmentChanged">
+                                <items>
+                                    <SegmentedButtonItem text="Hour" key="HOUR"/>
+                                    <SegmentedButtonItem text="Day" key="DAY"/>
+                                </items>
+                            </SegmentedButton>
+                        </l:VerticalLayout>
+                        <!-- <Button id="idBtnSave" icon="sap-icon://save" tooltip="Make sure StaffedNew is enter" press="onSave" enabled="{= ${detailView>/aChangedSPath}.length > 0}" type="Default"/> -->
+                    </OverflowToolbar>
+                </t:extension>
+                <t:columns>
+                    <t:Column width="250px" hAlign="Left">
+                        <Label text="Name"/>
+                        <t:template>
+                            <VBox>
+                                <Link text="{detailView>Name}" wrapping="false" press="onEmployeePress($event, ${detailView>})" visible="{detailView>Employee}"/>
+                                <Text text="{detailView>Name}" wrapping="false" visible="{= !${detailView>Employee}}"/>
+                            </VBox>
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="150px" hAlign="Right">
+                        <Label text="Time recordings"/>
+                        <t:template>
+                            <VBox>
+                                <Text text="{parts:['detailView>TimeRecordings', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'HOUR'}"/>
+                                <Text text="{parts:['detailView>TimeRecordingsDay', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'DAY'}"/>
+                            </VBox>
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="70px" hAlign="Right">
+                        <Label text="Staffed"/>
+                        <t:template>
+                            <VBox>
+                                <Text text="{parts:['detailView>Staffed', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'HOUR'}"/>
+                                <!-- <Text text="{path: 'detailView>StaffedDay', type: 'FloatType', formatOptions: { maxFractionDigits: 1}}" wrapping="false" visible="{= ${detailView>/selectedView} === 'DAY'}"/> -->
+                                <Text text="{parts:['detailView>StaffedDay', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'DAY'}"/>
+                            </VBox>
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="150px" hAlign="Right">
+                        <Label text="Unassigned capacity"/>
+                        <t:template>
+                            <!-- <Text text="{parts:['detailView>UnassignedCap', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'HOUR'}"/> -->
+                            <ObjectStatus text="{parts:['detailView>UnassignedCap', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" inverted="true" state="{= ${detailView>UnassignedCap} >= 0 ? 'Success' : 'Error'}" visible="{= ${detailView>/selectedView} === 'HOUR'}"/>
+                            <!-- <Text text="{parts:['detailView>UnassignedCapDay', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'DAY'}"/> -->
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="150px" hAlign="Right">
+                        <Label text="Staffed new"/>
+                        <t:template>
+                            <VBox>
+                                <Input value="{parts:['detailView>StaffedNew', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" textAlign="Right" change="onChange" placeholder="{= ${detailView>/selectedView} === 'HOUR' ? 'Hour(s)' : 'Day(s)'}" type="Number" visible="{= ${detailView>inputVisible} &amp;&amp; ${detailView>/selectedView} === 'HOUR'}"/>
+                                <Text text="{parts:['detailView>StaffedNew', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" wrapping="false" visible="{= !${detailView>inputVisible} &amp;&amp; ${detailView>/selectedView} === 'HOUR'}"/>
+                                <Input value="{parts:['detailView>StaffedNewDay', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" textAlign="Right" change="onChange" placeholder="{= ${detailView>/selectedView} === 'HOUR' ? 'Hour(s)' : 'Day(s)'}" type="Number" visible="{= ${detailView>inputVisible} &amp;&amp; ${detailView>/selectedView} === 'DAY'}"/>
+                                <Text text="{parts:['detailView>StaffedNewDay', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" wrapping="false" visible="{= !${detailView>inputVisible} &amp;&amp; ${detailView>/selectedView} === 'DAY'}"/>
+                            </VBox>
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="90px" hAlign="Right">
+                        <Label text="Baseline"/>
+                        <t:template>
+                            <VBox>
+                                <Text text="{parts:['detailView>Baseline', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'HOUR'}"/>
+                                <Text text="{parts:['detailView>BaselineDay', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'DAY'}"/>
+                            </VBox>
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="150px" hAlign="Right">
+                        <Label text="Writeoffs"/>
+                        <t:template>
+                            <Text text="{detailView>Writeoffs}" wrapping="false" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="150px" hAlign="Right">
+                        <Label text="Postponed"/>
+                        <t:template>
+                            <Text text="{detailView>Postponed}" wrapping="false" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="150px" hAlign="Right">
+                        <Label text="Contract type"/>
+                        <t:template>
+                            <Text text="{detailView>ContractType}" wrapping="false" />
+                        </t:template>
+                    </t:Column>
+                </t:columns>
+            </t:TreeTable>
+        </semantic:content>
+        <semantic:messagesIndicator>
+            <semantic:MessagesIndicator press="onMessagesButtonPress"/>
+        </semantic:messagesIndicator>
+        <semantic:footerCustomActions>
+            <Button text="Save" press="onSave"/>
+        </semantic:footerCustomActions>
+    </semantic:SemanticPage>
+</mvc:View>
