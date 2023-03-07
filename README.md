@@ -7,7 +7,7 @@
 |**Generation Platform**<br>SAP Business Application Studio|
 |**Template Used**<br>2listdetail|
 |**Service Type**<br>OData Url|
-|**Service URL**<br>https://my304155-api.s4hana.ondemand.com/sap/opu/odata/CPD/SC_PROJ_ENGMT_CREATE_UPD_SRV
+|**Service URL**<br>https://my308859-api.s4hana.ondemand.com/sap/opu/odata/CPD/SC_PROJ_ENGMT_CREATE_UPD_SRV
 |**Module Name**<br>horvath|
 |**Application Title**<br>Staffing App|
 |**Namespace**<br>StaffingApp|

@@ -38,9 +38,7 @@ sap.ui.define([
             debugger;
             this.getView().setModel(sap.ui.getCore().getMessageManager().getMessageModel(), "message");
             sap.ui.getCore().getMessageManager().registerObject(this.getView(), true);
-            this.getRouter().getRoute("list").attachPatternMatched(this._onObjectMatched, this);
             this.getRouter().getRoute("object").attachPatternMatched(this._onObjectMatched, this);
-            this.getRouter().getRoute("detailDetail").attachPatternMatched(this._onObjectMatched, this);
             this.setModel(oViewModel, "detailView");
             this.getOwnerComponent().getModel().metadataLoaded().then(this._onMetadataLoaded.bind(this));
         },
@@ -49,19 +47,6 @@ sap.ui.define([
         /* event handlers                                              */
         /* =========================================================== */
 
-        /**
-         * Event handler when the share by E-Mail button has been clicked
-         * @public
-         */
-        onSendEmailPress: function () {
-            var oViewModel = this.getModel("detailView");
-
-            URLHelper.triggerEmail(
-                null,
-                oViewModel.getProperty("/shareSendEmailSubject"),
-                oViewModel.getProperty("/shareSendEmailMessage")
-            ); getRoute
-        },
         onChange: function (oEvent) {
             var oSource = oEvent.getSource(),
                 // oContext = oSource.getBindingInfo("value").binding.getContext(),
@@ -105,9 +90,10 @@ sap.ui.define([
         onSegmentChanged: function (oEvent) {
             this.getModel("detailView").refresh(true);
         },
-        onEmployeePress: function (oEvent) {
+        onEmployeePress: function (oEvent, oDetailModel) {
             debugger;
-            this.getOwnerComponent().getRouter().navTo("detailDetail", { supplier: "" });
+            this.getModel("appView").setProperty("/layout", "EndColumnFullScreen");
+            this.getOwnerComponent().getRouter().navTo("detailDetail", { object: encodeURIComponent(JSON.stringify(oDetailModel)) });
         },
         /**
          * Set the full screen mode to false and navigate to list page
@@ -186,7 +172,7 @@ sap.ui.define([
         _onObjectMatched: function (oEvent) {
             debugger;
             var oArguments = oEvent.getParameter("arguments"),
-                oContextObj = JSON.parse(oArguments.object),
+                oContextObj = JSON.parse(decodeURIComponent(oArguments.object)),
                 oParam = { "$expand": "PlanDataSet,PlanDataSet/ToStaffData" },
                 aFilter = [],
                 aSorts = [],
@@ -203,9 +189,9 @@ sap.ui.define([
             aFilter.push(new Filter("ProjectID", FilterOperator.EQ, oContextObj.ProjectID));
             Promise.all([
                 this._fetchResources(this.getView().getModel(), "/WorkpackageSet", aFilter, oParam, "", [new Sorter("WorkPackageID", false)]),
-                this._fetchResources(this.getView().getModel(), "/StaffingDataSet", aFilter),
+                this._fetchResources(this.getView().getModel(), "/StaffingDataSet", aFilter, "", "", [new Sorter("StaffedEmployee", false), new Sorter("Period", false)] ),
                 this._fetchResources(this.getOwnerComponent().getModel("PROJ_ENGMT_UPDATE_SRV"), "/A_EngmntProjRsceSup", aComFilter),
-                this._fetchResources(this.getView().getModel("TimeSheet"), "/YY1_TIMERECORDING", aFilter)
+                this._fetchResources(this.getView().getModel("TimeSheet"), "/YY1_TIME_RECORDING", aFilter)
             ]).then(function (oResp) {
                 var oTreeData = { Node: [] },
                     oDetailModel = this.getModel("detailView"),
@@ -261,6 +247,7 @@ sap.ui.define([
                         }),
                             oEmpNodeLine = aEmpNode[aEmpNode.length - 1];
                         // Monthly Distribution Hours
+                        debugger;
                         for (var indexMth in aFilStaff) {
                             var oDist = aFilStaff[indexMth],
                                 aTimeRec = oResp[3].results.filter(function (obj) {
@@ -294,7 +281,7 @@ sap.ui.define([
                             oEmpNodeLine.TimeRecordings = (aTimeRec.length > 0) ? +((oEmpNodeLine.TimeRecordings) ? oEmpNodeLine.TimeRecordings : 0) + +aTimeRec[0].RecordedQuantity : oEmpNodeLine.TimeRecordings;
                             // oEmpNodeLine.StaffedNew = (oEmpNodeLine.StaffedNew > 0 && nStaffedNew) ? +oEmpNodeLine.StaffedNew + +nStaffedNew : nStaffedNew;
                         };
-                        debugger;
+                        
                         // Sum of periods
                         if (oPreNode && oPreNode.length > 0) {
                             this._sumPeriodDist(preMthLines, oPreNode);
@@ -320,6 +307,7 @@ sap.ui.define([
                 this.getView().getModel("detailView").setProperty("/resource", oTreeData);
                 this.getView().getModel("detailView").refresh(true);
                 this.getModel("detailView").setProperty("/busy", false);
+                debugger;
                 // this.byId("idTreeTable").autoResizeColumn();
             }.bind(this)).catch(function (oErr) { this.getModel("detailView").setProperty("/busy", false); }.bind(this));
         },
@@ -401,16 +389,6 @@ sap.ui.define([
             // oViewModel.setProperty("/busy", true);
             // // Restore original busy indicator delay for the detail view
             // oViewModel.setProperty("/delay", iOriginalViewBusyDelay);
-        },
-
-        /**
-         * Set the full screen mode to false and navigate to list page
-         */
-        onCloseDetailPress: function () {
-            this.getModel("appView").setProperty("/actionButtonsInfo/midColumn/fullScreen", false);
-            // No item should be selected on list after detail page is closed
-            this.getOwnerComponent().oListSelector.clearListListSelection();
-            this.getRouter().navTo("list");
         },
 
         /**
@@ -504,7 +482,7 @@ sap.ui.define([
             return { nMinMth: +nMinMth, nMaxMth: +nMaxMth };
         },
         _returnMthDist: function (oWpItem, oDist, aProjRes, aTimeRec, nStaffedNew, bEmployee, binputVisible) {
-            // Temporary
+            // Temporary for unassign capacity
             var nUnassign = +((Math.random() * 10) + -5),
                 nUnassignDay = (nUnassign) ? nUnassign / 8 : null;
             return {

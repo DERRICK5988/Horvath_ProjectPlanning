@@ -26,14 +26,7 @@
         }
       },
       "TimeSheetService": {
-        "uri": "/sap/opu/odata/sap/YY1_TIMERECORDING_CDS/",
-        "type": "OData",
-        "settings": {
-          "odataVersion": "2.0"
-        }
-      },
-      "PWAService": {
-        "uri": "/sap/opu/odata/sap/YY1_I_PWA_EXT_API_CDS/",
+        "uri": "/sap/opu/odata/sap/YY1_TIME_RECORDING_CDS/",
         "type": "OData",
         "settings": {
           "odataVersion": "2.0"
@@ -159,7 +152,7 @@
           ]
         },
         {
-          "pattern": "detailDetail/:supplier:",
+          "pattern": "detailDetail/{object}",
           "name": "detailDetail",
           "target": [
             "list",

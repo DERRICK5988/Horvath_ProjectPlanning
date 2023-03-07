@@ -9,14 +9,16 @@
     "sapui5"
   ],
   "main": "webapp/index.html",
-  "dependencies": {},
+  "dependencies": {
+    "@sap/ui5-builder-webide-extension": "^1.1.9"
+  },
   "devDependencies": {
-    "@ui5/cli": "^2.14.1",
-    "@sap/ux-ui5-tooling": "1",
-    "eslint": "7.32.0",
-    "eslint-plugin-fiori-custom": "2.2.1",
     "@babel/eslint-parser": "7.14.7",
-    "@sap-ux/ui5-middleware-fe-mockserver": "2"
+    "@sap-ux/ui5-middleware-fe-mockserver": "2",
+    "@sap/ux-ui5-tooling": "1",
+    "@ui5/cli": "^3.0.3",
+    "eslint": "7.32.0",
+    "eslint-plugin-fiori-custom": "2.2.1"
   },
   "scripts": {
     "start": "fiori run --open \"test/flpSandbox.html?sap-ui-xx-viewCache=false#StaffingApphorvath-display\"",

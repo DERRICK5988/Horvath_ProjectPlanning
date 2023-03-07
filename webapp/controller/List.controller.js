@@ -23,7 +23,7 @@ sap.ui.define([
          * Called when the list controller is instantiated. It sets up the event handling for the list/detail communication and other lifecycle tasks.
          * @public
          */
-        onInit : function () {
+        onInit: function () {
             // Control state model
             var oList = this.byId("list"),
                 oViewModel = this._createViewModel(),
@@ -36,15 +36,15 @@ sap.ui.define([
             this._oList = oList;
             // keeps the filter and search state
             this._oListFilterState = {
-                aFilter : [],
-                aSearch : []
+                aFilter: [],
+                aSearch: []
             };
 
             this.setModel(oViewModel, "listView");
             // Make sure, busy indication is showing immediately so there is no
             // break after the busy indication for loading the view's meta data is
             // ended (see promise 'oWhenMetadataIsLoaded' in AppController)
-            oList.attachEventOnce("updateFinished", function(){
+            oList.attachEventOnce("updateFinished", function () {
                 // Restore original busy indicator delay for the list
                 oViewModel.setProperty("/delay", iOriginalBusyDelay);
             });
@@ -69,7 +69,7 @@ sap.ui.define([
          * @param {sap.ui.base.Event} oEvent the update finished event
          * @public
          */
-        onUpdateFinished : function (oEvent) {
+        onUpdateFinished: function (oEvent) {
             // update the list object counter after new data is loaded
             this._updateListItemCount(oEvent.getParameter("total"));
         },
@@ -93,14 +93,8 @@ sap.ui.define([
             }
 
             var sQuery = oEvent.getParameter("query");
-
-            if (sQuery) {
-                this._oListFilterState.aSearch = [new Filter("ProjectName", FilterOperator.Contains, sQuery)];
-            } else {
-                this._oListFilterState.aSearch = [];
-            }
+            this._oListFilterState.aSearch = (sQuery) ? [new Filter("ProjectName", FilterOperator.Contains, sQuery)] : [];
             this._applyFilterSearch();
-
         },
 
         /**
@@ -133,7 +127,7 @@ sap.ui.define([
                     id: this.getView().getId(),
                     name: "StaffingApp.horvath.view.ViewSettingsDialog",
                     controller: this
-                }).then(function(oDialog){
+                }).then(function (oDialog) {
                     // connect dialog to the root view of this component (models, lifecycle)
                     this.getView().addDependent(oDialog);
                     oDialog.addStyleClass(this.getOwnerComponent().getContentDensityClass());
@@ -154,7 +148,7 @@ sap.ui.define([
          * @public
          */
         onConfirmViewSettingsDialog: function (oEvent) {
-            
+
             this._applySortGroup(oEvent);
         },
 
@@ -168,7 +162,7 @@ sap.ui.define([
                 sPath,
                 bDescending,
                 aSorters = [];
-            
+
             sPath = mParams.sortItem.getKey();
             bDescending = mParams.sortDescending;
             aSorters.push(new Sorter(sPath, bDescending));
@@ -210,8 +204,8 @@ sap.ui.define([
          */
         createGroupHeader: function (oGroup) {
             return new GroupHeaderListItem({
-                title : oGroup.text,
-                upperCase : false
+                title: oGroup.text,
+                upperCase: false
             });
         },
 
@@ -220,7 +214,7 @@ sap.ui.define([
          * We navigate back in the browser history
          * @public
          */
-        onNavBack: function() {
+        onNavBack: function () {
             // eslint-disable-next-line sap-no-history-manipulation
             history.go(-1);
         },
@@ -230,19 +224,19 @@ sap.ui.define([
         /* =========================================================== */
 
 
-        _createViewModel: function() {
+        _createViewModel: function () {
             return new JSONModel({
                 isFilterBarVisible: false,
                 filterBarLabel: "",
                 delay: 0,
                 title: this.getResourceBundle().getText("listTitleCount", [0]),
-                noDataText: this.getResourceBundle().getText("listListNoDataText"),
+                // noDataText: this.getResourceBundle().getText("listListNoDataText"),
                 sortBy: "ProjectName",
                 groupBy: "None"
             });
         },
 
-        _onMasterMatched:  function() {
+        _onMasterMatched: function () {
             debugger;
             //Set the layout property of the FCL control to 'OneColumn'
             this.getModel("appView").setProperty("/layout", "OneColumn");
@@ -256,18 +250,13 @@ sap.ui.define([
          */
         _showDetail: function (oItem) {
             var bReplace = !Device.system.phone,
-                oContextObj = oItem.getBindingContext().getObject(),
-                oParaObject = {
-                    ProjectID: oContextObj.ProjectID,
-                    ProjectName: oContextObj.ProjectName,
-                    StartDate: oContextObj.StartDate,
-                    EndDate: oContextObj.EndDate
-                };
+                oContextObj = oItem.getBindingContext().getObject();
             // set the layout property of FCL control to show two columns
+            debugger;
             this.getModel("appView").setProperty("/layout", "TwoColumnsMidExpanded");
+            // Encode selected object for single quote or invalid character
             this.getRouter().navTo("object", {
-                // objectId: oItem.getBindingContext().getProperty("ProjectID"),
-                object: JSON.stringify(oParaObject)
+                object: encodeURIComponent(JSON.stringify(oContextObj))
             }, bReplace);
         },
 
@@ -307,7 +296,7 @@ sap.ui.define([
          * @param {string} sFilterBarText the selected filter value
          * @private
          */
-        _updateFilterBar : function (sFilterBarText) {
+        _updateFilterBar: function (sFilterBarText) {
             var oViewModel = this.getModel("listView");
             oViewModel.setProperty("/isFilterBarVisible", (this._oListFilterState.aFilter.length > 0));
             oViewModel.setProperty("/filterBarLabel", this.getResourceBundle().getText("listFilterBarText", [sFilterBarText]));
