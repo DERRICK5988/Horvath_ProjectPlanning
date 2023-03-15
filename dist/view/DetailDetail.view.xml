@@ -1,0 +1,190 @@
+<mvc:View controllerName="StaffingApp.horvath.controller.DetailDetail" xmlns="sap.m" xmlns:layout="sap.ui.layout" xmlns:semantic="sap.f.semantic" xmlns:mvc="sap.ui.core.mvc" xmlns:i18n="sap.ui.model.resource.ResourceModel">
+    <semantic:SemanticPage id="idEmpCapacityPage" busy="{empCapacity>/busy}" headerPinnable="true" toggleHeaderOnTitleClick="true" preserveHeaderStateOnScroll="false" titleAreaShrinkRatio="1:1.6:1.6" showFooter="false">
+        <!-- Title Heading-->
+        <semantic:titleHeading>
+            <Title text="{empCapacity>/oDetail/Name}" />
+        </semantic:titleHeading>
+
+        <!-- Title Breadcrumbs-->
+        <!-- <semantic:titleBreadcrumbs>
+			<Breadcrumbs>
+				<Link text="Home" />
+				<Link text="Page 1" />
+				<Link text="Page 2" />
+				<Link text="Page 3" />
+				<Link text="Page 4" />
+				<Link text="Page 5" />
+			</Breadcrumbs>
+		</semantic:titleBreadcrumbs> -->
+
+        <!-- Title Snapped On Mobile Content-->
+        <semantic:titleSnappedOnMobile>
+            <Title text="{/titleSnappedContent/text}" />
+        </semantic:titleSnappedOnMobile>
+
+        <!-- Title Content-->
+        <semantic:titleContent>
+            <Image src="./test-resources/sap/f/images/KPI.png" tooltip="This is just a placeholder, not a real KPI control." height="2rem" width="3.5rem" />
+        </semantic:titleContent>
+
+        <!-- TitleExpanded content-->
+        <semantic:titleSnappedContent>
+            <Text text="{/titleSnappedContent/text}" />
+        </semantic:titleSnappedContent>
+
+        <!-- Header Content -->
+        <semantic:headerContent>
+            <layout:HorizontalLayout allowWrapping="true">
+                <layout:VerticalLayout class="sapUiMediumMarginEnd">
+                    <!-- <ObjectAttribute title="{i18n>Consultant}" text="{/objectDescription/category}" /> -->
+                    <ObjectAttribute title="{i18n>Level}" text="{/objectDescription/center}" />
+                    <ObjectAttribute title="{i18n>PeriodFrom}" text="{/objectDescription/email}" />
+                    <ObjectAttribute title="{i18n>PeriodTo}" text="{/objectDescription/email}" />
+                </layout:VerticalLayout>
+
+                <layout:VerticalLayout>
+                    <ObjectStatus text="Principal" state="{/objectDescription/status}" />
+                </layout:VerticalLayout>
+            </layout:HorizontalLayout>
+        </semantic:headerContent>
+
+        <!-- Content -->
+        <semantic:content>
+            <Table id="idEmpCapacityTable" showFooter="false" inset="false" items="{path:''}" class="sapFSemanticPageAlignContent" width="auto">
+                <headerToolbar>
+                    <OverflowToolbar>
+                        <content>
+                            <ToolbarSpacer />
+                            <layout:VerticalLayout width="100px">
+                                <SegmentedButton selectedKey="{detailView>/selectedView}" selectionChange="onSegmentChanged">
+                                    <items>
+                                        <SegmentedButtonItem text="Hour" key="HOUR" />
+                                        <SegmentedButtonItem text="Day" key="DAY" />
+                                    </items>
+                                </SegmentedButton>
+                            </layout:VerticalLayout>
+                        </content>
+                    </OverflowToolbar>
+                </headerToolbar>
+                <columns>
+                    <Column>
+                        <Text text="" />
+                        <footer>
+                            <layout:VerticalLayout class="sapUiMediumMarginEnd">
+                                <ObjectAttribute title="{i18n>TotalAssignedCap}" />
+                                <ObjectAttribute title="{i18n>TotalWorkCap}" />
+                                <ObjectAttribute title="{i18n>UnassignedCap}" />
+                            </layout:VerticalLayout>
+                        </footer>
+                    </Column>
+                    <Column minScreenWidth="Tablet" demandPopin="true">
+                        <Text text="{i18n>Capacity}" />
+                    </Column>
+                    <Column minScreenWidth="Tablet" demandPopin="true">
+                        <Text text="{i18n>Customer}" />
+                    </Column>
+                    <Column minScreenWidth="Tablet" demandPopin="true">
+                        <Text text="{i18n>ProjName}" />
+                    </Column>
+                    <Column minScreenWidth="Tablet" demandPopin="true">
+                        <Text text="{i18n>ProjManager}" />
+                    </Column>
+                    <Column minScreenWidth="Tablet" demandPopin="true">
+                        <Text text="{i18n>ProjPartner}" />
+                    </Column>
+                    <Column minScreenWidth="Tablet" demandPopin="true">
+                        <Text text="{i18n>ProjNumber}" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem vAlign="Middle">
+                        <cells>
+                            <ObjectIdentifier title="{Name}" text="{ProductId}" />
+                            <Text text="{Category}" />
+                            <Text text="{SupplierName}" />
+                            <Text text="{SupplierName}" />
+                            <Text text="{SupplierName}" />
+                            <Text text="{SupplierName}" />
+                            <Text text="{SupplierName}" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </semantic:content>
+
+        <!-- <semantic:titleMainAction>
+			<semantic:TitleMainAction text="Edit"/>
+		</semantic:titleMainAction>
+
+		<semantic:addAction>
+			<semantic:AddAction />
+		</semantic:addAction>
+
+		<semantic:deleteAction>
+			<semantic:DeleteAction />
+		</semantic:deleteAction>
+
+		<semantic:copyAction>
+			<semantic:CopyAction />
+		</semantic:copyAction>
+
+		<semantic:editAction>
+			<semantic:EditAction />
+		</semantic:editAction>
+
+		<semantic:favoriteAction>
+			<semantic:FavoriteAction />
+		</semantic:favoriteAction>
+
+		<semantic:flagAction>
+			<semantic:FlagAction />
+		</semantic:flagAction> -->
+
+        <semantic:closeAction>
+            <semantic:CloseAction press="onEndColumnClose" />
+        </semantic:closeAction>
+
+        <!-- <semantic:fullScreenAction>
+			<semantic:FullScreenAction visible="{/notMobile}"/>
+		</semantic:fullScreenAction>
+
+		<semantic:exitFullScreenAction>
+			<semantic:ExitFullScreenAction visible="{/notMobile}"/>
+		</semantic:exitFullScreenAction> -->
+
+        <!-- Custom Title Text Content-->
+        <!-- <semantic:titleCustomTextActions>
+            <Button text="ToggleFooter" press="showFooter" />
+        </semantic:titleCustomTextActions> -->
+
+        <!-- Custom Title Icon Content-->
+        <!-- <semantic:titleCustomIconActions>
+            <OverflowToolbarButton icon="sap-icon://cart" text="cart" />
+        </semantic:titleCustomIconActions> -->
+
+        <!-- Custom Share Actions -->
+        <!-- <semantic:customShareActions>
+			<Button icon= "sap-icon://bed" text="Bed" />
+			<Button icon= "sap-icon://flight" text="Flight" />
+		</semantic:customShareActions> -->
+
+        <!-- Semantic Footer Buttons -->
+        <!-- <semantic:positiveAction>
+            <semantic:PositiveAction />
+        </semantic:positiveAction>
+
+        <semantic:negativeAction>
+            <semantic:NegativeAction />
+        </semantic:negativeAction>
+
+        <semantic:messagesIndicator>
+            <semantic:MessagesIndicator press="onMessagesButtonPress" />
+        </semantic:messagesIndicator> -->
+
+        <!-- Custom Footer Content-->
+        <!-- <semantic:footerCustomActions>
+            <Button text="Save" />
+            <Button text="Cancel" />
+        </semantic:footerCustomActions> -->
+    </semantic:SemanticPage>
+</mvc:View>

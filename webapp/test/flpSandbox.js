@@ -54,7 +54,7 @@ sap.ui.define([
 							"StaffingApphorvath-display": {
 								"semanticObject": "StaffingApphorvath",
 								"action": "display",
-								"description": "A Fiori application.",
+								"description": "Staffing App",
 								"title": "Staffing App",
 								"signature": {
 									"parameters": {}

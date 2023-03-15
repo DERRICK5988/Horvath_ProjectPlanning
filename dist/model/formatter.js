@@ -1,0 +1,1 @@
+sap.ui.define([],function(){"use strict";return{currencyValue:function(e){if(!e){return""}return parseFloat(e).toFixed(2)},rounding:function(e,r){var n;if(!e){return e}if(r==="DAY"){n=+e.toFixed(1)}else{n=+e.toFixed(0)}return n}}});

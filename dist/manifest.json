@@ -1,0 +1,202 @@
+{
+    "_version": "1.48.0",
+    "sap.app": {
+        "id": "StaffingApp.horvath",
+        "type": "application",
+        "i18n": "i18n/i18n.properties",
+        "applicationVersion": {
+            "version": "0.0.1"
+        },
+        "title": "{{appTitle}}",
+        "description": "{{appDescription}}",
+        "resources": "resources.json",
+        "sourceTemplate": {
+            "id": "@sap/generator-fiori:listdetail",
+            "version": "1.9.1",
+            "toolsId": "77292265-f926-49e6-ac94-621d68dce025"
+        },
+        "dataSources": {
+            "TimeSheetService": {
+                "uri": "sap/opu/odata/sap/YY1_TIME_RECORDING_CDS/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "annotations": [],
+                    "localUri": "localService/YY1_TIME_RECORDING_CDS/metadata.xml"
+                }
+            },
+            "mainService": {
+                "uri": "sap/opu/odata/CPD/SC_EXTERNAL_SERVICES_SRV/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "annotations": [],
+                    "localUri": "localService/SC_EXTERNAL_SERVICES_SRV/metadata.xml"
+                }
+            },
+            "SC_PROJ_ENGMT_CREATE_UPD_SRV": {
+                "uri": "sap/opu/odata/CPD/SC_PROJ_ENGMT_CREATE_UPD_SRV",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "annotations": [],
+                    "localUri": "localService/SC_PROJ_ENGMT_CREATE_UPD_SRV/metadata.xml"
+                }
+            }
+        }
+    },
+    "sap.ui": {
+        "technology": "UI5",
+        "icons": {
+            "icon": "",
+            "favIcon": "",
+            "phone": "",
+            "phone@2": "",
+            "tablet": "",
+            "tablet@2": ""
+        },
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        }
+    },
+    "sap.ui5": {
+        "flexEnabled": true,
+        "dependencies": {
+            "minUI5Version": "1.108.7",
+            "libs": {
+                "sap.m": {},
+                "sap.ui.core": {},
+                "sap.f": {},
+                "sap.suite.ui.generic.template": {},
+                "sap.ui.comp": {},
+                "sap.ui.generic.app": {},
+                "sap.ui.table": {},
+                "sap.ushell": {}
+            }
+        },
+        "config": {
+            "fullWidth": true
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "StaffingApp.horvath.i18n.i18n"
+                }
+            },
+            "": {
+                "dataSource": "mainService",
+                "preload": true,
+                "settings": {
+                    "defaultOperationMode": "Server",
+                    "defaultBindingMode": "TwoWay",
+                    "refreshAfterChange": false,
+                    "useBatch": false
+                }
+            },
+            "TimeSheet": {
+                "dataSource": "TimeSheetService",
+                "preload": true,
+                "settings": {
+                    "defaultOperationMode": "Server",
+                    "defaultBindingMode": "TwoWay",
+                    "refreshAfterChange": false,
+                    "useBatch": false
+                }
+            },
+            "PROJ_ENGMT_UPDATE_SRV": {
+                "dataSource": "SC_PROJ_ENGMT_CREATE_UPD_SRV",
+                "preload": true,
+                "settings": {
+                    "defaultBindingMode": "TwoWay",
+                    "defaultCountMode": "None",
+                    "refreshAfterChange": true,
+                    "useBatch": false,
+                    "disableHeadRequestForToken": true
+                }
+            }
+        },
+        "resources": {
+            "css": []
+        },
+        "routing": {
+            "config": {
+                "routerClass": "sap.f.routing.Router",
+                "viewType": "XML",
+                "viewPath": "StaffingApp.horvath.view",
+                "controlId": "layout",
+                "controlAggregation": "beginColumnPages",
+                "bypassed": {
+                    "target": [
+                        "notFound"
+                    ]
+                },
+                "async": true
+            },
+            "routes": [
+                {
+                    "pattern": "",
+                    "name": "list",
+                    "target": [
+                        "list",
+                        "object"
+                    ]
+                },
+                {
+                    "pattern": "ProjectSet/{object}",
+                    "name": "object",
+                    "target": [
+                        "list",
+                        "object"
+                    ]
+                },
+                {
+                    "pattern": "detailDetail/{object}",
+                    "name": "detailDetail",
+                    "target": [
+                        "list",
+                        "object",
+                        "detailDetail"
+                    ]
+                }
+            ],
+            "targets": {
+                "list": {
+                    "viewName": "List",
+                    "viewId": "list",
+                    "controlAggregation": "beginColumnPages"
+                },
+                "object": {
+                    "viewName": "Detail",
+                    "viewId": "detail",
+                    "controlAggregation": "midColumnPages"
+                },
+                "detailObjectNotFound": {
+                    "viewId": "detailObjectNotFound",
+                    "viewName": "DetailObjectNotFound",
+                    "controlAggregation": "midColumnPages"
+                },
+                "detailDetail": {
+                    "viewId": "detaildetail",
+                    "viewName": "DetailDetail",
+                    "controlAggregation": "endColumnPages"
+                }
+            }
+        },
+        "rootView": {
+            "viewName": "StaffingApp.horvath.view.App",
+            "type": "XML",
+            "async": true,
+            "id": "app"
+        },
+        "sap.cloud": {
+            "public": true
+        }
+    }
+}

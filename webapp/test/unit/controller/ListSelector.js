@@ -88,7 +88,7 @@ sap.ui.define([
 
 		// Act
 		this.oListSelector.oWhenListLoadingIsDone.then(fnResolveSpy, fnRejectSpy);
-		this.oListSelector.setBoundMasterList(createListStub.call(this, true, "anything"));
+		this.oListSelector.setBoundList(createListStub.call(this, true, "anything"));
 	});
 
 	QUnit.test("Should reject the list loading promise, if the list has no items", function (assert) {
@@ -103,7 +103,7 @@ sap.ui.define([
 
 		// Act
 		this.oListSelector.oWhenListLoadingIsDone.then(fnResolveSpy, fnRejectSpy);
-		this.oListSelector.setBoundMasterList(createListStub.call(this, false));
+		this.oListSelector.setBoundList(createListStub.call(this, false));
 	});
 
 	QUnit.module("Selecting item in the list", {

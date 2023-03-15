@@ -1,5 +1,3 @@
-# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
-
 specVersion: "2.5"
 metadata:
   name: StaffingApp.horvath
@@ -9,15 +7,25 @@ server:
     - name: fiori-tools-proxy
       afterMiddleware: compression
       configuration:
-        ignoreCertError: false # If set to true, certificate errors will be ignored. E.g. self-signed certificates will be accepted
+        ignoreCertError: false
         ui5:
           path:
             - /resources
             - /test-resources
           url: https://ui5.sap.com
         backend:
+          - path: /sap/opu/odata/sap/YY1_TIME_RECORDING_CDS/
+            url: https://my308859-api.s4hana.ondemand.com
+            destination: S4HC_StaffingApp
           - path: /sap
             url: https://my308859-api.s4hana.ondemand.com
+            destination: S4HC_StaffingApp
+          - path: /sap/opu/odata/CPD/SC_EXTERNAL_SERVICES_SRV/
+            url: https://my308859-api.s4hana.ondemand.com
+            destination: S4HC_StaffingApp
+          - path: /sap/opu/odata/CPD/SC_PROJ_ENGMT_CREATE_UPD_SRV
+            url: https://my308859-api.s4hana.ondemand.com
+            destination: S4HC_StaffingApp
     - name: fiori-tools-appreload
       afterMiddleware: compression
       configuration:
@@ -30,7 +38,15 @@ server:
         mountPath: /
         services:
           - urlPath: /sap/opu/odata/CPD/SC_PROJ_ENGMT_CREATE_UPD_SRV
-            metadataPath: ./webapp/localService/metadata.xml
-            mockdataPath: ./webapp/localService/data
+            metadataPath: ./webapp/localService/SC_PROJ_ENGMT_CREATE_UPD_SRV/metadata.xml
+            mockdataPath: ./webapp/localService/SC_PROJ_ENGMT_CREATE_UPD_SRV/data
             generateMockData: true
+          - urlPath: /sap/opu/odata/sap/YY1_TIME_RECORDING_CDS/
+            generateMockData: true
+            metadataXmlPath: ./webapp/localService/YY1_TIME_RECORDING_CDS/metadata.xml
+            mockdataRootPath: ./webapp/localService/YY1_TIME_RECORDING_CDS/mockdata
+          - urlPath: /sap/opu/odata/CPD/SC_EXTERNAL_SERVICES_SRV/
+            generateMockData: true
+            metadataXmlPath: ./webapp/localService/SC_EXTERNAL_SERVICES_SRV/metadata.xml
+            mockdataRootPath: ./webapp/localService/SC_EXTERNAL_SERVICES_SRV/mockdata
         annotations: []
