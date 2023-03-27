@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Aggregation.V1" Alias="Aggregation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ANALYTICS',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Analytics.v1" Alias="Analytics"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="Capabilities"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CODELIST',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.CodeList.v1" Alias="SAP__CodeList"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="Communication"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_MEASURES',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Measures.V1" Alias="Measures"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.PersonalData.v1" Alias="PersonalData"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_UI',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="UI"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_VALIDATION',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Validation.V1" Alias="Validation"/>
+    </edmx:Reference>
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="YY1_PROJ_ASSIGNMENT_DISTR_CDS" xml:lang="en" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="YY1_PROJ_ASSIGNMENT_DISTRType" sap:label="Proj. Assignment Distr. (Staffing App)" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ProjDmndRsceAssgmtDistrUUID"/>
+                    <PropertyRef Name="Project"/>
+                    <PropertyRef Name="ProjectElement"/>
+                </Key>
+                <Property Name="ProjDmndRsceAssgmtDistrUUID" Type="Edm.Guid" Nullable="false" sap:required-in-filter="false" sap:label="Assgmt Distr. UUID" sap:quickinfo="Global Identification of a Resource Assignment Distribution"/>
+                <Property Name="Project" Type="Edm.String" Nullable="false" MaxLength="24" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Project ID"/>
+                <Property Name="ProjectElement" Type="Edm.String" Nullable="false" MaxLength="24" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Work package ID" sap:quickinfo="Project Element ID"/>
+                <Property Name="ProjectDescription" Type="Edm.String" MaxLength="60" sap:required-in-filter="false" sap:label="Project Name" sap:quickinfo="Description"/>
+                <Property Name="ProjDmndRsceAssgmt" Type="Edm.String" MaxLength="8" sap:display-format="NonNegative" sap:required-in-filter="false" sap:label="Person WorkAgreement" sap:quickinfo="Personnel Number of a Resource"/>
+                <Property Name="YearMth" Type="Edm.String" MaxLength="7" sap:required-in-filter="false" sap:label="YearMth"/>
+                <Property Name="ProjDmndRsceAssgmtDistrYearVal" Type="Edm.String" MaxLength="4" sap:display-format="NonNegative" sap:required-in-filter="false" sap:label="Year of Distribution" sap:quickinfo="Year of a Distribution Period"/>
+                <Property Name="ProjDmndRsceAssgmtDistrPerdVal" Type="Edm.String" MaxLength="3" sap:display-format="NonNegative" sap:required-in-filter="false" sap:label="Distribution Period" sap:quickinfo="Period to Which a Quantity is Distibuted"/>
+                <Property Name="ProjDmndRsceAssgmtDistrQty" Type="Edm.Decimal" Precision="13" Scale="3" sap:required-in-filter="false" sap:unit="ProjDmndRsceAssgmtDistrQtyUnit" sap:label="Distributed Quantity" sap:quickinfo="Resource Quantity Assigned for a Distribution Period"/>
+                <Property Name="ProjDmndRsceAssgmtDistrQtyUnit" Type="Edm.String" MaxLength="3" sap:required-in-filter="false" sap:label="Quantity Unit" sap:quickinfo="Unit of Measure for the Distributed Quantity" sap:semantics="unit-of-measure"/>
+                <Property Name="ProjectStartDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:required-in-filter="false" sap:label="Latest Planned Start"/>
+                <Property Name="ProjectEndDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:required-in-filter="false" sap:label="Latest Planned Finish"/>
+                <Property Name="ActualStartDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:required-in-filter="false" sap:label="Actual Start"/>
+                <Property Name="ActualFinishDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:required-in-filter="false" sap:label="Actual Finish"/>
+                <Property Name="ReferencedObjectUUID" Type="Edm.Guid" sap:required-in-filter="false" sap:label="Referenced Object" sap:quickinfo="UUID of the Object to Which a Demand Is Related"/>
+                <Property Name="ProjectUUID" Type="Edm.Guid" sap:required-in-filter="false" sap:label="Project UUID" sap:quickinfo="Global ID of the Project to Which a Demand is Related"/>
+                <Property Name="ProjDmndRsceAssgmtUUID" Type="Edm.Guid" sap:required-in-filter="false" sap:label="Resource Assgmt UUID" sap:quickinfo="Global Identification of a Resource Assignment to a  Demand"/>
+                <Property Name="ProjectDemandUUID" Type="Edm.Guid" sap:required-in-filter="false" sap:label="Demand UUID" sap:quickinfo="Global Identification of a Project Demand"/>
+            </EntityType>
+            <EntityContainer Name="YY1_PROJ_ASSIGNMENT_DISTR_CDS_Entities" m:IsDefaultEntityContainer="true" sap:message-scope-supported="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="YY1_PROJ_ASSIGNMENT_DISTR" EntityType="YY1_PROJ_ASSIGNMENT_DISTR_CDS.YY1_PROJ_ASSIGNMENT_DISTRType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+            </EntityContainer>
+            <Annotation Term="Core.SchemaVersion" String="1.0.0" xmlns="http://docs.oasis-open.org/odata/ns/edm"/>
+            <Annotations Target="YY1_PROJ_ASSIGNMENT_DISTR_CDS.YY1_PROJ_ASSIGNMENT_DISTR_CDS_Entities" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.ApplyMultiUnitBehaviorForSortingAndFiltering" Bool="true"/>
+            </Annotations>
+            <atom:link rel="self" href="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/sap/YY1_PROJ_ASSIGNMENT_DISTR_CDS/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/sap/YY1_PROJ_ASSIGNMENT_DISTR_CDS/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

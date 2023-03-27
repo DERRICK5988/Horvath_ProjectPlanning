@@ -1,4 +1,4 @@
-sap.ui.define([], function () {
+sap.ui.define(["sap/ui/core/format/DateFormat"], function (DateFormat) {
     "use strict";
 
     return {
@@ -9,7 +9,7 @@ sap.ui.define([], function () {
          * @param {string} sValue value to be formatted
          * @returns {string} formatted currency value with 2 digits
          */
-        currencyValue : function (sValue) {
+        currencyValue: function (sValue) {
             if (!sValue) {
                 return "";
             }
@@ -22,11 +22,24 @@ sap.ui.define([], function () {
                 return nValue;
             }
             if (sKey === "DAY") {
-                nRound = +nValue.toFixed(1);
+                nRound = (+nValue).toFixed(1);
             } else {
-                nRound = +nValue.toFixed(0);
+                nRound = (+nValue).toFixed(0);
             }
             return nRound;
+        },
+        returnDataFormat: function (sFormat) {
+            return DateFormat.getDateInstance({
+                pattern: sFormat
+            })
+        },
+        convertHrDay: function(nStaffedEffort, sKey) {
+            debugger;
+            if (sKey === "DAY" && nStaffedEffort !== 0) { 
+                return (+nStaffedEffort / 8).toFixed(1);
+             } else {
+                return;
+             }
         }
     };
 });

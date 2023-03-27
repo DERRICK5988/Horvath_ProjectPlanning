@@ -2,7 +2,7 @@
     <semantic:SemanticPage id="idEmpCapacityPage" busy="{empCapacity>/busy}" headerPinnable="true" toggleHeaderOnTitleClick="true" preserveHeaderStateOnScroll="false" titleAreaShrinkRatio="1:1.6:1.6" showFooter="false">
         <!-- Title Heading-->
         <semantic:titleHeading>
-            <Title text="{empCapacity>/oDetail/Name}" />
+            <Title text="{empCapacity>/oDetail/PersonFullName}" />
         </semantic:titleHeading>
 
         <!-- Title Breadcrumbs-->
@@ -18,45 +18,45 @@
 		</semantic:titleBreadcrumbs> -->
 
         <!-- Title Snapped On Mobile Content-->
-        <semantic:titleSnappedOnMobile>
+        <!-- <semantic:titleSnappedOnMobile>
             <Title text="{/titleSnappedContent/text}" />
-        </semantic:titleSnappedOnMobile>
+        </semantic:titleSnappedOnMobile> -->
 
         <!-- Title Content-->
-        <semantic:titleContent>
+        <!-- <semantic:titleContent>
             <Image src="./test-resources/sap/f/images/KPI.png" tooltip="This is just a placeholder, not a real KPI control." height="2rem" width="3.5rem" />
-        </semantic:titleContent>
+        </semantic:titleContent> -->
 
         <!-- TitleExpanded content-->
-        <semantic:titleSnappedContent>
+        <!-- <semantic:titleSnappedContent>
             <Text text="{/titleSnappedContent/text}" />
-        </semantic:titleSnappedContent>
+        </semantic:titleSnappedContent> -->
 
         <!-- Header Content -->
         <semantic:headerContent>
             <layout:HorizontalLayout allowWrapping="true">
                 <layout:VerticalLayout class="sapUiMediumMarginEnd">
                     <!-- <ObjectAttribute title="{i18n>Consultant}" text="{/objectDescription/category}" /> -->
-                    <ObjectAttribute title="{i18n>Level}" text="{/objectDescription/center}" />
-                    <ObjectAttribute title="{i18n>PeriodFrom}" text="{/objectDescription/email}" />
-                    <ObjectAttribute title="{i18n>PeriodTo}" text="{/objectDescription/email}" />
+                    <ObjectAttribute title="{i18n>Level}" text="" />
+                    <ObjectAttribute title="{i18n>Period}" text="{empCapacity>/oDetail/Name}" />
                 </layout:VerticalLayout>
 
                 <layout:VerticalLayout>
-                    <ObjectStatus text="Principal" state="{/objectDescription/status}" />
+                    <!-- <ObjectStatus text="" state="{/objectDescription/status}" /> -->
                 </layout:VerticalLayout>
             </layout:HorizontalLayout>
         </semantic:headerContent>
 
         <!-- Content -->
         <semantic:content>
-            <Table id="idEmpCapacityTable" showFooter="false" inset="false" items="{path:''}" class="sapFSemanticPageAlignContent" width="auto">
+            <Table id="idEmpCapacityTable" showFooter="false" inset="false" items="{path:'empCapacity>/aItem'}" 
+                   class="sapFSemanticPageAlignContent" width="auto">
                 <headerToolbar>
                     <OverflowToolbar>
                         <content>
                             <ToolbarSpacer />
                             <layout:VerticalLayout width="100px">
-                                <SegmentedButton selectedKey="{detailView>/selectedView}" selectionChange="onSegmentChanged">
+                                <SegmentedButton selectedKey="{empCapacity>/selectedView}" selectionChange="onSegmentChanged">
                                     <items>
                                         <SegmentedButtonItem text="Hour" key="HOUR" />
                                         <SegmentedButtonItem text="Day" key="DAY" />
@@ -67,8 +67,8 @@
                     </OverflowToolbar>
                 </headerToolbar>
                 <columns>
-                    <Column>
-                        <Text text="" />
+                    <Column minScreenWidth="Tablet" demandPopin="true" width="450px">
+                        <Text text="{i18n>Customer}" />
                         <footer>
                             <layout:VerticalLayout class="sapUiMediumMarginEnd">
                                 <ObjectAttribute title="{i18n>TotalAssignedCap}" />
@@ -77,13 +77,22 @@
                             </layout:VerticalLayout>
                         </footer>
                     </Column>
-                    <Column minScreenWidth="Tablet" demandPopin="true">
+                    <Column minScreenWidth="Tablet" demandPopin="true" width="100px">
                         <Text text="{i18n>Capacity}" />
+                        <footer width="100px">
+                            <layout:VerticalLayout class="sapUiMediumMarginEnd">
+                                <VBox>
+                                    <ObjectAttribute text="{empCapacity>/nTotalAssignedCap}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}"/>
+                                    <ObjectAttribute text="{parts:['empCapacity>/nTotalAssignedCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" visible="{= ${empCapacity>/selectedView} === 'DAY'}"/>
+                                    <ObjectAttribute text="{empCapacity>/nTotalWorkCap}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}"/>
+                                    <ObjectAttribute text="{parts:['empCapacity>/nTotalWorkCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" visible="{= ${empCapacity>/selectedView} === 'DAY'}"/>
+                                    <ObjectAttribute text="{empCapacity>/nTotalUnassignedCap}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}"/>
+                                    <ObjectAttribute text="{parts:['empCapacity>/nTotalUnassignedCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" visible="{= ${empCapacity>/selectedView} === 'DAY'}"/>
+                                </VBox>
+                            </layout:VerticalLayout>
+                        </footer>
                     </Column>
-                    <Column minScreenWidth="Tablet" demandPopin="true">
-                        <Text text="{i18n>Customer}" />
-                    </Column>
-                    <Column minScreenWidth="Tablet" demandPopin="true">
+                    <Column minScreenWidth="Tablet" demandPopin="true" width="400px">
                         <Text text="{i18n>ProjName}" />
                     </Column>
                     <Column minScreenWidth="Tablet" demandPopin="true">
@@ -92,20 +101,22 @@
                     <Column minScreenWidth="Tablet" demandPopin="true">
                         <Text text="{i18n>ProjPartner}" />
                     </Column>
-                    <Column minScreenWidth="Tablet" demandPopin="true">
+                    <Column minScreenWidth="Tablet" demandPopin="true" width="150px">
                         <Text text="{i18n>ProjNumber}" />
                     </Column>
                 </columns>
                 <items>
                     <ColumnListItem vAlign="Middle">
                         <cells>
-                            <ObjectIdentifier title="{Name}" text="{ProductId}" />
-                            <Text text="{Category}" />
-                            <Text text="{SupplierName}" />
-                            <Text text="{SupplierName}" />
-                            <Text text="{SupplierName}" />
-                            <Text text="{SupplierName}" />
-                            <Text text="{SupplierName}" />
+                            <Text text="{empCapacity>CustomerName}" />
+                            <VBox>
+                                <Text text="{parts:['empCapacity>PlndEffortQty', 'empCapacity>/selectedView'], formatter: '.formatter.rounding'}" wrapping="false" visible="{= ${empCapacity>/selectedView} === 'HOUR'}" hAlign="Right" />
+                                <Text text="{parts:['empCapacity>PlndEffortQty', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" wrapping="false" visible="{= ${empCapacity>/selectedView} === 'DAY'}" hAlign="Right"/>
+                            </VBox>
+                            <Text text="{empCapacity>EngagementProjectName}" />
+                            <Text text="{empCapacity>ProjectManager}" />
+                            <Text text="{empCapacity>ProjectPartner}" />
+                            <Text text="{empCapacity>EngagementProject}" />
                         </cells>
                     </ColumnListItem>
                 </items>

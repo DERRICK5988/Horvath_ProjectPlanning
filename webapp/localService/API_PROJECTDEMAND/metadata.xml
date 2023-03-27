@@ -1,0 +1,987 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Aggregation.V1" Alias="Aggregation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ANALYTICS',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Analytics.v1" Alias="Analytics"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="Capabilities"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CODELIST',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.CodeList.v1" Alias="SAP__CodeList"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="Communication"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_MEASURES',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Measures.V1" Alias="Measures"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.PersonalData.v1" Alias="PersonalData"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_UI',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="UI"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_VALIDATION',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Validation.V1" Alias="Validation"/>
+    </edmx:Reference>
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="cds_api_projectdemand" xml:lang="en" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="ProjDmndExpenseDistr_Type" sap:label="Demand Distribution for Expense" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ProjDmndExpnDistributionUUID"/>
+                </Key>
+                <Property Name="ProjDmndExpnDistributionUUID" Type="Edm.Guid" Nullable="false" sap:label="Dmnd f. Expn Distr" sap:quickinfo="Global ID for the Distribution of a Demand for Expense" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjectDemandExpenseUUID" Type="Edm.Guid" sap:label="Dmnd f. Expense UUID" sap:quickinfo="Global Identification of a Demand for Expense" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjectDemandUUID" Type="Edm.Guid" sap:label="Demand UUID" sap:quickinfo="Global Identification of a Project Demand" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjDmndReferencedPlanDataUUID" Type="Edm.Guid" sap:label="Project Plan Item" sap:quickinfo="Corresponding Line Item in Project Plan"/>
+                <Property Name="ProjDmndExpnDistrPeriodVal" Type="Edm.String" MaxLength="3" sap:display-format="NonNegative" sap:label="Distribution Period" sap:quickinfo="Period to Which a Quantity is Distibuted"/>
+                <Property Name="ProjDmndExpnDistrYearVal" Type="Edm.String" MaxLength="4" sap:display-format="NonNegative" sap:label="Year of Distribution" sap:quickinfo="Year of a Distribution Period"/>
+                <Property Name="ProjDmndExpnDistrAmount" Type="Edm.Decimal" Precision="17" Scale="3" sap:unit="ProjDmndExpnDistrAmountCrcy" sap:variable-scale="true" sap:label="Plannend Cost"/>
+                <Property Name="ProjDmndExpnDistrRevenueAmt" Type="Edm.Decimal" Precision="17" Scale="3" sap:unit="ProjDmndExpnDistrRevnAmtCrcy" sap:variable-scale="true" sap:label="Planned Revenue"/>
+                <Property Name="ProjectUUID" Type="Edm.Guid" sap:label="Project UUID" sap:quickinfo="Global ID of the Project to Which a Demand is Related" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ReferencedObjectUUID" Type="Edm.Guid" sap:label="Referenced Object" sap:quickinfo="UUID of the Object to Which a Demand Is Related" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjDmndExpnDistrAmountCrcy" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Currency" sap:semantics="currency-code"/>
+                <Property Name="ProjDmndExpnDistrRevnAmtCrcy" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Currency" sap:semantics="currency-code"/>
+                <Property Name="CreatedByUser" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Created By" sap:quickinfo="Created By User"/>
+                <Property Name="CreationDateTime" Type="Edm.DateTimeOffset" Precision="7" sap:label="Created On" sap:quickinfo="Creation Date Time"/>
+                <Property Name="LastChangedByUser" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Changed By" sap:quickinfo="Last Changed By User"/>
+                <Property Name="LastChangeDateTime" Type="Edm.DateTimeOffset" Precision="7" sap:label="Changed On" sap:quickinfo="Last Change Date Time"/>
+                <NavigationProperty Name="to_Root" Relationship="cds_api_projectdemand.assoc_3658F13A6F5D574208281DDCE5FDC2DB" FromRole="FromRole_assoc_3658F13A6F5D574208281DDCE5FDC2DB" ToRole="ToRole_assoc_3658F13A6F5D574208281DDCE5FDC2DB"/>
+                <NavigationProperty Name="to_ProjectDemandExpense" Relationship="cds_api_projectdemand.assoc_D3620BF46C119C743D51DF37133A4A35" FromRole="ToRole_assoc_D3620BF46C119C743D51DF37133A4A35" ToRole="FromRole_assoc_D3620BF46C119C743D51DF37133A4A35"/>
+            </EntityType>
+            <EntityType Name="A_ProjDmndResourceAssignment_Type" sap:label="Resource Assignment" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ProjDmndRsceAssgmtUUID"/>
+                </Key>
+                <Property Name="ProjDmndRsceAssgmtUUID" Type="Edm.Guid" Nullable="false" sap:label="Resource Assgmt UUID" sap:quickinfo="Global Identification of a Resource Assignment to a  Demand" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjectDemandWorkUUID" Type="Edm.Guid" sap:label="Resource Dmnd UUID" sap:quickinfo="Global Identification of a Resource Demand" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjectDemandUUID" Type="Edm.Guid" sap:label="Demand UUID" sap:quickinfo="Global Identification of a Project Demand" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjDmndRsceAssgmt" Type="Edm.String" MaxLength="8" sap:display-format="NonNegative" sap:label="Resource" sap:quickinfo="Personnel Number of a Resource"/>
+                <Property Name="ProjDmndRsceAssgmtQuantity" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="ProjDmndRsceAssgmtQuantityUnit" sap:label="Assigned Quantity" sap:quickinfo="Total Quantity of a Resource Assignment"/>
+                <Property Name="ProjDmndRsceAssgmtQuantityUnit" Type="Edm.String" MaxLength="3" sap:label="Quantity Unit" sap:quickinfo="Unit of Measure for the Assigned Quantity" sap:semantics="unit-of-measure"/>
+                <Property Name="ProjectDemandSupplyIdentifier" Type="Edm.String" MaxLength="24" sap:display-format="UpperCase" sap:label="Resource Supply ID" sap:quickinfo="Resource Supply ID of a Project Demand"/>
+                <Property Name="ProjectDemandSupplyDeliveryOrg" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Delivery Org." sap:quickinfo="Delivery Organization of the Assigned Resource"/>
+                <Property Name="ProjectDemandSourceOfSupply" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Assignment Source" sap:quickinfo="Source of a Resource Assignment"/>
+                <Property Name="ProjAssgmtLastUpdateSource" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Source of Update" sap:quickinfo="Source of Last Update to a Resource Assignment"/>
+                <Property Name="ProjDmndRsceWorkAssgmtOID" Type="Edm.String" MaxLength="100" sap:display-format="UpperCase" sap:label="Work Assignment ID" sap:quickinfo="Work Assignment ID (SAP One Domain Model)"/>
+                <Property Name="ProjDmndRsceWrkfrcPersonOID" Type="Edm.String" MaxLength="36" sap:label="Workforce Person ID" sap:quickinfo="Workforce Person ID (SAP One Domain Model)"/>
+                <Property Name="ProjDmndRsceAssgmtStartDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Demand Start Date" sap:quickinfo="Start Date of the Demand"/>
+                <Property Name="ProjDmndRsceAssgmtEndDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Demand End Date" sap:quickinfo="End Date of the Demand"/>
+                <Property Name="CreatedByUser" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Created By" sap:quickinfo="Created By User"/>
+                <Property Name="CreationDateTime" Type="Edm.DateTimeOffset" Precision="7" sap:label="Created On" sap:quickinfo="Creation Date Time"/>
+                <Property Name="LastChangedByUser" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Changed By" sap:quickinfo="Last Changed By User"/>
+                <Property Name="LastChangeDateTime" Type="Edm.DateTimeOffset" Precision="7" sap:label="Changed On" sap:quickinfo="Last Change Date Time"/>
+                <NavigationProperty Name="to_AssgmtDistribution" Relationship="cds_api_projectdemand.assoc_4A61008E41B33FB705F1F0D9074B6702" FromRole="FromRole_assoc_4A61008E41B33FB705F1F0D9074B6702" ToRole="ToRole_assoc_4A61008E41B33FB705F1F0D9074B6702"/>
+                <NavigationProperty Name="to_Root" Relationship="cds_api_projectdemand.assoc_85FA8369C8BC8182519A94AB86696053" FromRole="FromRole_assoc_85FA8369C8BC8182519A94AB86696053" ToRole="ToRole_assoc_85FA8369C8BC8182519A94AB86696053"/>
+                <NavigationProperty Name="to_Work" Relationship="cds_api_projectdemand.assoc_AF957FA162404D74D4B635D7E06EC123" FromRole="ToRole_assoc_AF957FA162404D74D4B635D7E06EC123" ToRole="FromRole_assoc_AF957FA162404D74D4B635D7E06EC123"/>
+            </EntityType>
+            <EntityType Name="A_ProjDmndRsceAssgmtDistr_Type" sap:label="Resource Assignment Distribution" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ProjDmndRsceAssgmtDistrUUID"/>
+                </Key>
+                <Property Name="ProjDmndRsceAssgmtDistrUUID" Type="Edm.Guid" Nullable="false" sap:label="Assgmt Distr. UUID" sap:quickinfo="Global Identification of a Resource Assignment Distribution" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjDmndRsceAssgmtUUID" Type="Edm.Guid" sap:label="Resource Assgmt UUID" sap:quickinfo="Global Identification of a Resource Assignment to a  Demand" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjectDemandUUID" Type="Edm.Guid" sap:label="Demand UUID" sap:quickinfo="Global Identification of a Project Demand" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjDmndRsceAssgmtDistrYearVal" Type="Edm.String" MaxLength="4" sap:display-format="NonNegative" sap:label="Year of Distribution" sap:quickinfo="Year of a Distribution Period"/>
+                <Property Name="ProjDmndRsceAssgmtDistrPerdVal" Type="Edm.String" MaxLength="3" sap:display-format="NonNegative" sap:label="Distribution Period" sap:quickinfo="Period to Which a Quantity is Distibuted"/>
+                <Property Name="ProjDmndRsceAssgmtDistrQty" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="ProjDmndRsceAssgmtDistrQtyUnit" sap:label="Distributed Quantity" sap:quickinfo="Resource Quantity Assigned for a Distribution Period"/>
+                <Property Name="ProjDmndRsceAssgmtDistrQtyUnit" Type="Edm.String" MaxLength="3" sap:label="Quantity Unit" sap:quickinfo="Unit of Measure for the Distributed Quantity" sap:semantics="unit-of-measure"/>
+                <Property Name="ProjDmndRsceDistrPerdAmt" Type="Edm.Decimal" Precision="17" Scale="3" sap:unit="ProjDmndRsceDistrPerdAmtCur" sap:variable-scale="true" sap:label="Plannend Cost"/>
+                <Property Name="ProjDmndRsceDistrPerdAmtCur" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Currency" sap:semantics="currency-code"/>
+                <Property Name="ProjDmndRsceDistrRevenueAmt" Type="Edm.Decimal" Precision="17" Scale="3" sap:unit="ProjDmndRsceDistrRevenueAmtCur" sap:variable-scale="true" sap:label="Planned Revenue"/>
+                <Property Name="ProjDmndRsceDistrRevenueAmtCur" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Currency" sap:semantics="currency-code"/>
+                <Property Name="ProjDmndRsceAssgmtDistrStrtDte" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Distr. Start Date" sap:quickinfo="Start Date of the Distribution Period"/>
+                <Property Name="ProjDmndRsceAssgmtDistrEndDte" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Distr. End Date" sap:quickinfo="End Date of the Distribution Period"/>
+                <Property Name="ProjDmndRsceDistrIsNotSupplied" Type="Edm.Boolean" sap:display-format="UpperCase" sap:label="Assgmt Is Confirmed" sap:quickinfo="Resource Assignment Is Confirmed" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="CreatedByUser" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Created By" sap:quickinfo="Created By User"/>
+                <Property Name="CreationDateTime" Type="Edm.DateTimeOffset" Precision="7" sap:label="Created On" sap:quickinfo="Creation Date Time"/>
+                <Property Name="LastChangedByUser" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Changed By" sap:quickinfo="Last Changed By User"/>
+                <Property Name="LastChangeDateTime" Type="Edm.DateTimeOffset" Precision="7" sap:label="Changed On" sap:quickinfo="Last Change Date Time"/>
+                <NavigationProperty Name="to_Assignment" Relationship="cds_api_projectdemand.assoc_4A61008E41B33FB705F1F0D9074B6702" FromRole="ToRole_assoc_4A61008E41B33FB705F1F0D9074B6702" ToRole="FromRole_assoc_4A61008E41B33FB705F1F0D9074B6702"/>
+                <NavigationProperty Name="to_Root" Relationship="cds_api_projectdemand.assoc_857197C78DC13DC4617A49655AF6F21E" FromRole="FromRole_assoc_857197C78DC13DC4617A49655AF6F21E" ToRole="ToRole_assoc_857197C78DC13DC4617A49655AF6F21E"/>
+            </EntityType>
+            <EntityType Name="A_ProjDmndRsceReqDistribution_Type" sap:label="Resource Request Distribution" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ProjDmndRsceReqDistrUUID"/>
+                </Key>
+                <Property Name="ProjDmndRsceReqDistrUUID" Type="Edm.Guid" Nullable="false" sap:label="Request Distr. UUID" sap:quickinfo="Global Identification of a Resource Request Distribution" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjDmndResourceRequestUUID" Type="Edm.Guid" sap:label="Rsce Request UUID" sap:quickinfo="Global Identification of a Resource Request" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjectDemandUUID" Type="Edm.Guid" sap:label="Demand UUID" sap:quickinfo="Global Identification of a Project Demand" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjDmndRsceReqDistrYearVal" Type="Edm.String" MaxLength="4" sap:display-format="NonNegative" sap:label="Year of Distribution" sap:quickinfo="Year of a Distribution Period"/>
+                <Property Name="ProjDmndRsceReqDistrPerdVal" Type="Edm.String" MaxLength="3" sap:display-format="NonNegative" sap:label="Distribution Period" sap:quickinfo="Period to Which a Quantity is Distibuted"/>
+                <Property Name="ProjDmndRsceReqDistrQuantity" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="ProjDmndRsceReqDistrQtyUnit" sap:label="Distributed Quantity" sap:quickinfo="Resource Quantity Requested for a Distribution Period"/>
+                <Property Name="ProjDmndRsceReqDistrQtyUnit" Type="Edm.String" MaxLength="3" sap:label="Quantity Unit" sap:quickinfo="Unit of Measure for the Distributed Quantity" sap:semantics="unit-of-measure"/>
+                <Property Name="ProjDmndRsceReqDistrPerdAmt" Type="Edm.Decimal" Precision="17" Scale="3" sap:unit="ProjDmndRsceReqDistrPerdAmtCur" sap:variable-scale="true" sap:label="Plannend Cost"/>
+                <Property Name="ProjDmndRsceReqDistrPerdAmtCur" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Currency" sap:semantics="currency-code"/>
+                <Property Name="ProjDmndRsceReqDistrRevenueAmt" Type="Edm.Decimal" Precision="17" Scale="3" sap:unit="ProjDmndRsceReqDistrRevnAmtCur" sap:variable-scale="true" sap:label="Planned Revenue"/>
+                <Property Name="ProjDmndRsceReqDistrRevnAmtCur" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Currency" sap:semantics="currency-code"/>
+                <Property Name="ProjDmndReferencedPlanDataUUID" Type="Edm.Guid" sap:label="Project Plan Item" sap:quickinfo="Corresponding Line Item in Project Plan"/>
+                <Property Name="ProjDmndRsceReqDistrStartDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Distr. Start Date" sap:quickinfo="Start Date of the Distribution Period"/>
+                <Property Name="ProjDmndRsceReqDistrEndDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Distr. End Date" sap:quickinfo="End Date of the Distribution Period"/>
+                <Property Name="CreatedByUser" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Created By" sap:quickinfo="Created By User"/>
+                <Property Name="CreationDateTime" Type="Edm.DateTimeOffset" Precision="7" sap:label="Created On" sap:quickinfo="Creation Date Time"/>
+                <Property Name="LastChangedByUser" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Changed By" sap:quickinfo="Last Changed By User"/>
+                <Property Name="LastChangeDateTime" Type="Edm.DateTimeOffset" Precision="7" sap:label="Changed On" sap:quickinfo="Last Change Date Time"/>
+                <NavigationProperty Name="to_Root" Relationship="cds_api_projectdemand.assoc_7F61AFDFCCAF5A9CF6551819D6BD5150" FromRole="FromRole_assoc_7F61AFDFCCAF5A9CF6551819D6BD5150" ToRole="ToRole_assoc_7F61AFDFCCAF5A9CF6551819D6BD5150"/>
+                <NavigationProperty Name="to_ProjDmndRsceReq" Relationship="cds_api_projectdemand.assoc_050E3702A34D18C42EDDE2F4D4678693" FromRole="ToRole_assoc_050E3702A34D18C42EDDE2F4D4678693" ToRole="FromRole_assoc_050E3702A34D18C42EDDE2F4D4678693"/>
+            </EntityType>
+            <EntityType Name="A_ProjectDemand_Type" sap:label="Project Demand" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ProjectDemandUUID"/>
+                </Key>
+                <Property Name="ProjectDemandUUID" Type="Edm.Guid" Nullable="false" sap:label="Demand UUID" sap:quickinfo="Global Identification of a Project Demand" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjectDemand" Type="Edm.String" MaxLength="24" sap:display-format="UpperCase" sap:label="Demand ID" sap:quickinfo="External ID of a Project Demand"/>
+                <Property Name="ProjectDemandName" Type="Edm.String" MaxLength="40" sap:label="Demand Name" sap:quickinfo="Project Demand Name"/>
+                <Property Name="ProjectDemandDescription" Type="Edm.String" MaxLength="1000" sap:label="Description" sap:quickinfo="Description of a Project Demand"/>
+                <Property Name="ProjectDemandCategory" Type="Edm.String" MaxLength="2" sap:display-format="UpperCase" sap:label="Demand Category" sap:quickinfo="Project Demand Category"/>
+                <Property Name="ProjectDemandType" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Demand Type" sap:quickinfo="Project Demand Type"/>
+                <Property Name="ReferencedObjectUUID" Type="Edm.Guid" sap:label="Referenced Object" sap:quickinfo="UUID of the Object to Which a Demand Is Related"/>
+                <Property Name="ProjectDemandStatus" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Demand Status" sap:quickinfo="Project Demand Status"/>
+                <Property Name="ProjectDemandDateMaintenance" Type="Edm.String" MaxLength="2" sap:label="Date Alignment" sap:quickinfo="Alignment of Project Demand Dates with WBS Element Dates"/>
+                <Property Name="ProjectDemandStartDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Demand Start Date" sap:quickinfo="Start Date of the Demand"/>
+                <Property Name="ProjectDemandEndDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Demand End Date" sap:quickinfo="End Date of the Demand"/>
+                <Property Name="ProjectDemandReleasedDateTime" Type="Edm.DateTimeOffset" Precision="0" sap:label="Requested On" sap:quickinfo="Timestamp of Demand Status Change to &quot;Requested&quot;"/>
+                <Property Name="ProjDmndActualSupplyDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Demand Delivery" sap:quickinfo="Delivery Date of the Demand"/>
+                <Property Name="ProjectDemandPerUnitAmount" Type="Edm.Decimal" Precision="23" Scale="3" sap:unit="ProjectDemandRequestCurrency" sap:variable-scale="true" sap:label="Price Per Unit" sap:quickinfo="Price per unit"/>
+                <Property Name="ProjectDemandRequestCurrency" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Demand Currency" sap:quickinfo="Project Demand Currency" sap:semantics="currency-code"/>
+                <Property Name="ProjDmndRequestedQuantityUnit" Type="Edm.String" MaxLength="3" sap:label="Quantity Unit" sap:quickinfo="Unit of Measure for the Required Quantity" sap:semantics="unit-of-measure"/>
+                <Property Name="PriceUnitQty" Type="Edm.Decimal" Precision="5" Scale="0" sap:label="Price unit"/>
+                <Property Name="ProjectDemandRequestNetAmount" Type="Edm.Decimal" Precision="23" Scale="3" sap:unit="ProjDmndReqNetAmountCurrency" sap:variable-scale="true" sap:label="Net Value" sap:quickinfo="Estimated Net Value of the Project Demand" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjDmndReqNetAmountCurrency" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Demand Currency" sap:quickinfo="Project Demand Currency" sap:semantics="currency-code"/>
+                <Property Name="ProjectDemandOverallAmount" Type="Edm.Decimal" Precision="23" Scale="3" sap:unit="ProjDmndReqNetAmountCurrency" sap:variable-scale="true" sap:label="Overall Limit"/>
+                <Property Name="ProjectDemandExpectedAmount" Type="Edm.Decimal" Precision="23" Scale="3" sap:unit="ProjDmndReqNetAmountCurrency" sap:variable-scale="true" sap:label="Exptd Value" sap:quickinfo="Expected Value of Overall Limit"/>
+                <Property Name="ProjDmndRequestedQuantity" Type="Edm.Decimal" Precision="15" Scale="3" sap:unit="ProjDmndRequestedQuantityUnit" sap:label="Required Quantity"/>
+                <Property Name="Plant" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Plant"/>
+                <Property Name="PurchasingGroup" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="Purchasing Group"/>
+                <Property Name="PurchasingOrganization" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Purch. Organization" sap:quickinfo="Purchasing Organization"/>
+                <Property Name="CreatedByUser" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Created By" sap:quickinfo="Name of the Person Who Created the Object" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="CreationDateTime" Type="Edm.DateTimeOffset" Precision="7" sap:label="Created On" sap:quickinfo="Timestamp of Object Creation" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="LastChangedByUser" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Changed By" sap:quickinfo="Last Changed By User" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="LastChangeDateTime" Type="Edm.DateTimeOffset" Precision="7" sap:label="Changed On" sap:quickinfo="Last Change Date Time" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjectDemandLastChangedByUser" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Demand Changed By" sap:quickinfo="User Who Last Changed a Demand (Sub-Entities Included)" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjDemandLastChangeDateTime" Type="Edm.DateTimeOffset" Precision="7" sap:label="Demand Changed On" sap:quickinfo="Timestamp of Last Change to a Demand (Sub-Entities Included)" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjDmndExternalReferenceUUID" Type="Edm.Guid" sap:label="External Reference" sap:quickinfo="External UUID related to a Demand" sap:creatable="false" sap:updatable="false"/>
+                <NavigationProperty Name="to_Expense" Relationship="cds_api_projectdemand.assoc_8069B6E6558E0EAB95021C91AD082011" FromRole="FromRole_assoc_8069B6E6558E0EAB95021C91AD082011" ToRole="ToRole_assoc_8069B6E6558E0EAB95021C91AD082011"/>
+                <NavigationProperty Name="to_Material" Relationship="cds_api_projectdemand.assoc_8E94444EA96CC4B705370147907B0D66" FromRole="FromRole_assoc_8E94444EA96CC4B705370147907B0D66" ToRole="ToRole_assoc_8E94444EA96CC4B705370147907B0D66"/>
+                <NavigationProperty Name="to_Service" Relationship="cds_api_projectdemand.assoc_AA56C01D6341BD1CC2E9430B6D1A37DB" FromRole="FromRole_assoc_AA56C01D6341BD1CC2E9430B6D1A37DB" ToRole="ToRole_assoc_AA56C01D6341BD1CC2E9430B6D1A37DB"/>
+                <NavigationProperty Name="to_Work" Relationship="cds_api_projectdemand.assoc_0D3A585F4D77EF0A189A999D93E62853" FromRole="FromRole_assoc_0D3A585F4D77EF0A189A999D93E62853" ToRole="ToRole_assoc_0D3A585F4D77EF0A189A999D93E62853"/>
+            </EntityType>
+            <EntityType Name="ProjectDemandExpense_Type" sap:label="Demand for Expense" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ProjectDemandExpenseUUID"/>
+                </Key>
+                <Property Name="ProjectDemandExpenseUUID" Type="Edm.Guid" Nullable="false" sap:label="Dmnd f. Expense UUID" sap:quickinfo="Global Identification of a Demand for Expense" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjectDemandUUID" Type="Edm.Guid" sap:label="Demand UUID" sap:quickinfo="Global Identification of a Project Demand" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjectDemandExpenseType" Type="Edm.String" MaxLength="40" sap:display-format="UpperCase" sap:label="Expense Type"/>
+                <Property Name="ProjectUUID" Type="Edm.Guid" sap:label="Project UUID" sap:quickinfo="Global ID of the Project to Which a Demand is Related" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ReferencedObjectUUID" Type="Edm.Guid" sap:label="Referenced Object" sap:quickinfo="UUID of the Object to Which a Demand Is Related" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjDmndBillingControlCategory" Type="Edm.String" MaxLength="8" sap:display-format="UpperCase" sap:label="Billing Category" sap:quickinfo="Billing Control Category"/>
+                <Property Name="CreatedByUser" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Created By" sap:quickinfo="Created By User"/>
+                <Property Name="CreationDateTime" Type="Edm.DateTimeOffset" Precision="7" sap:label="Created On" sap:quickinfo="Creation Date Time"/>
+                <Property Name="LastChangedByUser" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Changed By" sap:quickinfo="Last Changed By User"/>
+                <Property Name="LastChangeDateTime" Type="Edm.DateTimeOffset" Precision="7" sap:label="Changed On" sap:quickinfo="Last Change Date Time"/>
+                <NavigationProperty Name="to_Root" Relationship="cds_api_projectdemand.assoc_8069B6E6558E0EAB95021C91AD082011" FromRole="ToRole_assoc_8069B6E6558E0EAB95021C91AD082011" ToRole="FromRole_assoc_8069B6E6558E0EAB95021C91AD082011"/>
+                <NavigationProperty Name="to_ProjDmndExpenseDistr" Relationship="cds_api_projectdemand.assoc_D3620BF46C119C743D51DF37133A4A35" FromRole="FromRole_assoc_D3620BF46C119C743D51DF37133A4A35" ToRole="ToRole_assoc_D3620BF46C119C743D51DF37133A4A35"/>
+            </EntityType>
+            <EntityType Name="A_ProjectDemandMaterial_Type" sap:label="Material Demand" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ProjectDemandMaterialUUID"/>
+                </Key>
+                <Property Name="ProjectDemandMaterialUUID" Type="Edm.Guid" Nullable="false" sap:label="Material Demand UUID" sap:quickinfo="Global Identification for Material Demand" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjectDemandUUID" Type="Edm.Guid" sap:label="Demand UUID" sap:quickinfo="Global Identification of a Project Demand" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="Material" Type="Edm.String" MaxLength="18" sap:display-format="UpperCase" sap:label="Material Number"/>
+                <Property Name="StorageLocation" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Storage Location"/>
+                <Property Name="MaterialGroup" Type="Edm.String" MaxLength="9" sap:display-format="UpperCase" sap:label="Material Group"/>
+                <Property Name="Supplier" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Desired Supplier" sap:quickinfo="Desired Supplier for Project Demand"/>
+                <Property Name="PurchasingInfoRecord" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Demand Info Record" sap:quickinfo="Info Record for Project Demand"/>
+                <Property Name="PurchaseContract" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Purchasing Doc Nmbr" sap:quickinfo="Purchasing Document Number"/>
+                <Property Name="PurchaseContractItem" Type="Edm.String" MaxLength="5" sap:display-format="NonNegative" sap:label="Contract Item Numbr" sap:quickinfo="Item Number of Purchasing Document"/>
+                <Property Name="MaterialPlannedDeliveryDurn" Type="Edm.Decimal" Precision="3" Scale="0" sap:label="Planned Deliv. Time" sap:quickinfo="Planned Delivery Time in Days"/>
+                <Property Name="PurchaseRequisition" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="PR Number" sap:quickinfo="Purchase Requisition Number" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="FormattedPurRequisitionItem" Type="Edm.String" MaxLength="30" sap:label="Requisition/Item ID" sap:quickinfo="Formatted Purchase Requisition Item" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PurchaseRequisitionItem" Type="Edm.String" MaxLength="5" sap:display-format="NonNegative" sap:label="PR Item Number" sap:quickinfo="Purchase Requisition Item Number" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="IsPurOrderAllwdForInbDeliv" Type="Edm.Boolean" sap:display-format="UpperCase" sap:label="TRUE" sap:quickinfo="Data element for domain BOOLE: TRUE (='X') and FALSE (=' ')" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="OrderedQuantity" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="BaseUnit" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="StillToBeDeliveredQuantity" Type="Edm.Decimal" Precision="14" Scale="3" sap:unit="BaseUnit" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="InvoiceReceiptAmount" Type="Edm.Decimal" Precision="21" Scale="3" sap:unit="DocumentCurrency" sap:variable-scale="true" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="RequestedQuantity" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="BaseUnit" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="NetValueAmountInDocCurrency" Type="Edm.Decimal" Precision="25" Scale="3" sap:unit="DocumentCurrency" sap:variable-scale="true" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="DocumentCurrency" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Currency" sap:quickinfo="Currency Key" sap:creatable="false" sap:updatable="false" sap:semantics="currency-code"/>
+                <Property Name="ScheduleLineDeliveryDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="SchedLineStscDeliveryDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="BaseUnit" Type="Edm.String" MaxLength="3" sap:label="Unit of Measure" sap:quickinfo="Purchase requisition unit of measure" sap:creatable="false" sap:updatable="false" sap:semantics="unit-of-measure"/>
+                <Property Name="GoodsReceiptAmount" Type="Edm.Decimal" Precision="21" Scale="3" sap:unit="DocumentCurrency" sap:variable-scale="true" sap:creatable="false" sap:updatable="false"/>
+                <NavigationProperty Name="to_RootTP" Relationship="cds_api_projectdemand.assoc_8E94444EA96CC4B705370147907B0D66" FromRole="ToRole_assoc_8E94444EA96CC4B705370147907B0D66" ToRole="FromRole_assoc_8E94444EA96CC4B705370147907B0D66"/>
+                <NavigationProperty Name="to_MaterialSupply" Relationship="cds_api_projectdemand.assoc_22C7D4098ED9F4F212048064293DA2F9" FromRole="FromRole_assoc_22C7D4098ED9F4F212048064293DA2F9" ToRole="ToRole_assoc_22C7D4098ED9F4F212048064293DA2F9"/>
+            </EntityType>
+            <EntityType Name="A_ProjectDemandMaterialSupply_Type" sap:label="Material Supply Data" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ProjDemandMaterialSupplyUUID"/>
+                </Key>
+                <Property Name="ProjDemandMaterialSupplyUUID" Type="Edm.Guid" Nullable="false" sap:label="Mtrl Dmnd Sply UUID" sap:quickinfo="UUID for the Material Demand Supply" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjectDemandMaterialUUID" Type="Edm.Guid" sap:label="Material Demand UUID" sap:quickinfo="Global Identification for Material Demand" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PurchaseRequisition" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="PR Number" sap:quickinfo="Purchase Requisition Number" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PurchaseRequisitionItem" Type="Edm.String" MaxLength="5" sap:display-format="NonNegative" sap:label="PR Item Number" sap:quickinfo="Purchase Requisition Item Number" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjectDemandRequirementPlan" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Requirement Plan" sap:quickinfo="Project Demand Requirement Plan"/>
+                <Property Name="ProjDmndPlndIndepRqmtItem" Type="Edm.String" MaxLength="60" sap:display-format="UpperCase" sap:label="Planned Ind Req Itm" sap:quickinfo="Project Demand Planned Independent Requirement Item"/>
+                <Property Name="ProjectDemandUUID" Type="Edm.Guid" sap:label="Demand UUID" sap:quickinfo="Global Identification of a Project Demand" sap:creatable="false" sap:updatable="false"/>
+                <NavigationProperty Name="to_Material" Relationship="cds_api_projectdemand.assoc_22C7D4098ED9F4F212048064293DA2F9" FromRole="ToRole_assoc_22C7D4098ED9F4F212048064293DA2F9" ToRole="FromRole_assoc_22C7D4098ED9F4F212048064293DA2F9"/>
+                <NavigationProperty Name="to_Root" Relationship="cds_api_projectdemand.assoc_70CC7A24A52AEA0488C0E52D378E0BE4" FromRole="FromRole_assoc_70CC7A24A52AEA0488C0E52D378E0BE4" ToRole="ToRole_assoc_70CC7A24A52AEA0488C0E52D378E0BE4"/>
+            </EntityType>
+            <EntityType Name="A_ProjectDemandResource_Type" sap:label="Resource Demand" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ProjectDemandWorkUUID"/>
+                </Key>
+                <Property Name="ProjectDemandWorkUUID" Type="Edm.Guid" Nullable="false" sap:label="Resource Dmnd UUID" sap:quickinfo="Global Identification of a Resource Demand" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjectDemandUUID" Type="Edm.Guid" sap:label="Demand UUID" sap:quickinfo="Global Identification of a Project Demand" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="CostCenter" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Cost Center"/>
+                <Property Name="ActivityType" Type="Edm.String" MaxLength="6" sap:display-format="UpperCase" sap:label="Activity Type"/>
+                <Property Name="ProjDmndAssgmtStatus" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Assignment Status" sap:quickinfo="Assignment Status of a Resource Demand"/>
+                <Property Name="ProjectElementWorkItem" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Work Item ID" sap:quickinfo="ID of the Work Item to Which a Resource Demand is Related"/>
+                <Property Name="ProjDmndBillingControlCategory" Type="Edm.String" MaxLength="8" sap:display-format="UpperCase" sap:label="Billing Category" sap:quickinfo="Billing Control Category"/>
+                <Property Name="ProjDmndRequestedDeliveryOrg" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Delivery Org." sap:quickinfo="Delivery Organization from Which a Resource is Required"/>
+                <NavigationProperty Name="to_Root" Relationship="cds_api_projectdemand.assoc_0D3A585F4D77EF0A189A999D93E62853" FromRole="ToRole_assoc_0D3A585F4D77EF0A189A999D93E62853" ToRole="FromRole_assoc_0D3A585F4D77EF0A189A999D93E62853"/>
+                <NavigationProperty Name="to_ResourceAssignment" Relationship="cds_api_projectdemand.assoc_AF957FA162404D74D4B635D7E06EC123" FromRole="FromRole_assoc_AF957FA162404D74D4B635D7E06EC123" ToRole="ToRole_assoc_AF957FA162404D74D4B635D7E06EC123"/>
+                <NavigationProperty Name="to_ResourceRequest" Relationship="cds_api_projectdemand.assoc_842489CFE206DB5E01231504A4F2A4D4" FromRole="FromRole_assoc_842489CFE206DB5E01231504A4F2A4D4" ToRole="ToRole_assoc_842489CFE206DB5E01231504A4F2A4D4"/>
+            </EntityType>
+            <EntityType Name="A_ProjectDemandResourceRequest_Type" sap:label="Resource Request" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ProjDmndResourceRequestUUID"/>
+                </Key>
+                <Property Name="ProjDmndResourceRequestUUID" Type="Edm.Guid" Nullable="false" sap:label="Rsce Request UUID" sap:quickinfo="Global Identification of a Resource Request" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjectDemandWorkUUID" Type="Edm.Guid" sap:label="Resource Dmnd UUID" sap:quickinfo="Global Identification of a Resource Demand" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjectDemandUUID" Type="Edm.Guid" sap:label="Demand UUID" sap:quickinfo="Global Identification of a Project Demand" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjectDemandRequestedResource" Type="Edm.String" MaxLength="8" sap:display-format="NonNegative" sap:label="Resource" sap:quickinfo="Personnel Number of a Resource"/>
+                <Property Name="ProjDmndStfngInstructionText" Type="Edm.String" MaxLength="1000" sap:label="Staffing Instruction" sap:quickinfo="Staffing Instruction for a Resource Demand"/>
+                <Property Name="ProjDmndRsceReqWorkAssgmtOID" Type="Edm.String" MaxLength="100" sap:display-format="UpperCase" sap:label="Work Assignment ID" sap:quickinfo="Work Assignment ID (SAP One Domain Model)"/>
+                <Property Name="ProjDmndRsceReqWrkfrcPersonOID" Type="Edm.String" MaxLength="36" sap:label="Workforce Person ID" sap:quickinfo="Workforce Person ID (SAP One Domain Model)"/>
+                <Property Name="ProjDmndRsceReqStartDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Demand Start Date" sap:quickinfo="Start Date of the Demand"/>
+                <Property Name="ProjDmndRsceReqEndDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Demand End Date" sap:quickinfo="End Date of the Demand"/>
+                <Property Name="CreatedByUser" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Created By" sap:quickinfo="Created By User"/>
+                <Property Name="CreationDateTime" Type="Edm.DateTimeOffset" Precision="7" sap:label="Created On" sap:quickinfo="Creation Date Time"/>
+                <Property Name="LastChangedByUser" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Changed By" sap:quickinfo="Last Changed By User"/>
+                <Property Name="LastChangeDateTime" Type="Edm.DateTimeOffset" Precision="7" sap:label="Changed On" sap:quickinfo="Last Change Date Time"/>
+                <NavigationProperty Name="to_Work" Relationship="cds_api_projectdemand.assoc_842489CFE206DB5E01231504A4F2A4D4" FromRole="ToRole_assoc_842489CFE206DB5E01231504A4F2A4D4" ToRole="FromRole_assoc_842489CFE206DB5E01231504A4F2A4D4"/>
+                <NavigationProperty Name="to_ProjDmndRsceReqDistr" Relationship="cds_api_projectdemand.assoc_050E3702A34D18C42EDDE2F4D4678693" FromRole="FromRole_assoc_050E3702A34D18C42EDDE2F4D4678693" ToRole="ToRole_assoc_050E3702A34D18C42EDDE2F4D4678693"/>
+                <NavigationProperty Name="to_Root" Relationship="cds_api_projectdemand.assoc_97FC1FA347810F813C21EDEB756C6564" FromRole="FromRole_assoc_97FC1FA347810F813C21EDEB756C6564" ToRole="ToRole_assoc_97FC1FA347810F813C21EDEB756C6564"/>
+            </EntityType>
+            <EntityType Name="A_ProjectDemandService_Type" sap:label="Service Demand" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ProjectDemandServiceUUID"/>
+                </Key>
+                <Property Name="ProjectDemandServiceUUID" Type="Edm.Guid" Nullable="false" sap:label="Service Dmnd UUID" sap:quickinfo="Global Identification for Service Demand" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjectDemandUUID" Type="Edm.Guid" sap:label="Demand UUID" sap:quickinfo="Global Identification of a Project Demand" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="Material" Type="Edm.String" MaxLength="18" sap:display-format="UpperCase" sap:label="Material Number"/>
+                <Property Name="MaterialGroup" Type="Edm.String" MaxLength="9" sap:display-format="UpperCase" sap:label="Material Group"/>
+                <Property Name="Supplier" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Desired Supplier" sap:quickinfo="Desired Supplier for Project Demand"/>
+                <Property Name="PurchasingInfoRecord" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Demand Info Record" sap:quickinfo="Info Record for Project Demand"/>
+                <Property Name="PurchaseContract" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Purchasing Doc Nmbr" sap:quickinfo="Purchasing Document Number"/>
+                <Property Name="PurchaseContractItem" Type="Edm.String" MaxLength="5" sap:display-format="NonNegative" sap:label="Contract Item Numbr" sap:quickinfo="Item Number of Purchasing Document"/>
+                <Property Name="MaterialPlannedDeliveryDurn" Type="Edm.Decimal" Precision="3" Scale="0" sap:label="Planned Deliv. Time" sap:quickinfo="Planned Delivery Time in Days"/>
+                <Property Name="SchedLineStscDeliveryDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="IsPurOrderAllwdForInbDeliv" Type="Edm.Boolean" sap:display-format="UpperCase" sap:label="TRUE" sap:quickinfo="Data element for domain BOOLE: TRUE (='X') and FALSE (=' ')" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="BaseUnit" Type="Edm.String" MaxLength="3" sap:label="Unit of Measure" sap:quickinfo="Purchase requisition unit of measure" sap:creatable="false" sap:updatable="false" sap:semantics="unit-of-measure"/>
+                <Property Name="DocumentCurrency" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Currency" sap:quickinfo="Currency Key" sap:creatable="false" sap:updatable="false" sap:semantics="currency-code"/>
+                <Property Name="GoodsReceiptAmount" Type="Edm.Decimal" Precision="21" Scale="3" sap:unit="DocumentCurrency" sap:variable-scale="true" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="InvoiceReceiptAmount" Type="Edm.Decimal" Precision="21" Scale="3" sap:unit="DocumentCurrency" sap:variable-scale="true" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="OpenQuantity" Type="Edm.Decimal" Precision="16" Scale="3" sap:unit="BaseUnit" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="OrderedQuantity" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="BaseUnit" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PurchaseRequisition" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="PR Number" sap:quickinfo="Purchase Requisition Number" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PurchaseRequisitionItem" Type="Edm.String" MaxLength="5" sap:display-format="NonNegative" sap:label="PR Item Number" sap:quickinfo="Purchase Requisition Item Number" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ScheduleLineDeliveryDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="StillToBeDeliveredQuantity" Type="Edm.Decimal" Precision="14" Scale="3" sap:unit="BaseUnit" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="NetValueAmountInDocCurrency" Type="Edm.Decimal" Precision="25" Scale="3" sap:unit="DocumentCurrency" sap:variable-scale="true" sap:creatable="false" sap:updatable="false"/>
+                <NavigationProperty Name="to_RootTP" Relationship="cds_api_projectdemand.assoc_AA56C01D6341BD1CC2E9430B6D1A37DB" FromRole="ToRole_assoc_AA56C01D6341BD1CC2E9430B6D1A37DB" ToRole="FromRole_assoc_AA56C01D6341BD1CC2E9430B6D1A37DB"/>
+                <NavigationProperty Name="to_ServiceSupply" Relationship="cds_api_projectdemand.assoc_841F909F38A32C6266569DF1C5736D53" FromRole="FromRole_assoc_841F909F38A32C6266569DF1C5736D53" ToRole="ToRole_assoc_841F909F38A32C6266569DF1C5736D53"/>
+            </EntityType>
+            <EntityType Name="A_ProjectDemandServiceSupply_Type" sap:label="Service Supply Data" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ProjectDemandServiceSupplyUUID"/>
+                </Key>
+                <Property Name="ProjectDemandServiceSupplyUUID" Type="Edm.Guid" Nullable="false" sap:label="Srvc Sply UUID" sap:quickinfo="Global Identification for Service Supply" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjectDemandServiceUUID" Type="Edm.Guid" sap:label="Service Dmnd UUID" sap:quickinfo="Global Identification for Service Demand" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjectDemandUUID" Type="Edm.Guid" sap:label="Demand UUID" sap:quickinfo="Global Identification of a Project Demand" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PurchaseRequisition" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="PR Number" sap:quickinfo="Purchase Requisition Number" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PurchaseRequisitionItem" Type="Edm.String" MaxLength="5" sap:display-format="NonNegative" sap:label="PR Item Number" sap:quickinfo="Purchase Requisition Item Number" sap:creatable="false" sap:updatable="false"/>
+                <NavigationProperty Name="to_Service" Relationship="cds_api_projectdemand.assoc_841F909F38A32C6266569DF1C5736D53" FromRole="ToRole_assoc_841F909F38A32C6266569DF1C5736D53" ToRole="FromRole_assoc_841F909F38A32C6266569DF1C5736D53"/>
+                <NavigationProperty Name="to_Root" Relationship="cds_api_projectdemand.assoc_5B24D19A7014756AA28D6907CAA546CD" FromRole="FromRole_assoc_5B24D19A7014756AA28D6907CAA546CD" ToRole="ToRole_assoc_5B24D19A7014756AA28D6907CAA546CD"/>
+            </EntityType>
+            <Association Name="assoc_5B24D19A7014756AA28D6907CAA546CD" sap:content-version="1">
+                <End Type="cds_api_projectdemand.A_ProjectDemandServiceSupply_Type" Multiplicity="1" Role="FromRole_assoc_5B24D19A7014756AA28D6907CAA546CD"/>
+                <End Type="cds_api_projectdemand.A_ProjectDemand_Type" Multiplicity="1" Role="ToRole_assoc_5B24D19A7014756AA28D6907CAA546CD"/>
+                <ReferentialConstraint>
+                    <Principal Role="ToRole_assoc_5B24D19A7014756AA28D6907CAA546CD">
+                        <PropertyRef Name="ProjectDemandUUID"/>
+                    </Principal>
+                    <Dependent Role="FromRole_assoc_5B24D19A7014756AA28D6907CAA546CD">
+                        <PropertyRef Name="ProjectDemandUUID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="assoc_857197C78DC13DC4617A49655AF6F21E" sap:content-version="1">
+                <End Type="cds_api_projectdemand.A_ProjDmndRsceAssgmtDistr_Type" Multiplicity="1" Role="FromRole_assoc_857197C78DC13DC4617A49655AF6F21E"/>
+                <End Type="cds_api_projectdemand.A_ProjectDemand_Type" Multiplicity="0..1" Role="ToRole_assoc_857197C78DC13DC4617A49655AF6F21E"/>
+                <ReferentialConstraint>
+                    <Principal Role="ToRole_assoc_857197C78DC13DC4617A49655AF6F21E">
+                        <PropertyRef Name="ProjectDemandUUID"/>
+                    </Principal>
+                    <Dependent Role="FromRole_assoc_857197C78DC13DC4617A49655AF6F21E">
+                        <PropertyRef Name="ProjectDemandUUID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="assoc_70CC7A24A52AEA0488C0E52D378E0BE4" sap:content-version="1">
+                <End Type="cds_api_projectdemand.A_ProjectDemandMaterialSupply_Type" Multiplicity="1" Role="FromRole_assoc_70CC7A24A52AEA0488C0E52D378E0BE4"/>
+                <End Type="cds_api_projectdemand.A_ProjectDemand_Type" Multiplicity="1" Role="ToRole_assoc_70CC7A24A52AEA0488C0E52D378E0BE4"/>
+                <ReferentialConstraint>
+                    <Principal Role="ToRole_assoc_70CC7A24A52AEA0488C0E52D378E0BE4">
+                        <PropertyRef Name="ProjectDemandUUID"/>
+                    </Principal>
+                    <Dependent Role="FromRole_assoc_70CC7A24A52AEA0488C0E52D378E0BE4">
+                        <PropertyRef Name="ProjectDemandUUID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="assoc_8069B6E6558E0EAB95021C91AD082011" sap:content-version="1">
+                <End Type="cds_api_projectdemand.A_ProjectDemand_Type" Multiplicity="1" Role="FromRole_assoc_8069B6E6558E0EAB95021C91AD082011">
+                    <OnDelete Action="Cascade"/>
+                </End>
+                <End Type="cds_api_projectdemand.ProjectDemandExpense_Type" Multiplicity="0..1" Role="ToRole_assoc_8069B6E6558E0EAB95021C91AD082011"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_assoc_8069B6E6558E0EAB95021C91AD082011">
+                        <PropertyRef Name="ProjectDemandUUID"/>
+                    </Principal>
+                    <Dependent Role="ToRole_assoc_8069B6E6558E0EAB95021C91AD082011">
+                        <PropertyRef Name="ProjectDemandUUID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="assoc_8E94444EA96CC4B705370147907B0D66" sap:content-version="1">
+                <End Type="cds_api_projectdemand.A_ProjectDemand_Type" Multiplicity="1" Role="FromRole_assoc_8E94444EA96CC4B705370147907B0D66">
+                    <OnDelete Action="Cascade"/>
+                </End>
+                <End Type="cds_api_projectdemand.A_ProjectDemandMaterial_Type" Multiplicity="0..1" Role="ToRole_assoc_8E94444EA96CC4B705370147907B0D66"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_assoc_8E94444EA96CC4B705370147907B0D66">
+                        <PropertyRef Name="ProjectDemandUUID"/>
+                    </Principal>
+                    <Dependent Role="ToRole_assoc_8E94444EA96CC4B705370147907B0D66">
+                        <PropertyRef Name="ProjectDemandUUID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="assoc_AA56C01D6341BD1CC2E9430B6D1A37DB" sap:content-version="1">
+                <End Type="cds_api_projectdemand.A_ProjectDemand_Type" Multiplicity="1" Role="FromRole_assoc_AA56C01D6341BD1CC2E9430B6D1A37DB">
+                    <OnDelete Action="Cascade"/>
+                </End>
+                <End Type="cds_api_projectdemand.A_ProjectDemandService_Type" Multiplicity="0..1" Role="ToRole_assoc_AA56C01D6341BD1CC2E9430B6D1A37DB"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_assoc_AA56C01D6341BD1CC2E9430B6D1A37DB">
+                        <PropertyRef Name="ProjectDemandUUID"/>
+                    </Principal>
+                    <Dependent Role="ToRole_assoc_AA56C01D6341BD1CC2E9430B6D1A37DB">
+                        <PropertyRef Name="ProjectDemandUUID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="assoc_0D3A585F4D77EF0A189A999D93E62853" sap:content-version="1">
+                <End Type="cds_api_projectdemand.A_ProjectDemand_Type" Multiplicity="1" Role="FromRole_assoc_0D3A585F4D77EF0A189A999D93E62853">
+                    <OnDelete Action="Cascade"/>
+                </End>
+                <End Type="cds_api_projectdemand.A_ProjectDemandResource_Type" Multiplicity="0..1" Role="ToRole_assoc_0D3A585F4D77EF0A189A999D93E62853"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_assoc_0D3A585F4D77EF0A189A999D93E62853">
+                        <PropertyRef Name="ProjectDemandUUID"/>
+                    </Principal>
+                    <Dependent Role="ToRole_assoc_0D3A585F4D77EF0A189A999D93E62853">
+                        <PropertyRef Name="ProjectDemandUUID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="assoc_D3620BF46C119C743D51DF37133A4A35" sap:content-version="1">
+                <End Type="cds_api_projectdemand.ProjectDemandExpense_Type" Multiplicity="1" Role="FromRole_assoc_D3620BF46C119C743D51DF37133A4A35">
+                    <OnDelete Action="Cascade"/>
+                </End>
+                <End Type="cds_api_projectdemand.ProjDmndExpenseDistr_Type" Multiplicity="*" Role="ToRole_assoc_D3620BF46C119C743D51DF37133A4A35"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_assoc_D3620BF46C119C743D51DF37133A4A35">
+                        <PropertyRef Name="ProjectDemandExpenseUUID"/>
+                    </Principal>
+                    <Dependent Role="ToRole_assoc_D3620BF46C119C743D51DF37133A4A35">
+                        <PropertyRef Name="ProjectDemandExpenseUUID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="assoc_4A61008E41B33FB705F1F0D9074B6702" sap:content-version="1">
+                <End Type="cds_api_projectdemand.A_ProjDmndResourceAssignment_Type" Multiplicity="1" Role="FromRole_assoc_4A61008E41B33FB705F1F0D9074B6702">
+                    <OnDelete Action="Cascade"/>
+                </End>
+                <End Type="cds_api_projectdemand.A_ProjDmndRsceAssgmtDistr_Type" Multiplicity="*" Role="ToRole_assoc_4A61008E41B33FB705F1F0D9074B6702"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_assoc_4A61008E41B33FB705F1F0D9074B6702">
+                        <PropertyRef Name="ProjDmndRsceAssgmtUUID"/>
+                    </Principal>
+                    <Dependent Role="ToRole_assoc_4A61008E41B33FB705F1F0D9074B6702">
+                        <PropertyRef Name="ProjDmndRsceAssgmtUUID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="assoc_85FA8369C8BC8182519A94AB86696053" sap:content-version="1">
+                <End Type="cds_api_projectdemand.A_ProjDmndResourceAssignment_Type" Multiplicity="1" Role="FromRole_assoc_85FA8369C8BC8182519A94AB86696053"/>
+                <End Type="cds_api_projectdemand.A_ProjectDemand_Type" Multiplicity="1" Role="ToRole_assoc_85FA8369C8BC8182519A94AB86696053"/>
+                <ReferentialConstraint>
+                    <Principal Role="ToRole_assoc_85FA8369C8BC8182519A94AB86696053">
+                        <PropertyRef Name="ProjectDemandUUID"/>
+                    </Principal>
+                    <Dependent Role="FromRole_assoc_85FA8369C8BC8182519A94AB86696053">
+                        <PropertyRef Name="ProjectDemandUUID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="assoc_22C7D4098ED9F4F212048064293DA2F9" sap:content-version="1">
+                <End Type="cds_api_projectdemand.A_ProjectDemandMaterial_Type" Multiplicity="1" Role="FromRole_assoc_22C7D4098ED9F4F212048064293DA2F9">
+                    <OnDelete Action="Cascade"/>
+                </End>
+                <End Type="cds_api_projectdemand.A_ProjectDemandMaterialSupply_Type" Multiplicity="0..1" Role="ToRole_assoc_22C7D4098ED9F4F212048064293DA2F9"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_assoc_22C7D4098ED9F4F212048064293DA2F9">
+                        <PropertyRef Name="ProjectDemandMaterialUUID"/>
+                    </Principal>
+                    <Dependent Role="ToRole_assoc_22C7D4098ED9F4F212048064293DA2F9">
+                        <PropertyRef Name="ProjectDemandMaterialUUID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="assoc_050E3702A34D18C42EDDE2F4D4678693" sap:content-version="1">
+                <End Type="cds_api_projectdemand.A_ProjectDemandResourceRequest_Type" Multiplicity="1" Role="FromRole_assoc_050E3702A34D18C42EDDE2F4D4678693">
+                    <OnDelete Action="Cascade"/>
+                </End>
+                <End Type="cds_api_projectdemand.A_ProjDmndRsceReqDistribution_Type" Multiplicity="*" Role="ToRole_assoc_050E3702A34D18C42EDDE2F4D4678693"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_assoc_050E3702A34D18C42EDDE2F4D4678693">
+                        <PropertyRef Name="ProjDmndResourceRequestUUID"/>
+                    </Principal>
+                    <Dependent Role="ToRole_assoc_050E3702A34D18C42EDDE2F4D4678693">
+                        <PropertyRef Name="ProjDmndResourceRequestUUID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="assoc_97FC1FA347810F813C21EDEB756C6564" sap:content-version="1">
+                <End Type="cds_api_projectdemand.A_ProjectDemandResourceRequest_Type" Multiplicity="1" Role="FromRole_assoc_97FC1FA347810F813C21EDEB756C6564"/>
+                <End Type="cds_api_projectdemand.A_ProjectDemand_Type" Multiplicity="0..1" Role="ToRole_assoc_97FC1FA347810F813C21EDEB756C6564"/>
+                <ReferentialConstraint>
+                    <Principal Role="ToRole_assoc_97FC1FA347810F813C21EDEB756C6564">
+                        <PropertyRef Name="ProjectDemandUUID"/>
+                    </Principal>
+                    <Dependent Role="FromRole_assoc_97FC1FA347810F813C21EDEB756C6564">
+                        <PropertyRef Name="ProjectDemandUUID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="assoc_3658F13A6F5D574208281DDCE5FDC2DB" sap:content-version="1">
+                <End Type="cds_api_projectdemand.ProjDmndExpenseDistr_Type" Multiplicity="1" Role="FromRole_assoc_3658F13A6F5D574208281DDCE5FDC2DB"/>
+                <End Type="cds_api_projectdemand.A_ProjectDemand_Type" Multiplicity="0..1" Role="ToRole_assoc_3658F13A6F5D574208281DDCE5FDC2DB"/>
+                <ReferentialConstraint>
+                    <Principal Role="ToRole_assoc_3658F13A6F5D574208281DDCE5FDC2DB">
+                        <PropertyRef Name="ProjectDemandUUID"/>
+                    </Principal>
+                    <Dependent Role="FromRole_assoc_3658F13A6F5D574208281DDCE5FDC2DB">
+                        <PropertyRef Name="ProjectDemandUUID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="assoc_AF957FA162404D74D4B635D7E06EC123" sap:content-version="1">
+                <End Type="cds_api_projectdemand.A_ProjectDemandResource_Type" Multiplicity="1" Role="FromRole_assoc_AF957FA162404D74D4B635D7E06EC123">
+                    <OnDelete Action="Cascade"/>
+                </End>
+                <End Type="cds_api_projectdemand.A_ProjDmndResourceAssignment_Type" Multiplicity="*" Role="ToRole_assoc_AF957FA162404D74D4B635D7E06EC123"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_assoc_AF957FA162404D74D4B635D7E06EC123">
+                        <PropertyRef Name="ProjectDemandWorkUUID"/>
+                    </Principal>
+                    <Dependent Role="ToRole_assoc_AF957FA162404D74D4B635D7E06EC123">
+                        <PropertyRef Name="ProjectDemandWorkUUID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="assoc_842489CFE206DB5E01231504A4F2A4D4" sap:content-version="1">
+                <End Type="cds_api_projectdemand.A_ProjectDemandResource_Type" Multiplicity="1" Role="FromRole_assoc_842489CFE206DB5E01231504A4F2A4D4">
+                    <OnDelete Action="Cascade"/>
+                </End>
+                <End Type="cds_api_projectdemand.A_ProjectDemandResourceRequest_Type" Multiplicity="*" Role="ToRole_assoc_842489CFE206DB5E01231504A4F2A4D4"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_assoc_842489CFE206DB5E01231504A4F2A4D4">
+                        <PropertyRef Name="ProjectDemandWorkUUID"/>
+                    </Principal>
+                    <Dependent Role="ToRole_assoc_842489CFE206DB5E01231504A4F2A4D4">
+                        <PropertyRef Name="ProjectDemandWorkUUID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="assoc_7F61AFDFCCAF5A9CF6551819D6BD5150" sap:content-version="1">
+                <End Type="cds_api_projectdemand.A_ProjDmndRsceReqDistribution_Type" Multiplicity="1" Role="FromRole_assoc_7F61AFDFCCAF5A9CF6551819D6BD5150"/>
+                <End Type="cds_api_projectdemand.A_ProjectDemand_Type" Multiplicity="0..1" Role="ToRole_assoc_7F61AFDFCCAF5A9CF6551819D6BD5150"/>
+                <ReferentialConstraint>
+                    <Principal Role="ToRole_assoc_7F61AFDFCCAF5A9CF6551819D6BD5150">
+                        <PropertyRef Name="ProjectDemandUUID"/>
+                    </Principal>
+                    <Dependent Role="FromRole_assoc_7F61AFDFCCAF5A9CF6551819D6BD5150">
+                        <PropertyRef Name="ProjectDemandUUID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="assoc_841F909F38A32C6266569DF1C5736D53" sap:content-version="1">
+                <End Type="cds_api_projectdemand.A_ProjectDemandService_Type" Multiplicity="1" Role="FromRole_assoc_841F909F38A32C6266569DF1C5736D53">
+                    <OnDelete Action="Cascade"/>
+                </End>
+                <End Type="cds_api_projectdemand.A_ProjectDemandServiceSupply_Type" Multiplicity="0..1" Role="ToRole_assoc_841F909F38A32C6266569DF1C5736D53"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_assoc_841F909F38A32C6266569DF1C5736D53">
+                        <PropertyRef Name="ProjectDemandServiceUUID"/>
+                    </Principal>
+                    <Dependent Role="ToRole_assoc_841F909F38A32C6266569DF1C5736D53">
+                        <PropertyRef Name="ProjectDemandServiceUUID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <EntityContainer Name="cds_api_projectdemand_Entities" m:IsDefaultEntityContainer="true" sap:message-scope-supported="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="A_ProjDmndExpenseDistr" EntityType="cds_api_projectdemand.ProjDmndExpenseDistr_Type" sap:creatable="false" sap:content-version="1"/>
+                <EntitySet Name="A_ProjDmndResourceAssignment" EntityType="cds_api_projectdemand.A_ProjDmndResourceAssignment_Type" sap:creatable="false" sap:content-version="1"/>
+                <EntitySet Name="A_ProjDmndRsceAssgmtDistr" EntityType="cds_api_projectdemand.A_ProjDmndRsceAssgmtDistr_Type" sap:creatable="false" sap:content-version="1"/>
+                <EntitySet Name="A_ProjDmndRsceReqDistribution" EntityType="cds_api_projectdemand.A_ProjDmndRsceReqDistribution_Type" sap:creatable="false" sap:content-version="1"/>
+                <EntitySet Name="A_ProjectDemand" EntityType="cds_api_projectdemand.A_ProjectDemand_Type" sap:content-version="1"/>
+                <EntitySet Name="A_ProjectDemandExpense" EntityType="cds_api_projectdemand.ProjectDemandExpense_Type" sap:creatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="A_ProjectDemandMaterial" EntityType="cds_api_projectdemand.A_ProjectDemandMaterial_Type" sap:creatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="A_ProjectDemandMaterialSupply" EntityType="cds_api_projectdemand.A_ProjectDemandMaterialSupply_Type" sap:creatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="A_ProjectDemandResource" EntityType="cds_api_projectdemand.A_ProjectDemandResource_Type" sap:creatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="A_ProjectDemandResourceRequest" EntityType="cds_api_projectdemand.A_ProjectDemandResourceRequest_Type" sap:creatable="false" sap:content-version="1"/>
+                <EntitySet Name="A_ProjectDemandService" EntityType="cds_api_projectdemand.A_ProjectDemandService_Type" sap:creatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="A_ProjectDemandServiceSupply" EntityType="cds_api_projectdemand.A_ProjectDemandServiceSupply_Type" sap:creatable="false" sap:deletable="false" sap:content-version="1"/>
+                <AssociationSet Name="assoc_AF957FA162404D74D4B635D7E06EC123" Association="cds_api_projectdemand.assoc_AF957FA162404D74D4B635D7E06EC123" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_ProjectDemandResource" Role="FromRole_assoc_AF957FA162404D74D4B635D7E06EC123"/>
+                    <End EntitySet="A_ProjDmndResourceAssignment" Role="ToRole_assoc_AF957FA162404D74D4B635D7E06EC123"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_0D3A585F4D77EF0A189A999D93E62853" Association="cds_api_projectdemand.assoc_0D3A585F4D77EF0A189A999D93E62853" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_ProjectDemand" Role="FromRole_assoc_0D3A585F4D77EF0A189A999D93E62853"/>
+                    <End EntitySet="A_ProjectDemandResource" Role="ToRole_assoc_0D3A585F4D77EF0A189A999D93E62853"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_842489CFE206DB5E01231504A4F2A4D4" Association="cds_api_projectdemand.assoc_842489CFE206DB5E01231504A4F2A4D4" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_ProjectDemandResource" Role="FromRole_assoc_842489CFE206DB5E01231504A4F2A4D4"/>
+                    <End EntitySet="A_ProjectDemandResourceRequest" Role="ToRole_assoc_842489CFE206DB5E01231504A4F2A4D4"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_97FC1FA347810F813C21EDEB756C6564" Association="cds_api_projectdemand.assoc_97FC1FA347810F813C21EDEB756C6564" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_ProjectDemandResourceRequest" Role="FromRole_assoc_97FC1FA347810F813C21EDEB756C6564"/>
+                    <End EntitySet="A_ProjectDemand" Role="ToRole_assoc_97FC1FA347810F813C21EDEB756C6564"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_D3620BF46C119C743D51DF37133A4A35" Association="cds_api_projectdemand.assoc_D3620BF46C119C743D51DF37133A4A35" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_ProjectDemandExpense" Role="FromRole_assoc_D3620BF46C119C743D51DF37133A4A35"/>
+                    <End EntitySet="A_ProjDmndExpenseDistr" Role="ToRole_assoc_D3620BF46C119C743D51DF37133A4A35"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_85FA8369C8BC8182519A94AB86696053" Association="cds_api_projectdemand.assoc_85FA8369C8BC8182519A94AB86696053" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_ProjDmndResourceAssignment" Role="FromRole_assoc_85FA8369C8BC8182519A94AB86696053"/>
+                    <End EntitySet="A_ProjectDemand" Role="ToRole_assoc_85FA8369C8BC8182519A94AB86696053"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_5B24D19A7014756AA28D6907CAA546CD" Association="cds_api_projectdemand.assoc_5B24D19A7014756AA28D6907CAA546CD" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_ProjectDemandServiceSupply" Role="FromRole_assoc_5B24D19A7014756AA28D6907CAA546CD"/>
+                    <End EntitySet="A_ProjectDemand" Role="ToRole_assoc_5B24D19A7014756AA28D6907CAA546CD"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_841F909F38A32C6266569DF1C5736D53" Association="cds_api_projectdemand.assoc_841F909F38A32C6266569DF1C5736D53" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_ProjectDemandService" Role="FromRole_assoc_841F909F38A32C6266569DF1C5736D53"/>
+                    <End EntitySet="A_ProjectDemandServiceSupply" Role="ToRole_assoc_841F909F38A32C6266569DF1C5736D53"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_050E3702A34D18C42EDDE2F4D4678693" Association="cds_api_projectdemand.assoc_050E3702A34D18C42EDDE2F4D4678693" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_ProjectDemandResourceRequest" Role="FromRole_assoc_050E3702A34D18C42EDDE2F4D4678693"/>
+                    <End EntitySet="A_ProjDmndRsceReqDistribution" Role="ToRole_assoc_050E3702A34D18C42EDDE2F4D4678693"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_22C7D4098ED9F4F212048064293DA2F9" Association="cds_api_projectdemand.assoc_22C7D4098ED9F4F212048064293DA2F9" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_ProjectDemandMaterial" Role="FromRole_assoc_22C7D4098ED9F4F212048064293DA2F9"/>
+                    <End EntitySet="A_ProjectDemandMaterialSupply" Role="ToRole_assoc_22C7D4098ED9F4F212048064293DA2F9"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_70CC7A24A52AEA0488C0E52D378E0BE4" Association="cds_api_projectdemand.assoc_70CC7A24A52AEA0488C0E52D378E0BE4" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_ProjectDemandMaterialSupply" Role="FromRole_assoc_70CC7A24A52AEA0488C0E52D378E0BE4"/>
+                    <End EntitySet="A_ProjectDemand" Role="ToRole_assoc_70CC7A24A52AEA0488C0E52D378E0BE4"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_7F61AFDFCCAF5A9CF6551819D6BD5150" Association="cds_api_projectdemand.assoc_7F61AFDFCCAF5A9CF6551819D6BD5150" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_ProjDmndRsceReqDistribution" Role="FromRole_assoc_7F61AFDFCCAF5A9CF6551819D6BD5150"/>
+                    <End EntitySet="A_ProjectDemand" Role="ToRole_assoc_7F61AFDFCCAF5A9CF6551819D6BD5150"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_8E94444EA96CC4B705370147907B0D66" Association="cds_api_projectdemand.assoc_8E94444EA96CC4B705370147907B0D66" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_ProjectDemand" Role="FromRole_assoc_8E94444EA96CC4B705370147907B0D66"/>
+                    <End EntitySet="A_ProjectDemandMaterial" Role="ToRole_assoc_8E94444EA96CC4B705370147907B0D66"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_4A61008E41B33FB705F1F0D9074B6702" Association="cds_api_projectdemand.assoc_4A61008E41B33FB705F1F0D9074B6702" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_ProjDmndResourceAssignment" Role="FromRole_assoc_4A61008E41B33FB705F1F0D9074B6702"/>
+                    <End EntitySet="A_ProjDmndRsceAssgmtDistr" Role="ToRole_assoc_4A61008E41B33FB705F1F0D9074B6702"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_8069B6E6558E0EAB95021C91AD082011" Association="cds_api_projectdemand.assoc_8069B6E6558E0EAB95021C91AD082011" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_ProjectDemand" Role="FromRole_assoc_8069B6E6558E0EAB95021C91AD082011"/>
+                    <End EntitySet="A_ProjectDemandExpense" Role="ToRole_assoc_8069B6E6558E0EAB95021C91AD082011"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_3658F13A6F5D574208281DDCE5FDC2DB" Association="cds_api_projectdemand.assoc_3658F13A6F5D574208281DDCE5FDC2DB" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_ProjDmndExpenseDistr" Role="FromRole_assoc_3658F13A6F5D574208281DDCE5FDC2DB"/>
+                    <End EntitySet="A_ProjectDemand" Role="ToRole_assoc_3658F13A6F5D574208281DDCE5FDC2DB"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_857197C78DC13DC4617A49655AF6F21E" Association="cds_api_projectdemand.assoc_857197C78DC13DC4617A49655AF6F21E" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_ProjDmndRsceAssgmtDistr" Role="FromRole_assoc_857197C78DC13DC4617A49655AF6F21E"/>
+                    <End EntitySet="A_ProjectDemand" Role="ToRole_assoc_857197C78DC13DC4617A49655AF6F21E"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_AA56C01D6341BD1CC2E9430B6D1A37DB" Association="cds_api_projectdemand.assoc_AA56C01D6341BD1CC2E9430B6D1A37DB" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_ProjectDemand" Role="FromRole_assoc_AA56C01D6341BD1CC2E9430B6D1A37DB"/>
+                    <End EntitySet="A_ProjectDemandService" Role="ToRole_assoc_AA56C01D6341BD1CC2E9430B6D1A37DB"/>
+                </AssociationSet>
+                <FunctionImport Name="ResetDemandStatusToRequested" ReturnType="cds_api_projectdemand.A_ProjectDemand_Type" EntitySet="A_ProjectDemand" m:HttpMethod="POST" sap:action-for="cds_api_projectdemand.A_ProjectDemand_Type">
+                    <Parameter Name="ProjectDemandUUID" Type="Edm.Guid" Mode="In" sap:label="Demand UUID"/>
+                </FunctionImport>
+                <FunctionImport Name="SetDemandStatusToClosed" ReturnType="cds_api_projectdemand.A_ProjectDemand_Type" EntitySet="A_ProjectDemand" m:HttpMethod="POST" sap:action-for="cds_api_projectdemand.A_ProjectDemand_Type">
+                    <Parameter Name="ProjectDemandUUID" Type="Edm.Guid" Mode="In" sap:label="Demand UUID"/>
+                </FunctionImport>
+                <FunctionImport Name="SetDemandStatusToRequested" ReturnType="cds_api_projectdemand.A_ProjectDemand_Type" EntitySet="A_ProjectDemand" m:HttpMethod="POST" sap:action-for="cds_api_projectdemand.A_ProjectDemand_Type">
+                    <Parameter Name="ProjectDemandUUID" Type="Edm.Guid" Mode="In" sap:label="Demand UUID"/>
+                </FunctionImport>
+                <FunctionImport Name="SetDmndStsToRequestOnRelease" ReturnType="cds_api_projectdemand.A_ProjectDemand_Type" EntitySet="A_ProjectDemand" m:HttpMethod="POST" sap:action-for="cds_api_projectdemand.A_ProjectDemand_Type">
+                    <Parameter Name="ProjectDemandUUID" Type="Edm.Guid" Mode="In" sap:label="Demand UUID"/>
+                </FunctionImport>
+            </EntityContainer>
+            <Annotation Term="Core.SchemaVersion" String="1.0.0" xmlns="http://docs.oasis-open.org/odata/ns/edm"/>
+            <Annotations Target="cds_api_projectdemand.cds_api_projectdemand_Entities" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.ApplyMultiUnitBehaviorForSortingAndFiltering" Bool="true"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjDmndResourceAssignment_Type/to_AssgmtDistribution" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Composition"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjectDemandMaterial_Type/to_MaterialSupply" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Composition"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjectDemandResourceRequest_Type/to_ProjDmndRsceReqDistr" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Composition"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjectDemandResource_Type/to_ResourceAssignment" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Composition"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjectDemandResource_Type/to_ResourceRequest" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Composition"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjectDemandService_Type/to_ServiceSupply" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Composition"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjectDemand_Type/to_Expense" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Composition"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjectDemand_Type/to_Material" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Composition"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjectDemand_Type/to_Service" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Composition"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjectDemand_Type/to_Work" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Composition"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.ProjectDemandExpense_Type/to_ProjDmndExpenseDistr" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.Composition"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjectDemandResourceRequest_Type/ProjectDemandRequestedResource" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.cds_api_projectdemand_Entities/A_ProjDmndResourceAssignment" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.NavigationRestrictions">
+                    <Record>
+                        <PropertyValue Property="RestrictedProperties">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_AssgmtDistribution"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.cds_api_projectdemand_Entities/A_ProjectDemand" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.NavigationRestrictions">
+                    <Record>
+                        <PropertyValue Property="RestrictedProperties">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_Expense"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_Material"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_Service"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_Work"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.cds_api_projectdemand_Entities/A_ProjectDemandExpense" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.NavigationRestrictions">
+                    <Record>
+                        <PropertyValue Property="RestrictedProperties">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_ProjDmndExpenseDistr"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.cds_api_projectdemand_Entities/A_ProjectDemandMaterial" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.NavigationRestrictions">
+                    <Record>
+                        <PropertyValue Property="RestrictedProperties">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_MaterialSupply"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.cds_api_projectdemand_Entities/A_ProjectDemandResource" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.NavigationRestrictions">
+                    <Record>
+                        <PropertyValue Property="RestrictedProperties">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_ResourceAssignment"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_ResourceRequest"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.cds_api_projectdemand_Entities/A_ProjectDemandResourceRequest" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.NavigationRestrictions">
+                    <Record>
+                        <PropertyValue Property="RestrictedProperties">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_ProjDmndRsceReqDistr"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.cds_api_projectdemand_Entities/A_ProjectDemandService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.NavigationRestrictions">
+                    <Record>
+                        <PropertyValue Property="RestrictedProperties">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_ServiceSupply"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.cds_api_projectdemand_Entities/A_ProjDmndExpenseDistr" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.cds_api_projectdemand_Entities/A_ProjDmndRsceAssgmtDistr" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.cds_api_projectdemand_Entities/A_ProjDmndRsceReqDistribution" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.cds_api_projectdemand_Entities/A_ProjectDemandMaterialSupply" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.cds_api_projectdemand_Entities/A_ProjectDemandServiceSupply" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjDmndResourceAssignment_Type/ProjAssgmtLastUpdateSource" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="ProjectDemandLastUpdateSource"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjDmndResourceAssignment_Type/ProjDmndRsceAssgmtQuantityUnit" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="UnitOfMeasure"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjDmndResourceAssignment_Type/ProjectDemandSourceOfSupply" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="ProjectDemandSourceOfSupply"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjDmndRsceAssgmtDistr_Type/ProjDmndRsceAssgmtDistrQtyUnit" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="UnitOfMeasure"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjDmndRsceAssgmtDistr_Type/ProjDmndRsceDistrPerdAmtCur" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="Currency"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjDmndRsceAssgmtDistr_Type/ProjDmndRsceDistrRevenueAmtCur" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="Currency"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjDmndRsceReqDistribution_Type/ProjDmndRsceReqDistrPerdAmtCur" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="Currency"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjDmndRsceReqDistribution_Type/ProjDmndRsceReqDistrQtyUnit" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="UnitOfMeasure"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjDmndRsceReqDistribution_Type/ProjDmndRsceReqDistrRevnAmtCur" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="Currency"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjectDemandMaterial_Type/BaseUnit" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="UnitOfMeasure"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjectDemandResource_Type/ProjDmndAssgmtStatus" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="ProjectDemandAssignmentStatus"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjectDemandResource_Type/ProjDmndBillingControlCategory" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="BillingControlCategory"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjectDemandService_Type/BaseUnit" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="UnitOfMeasure"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjectDemand_Type/ProjDmndReqNetAmountCurrency" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="Currency"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjectDemand_Type/ProjDmndRequestedQuantityUnit" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="UnitOfMeasure"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjectDemand_Type/ProjectDemandCategory" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="ProjectDemandCategory"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjectDemand_Type/ProjectDemandRequestCurrency" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="Currency"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjectDemand_Type/ProjectDemandStatus" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="ProjectDemandStatus"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjectDemand_Type/ProjectDemandType" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="ProjectDemandType"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjectDemand_Type/PurchasingGroup" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="PurchasingGroup"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjectDemand_Type/PurchasingOrganization" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="PurchasingOrganization"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.A_ProjectDemand_Type/ReferencedObjectUUID" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="EnterpriseProjectElement"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.ProjDmndExpenseDistr_Type/ProjDmndExpnDistrAmountCrcy" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="Currency"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.ProjDmndExpenseDistr_Type/ProjDmndExpnDistrRevnAmtCrcy" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="Currency"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.ProjDmndExpenseDistr_Type/ReferencedObjectUUID" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="EnterpriseProjectElement"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.ProjectDemandExpense_Type/ProjDmndBillingControlCategory" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="BillingControlCategory"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.ProjectDemandExpense_Type/ReferencedObjectUUID" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.SAPObjectNodeTypeReference" String="EnterpriseProjectElement"/>
+            </Annotations>
+            <Annotations Target="cds_api_projectdemand.cds_api_projectdemand_Entities" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Org.OData.Capabilities.V1.BatchSupport">
+                    <Record Type="Org.OData.Capabilities.V1.BatchSupportType">
+                        <PropertyValue Property="ReferencesAcrossChangeSetsSupported" Bool="true"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <atom:link rel="self" href="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/sap/API_PROJECTDEMAND/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/sap/API_PROJECTDEMAND/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

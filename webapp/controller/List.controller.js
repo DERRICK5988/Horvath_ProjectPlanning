@@ -237,7 +237,6 @@ sap.ui.define([
         },
 
         _onMasterMatched: function () {
-            debugger;
             //Set the layout property of the FCL control to 'OneColumn'
             this.getModel("appView").setProperty("/layout", "OneColumn");
         },
@@ -252,7 +251,6 @@ sap.ui.define([
             var bReplace = !Device.system.phone,
                 oContextObj = oItem.getBindingContext().getObject();
             // set the layout property of FCL control to show two columns
-            debugger;
             this.getModel("appView").setProperty("/layout", "TwoColumnsMidExpanded");
             // Encode selected object for single quote or invalid character
             this.getRouter().navTo("object", {

@@ -8,8 +8,9 @@ sap.ui.define([
     'sap/m/MessagePopoverItem',
     "sap/m/MessageBox",
     "sap/m/FormattedText",
-    "sap/m/library"
-], function (BaseController, JSONModel, Filter, FilterOperator, Sorter, MessagePopover, MessagePopoverItem, MessageBox, FormattedText, mobileLibrary) {
+    "sap/m/library",
+    "sap/ui/core/message/Message"
+], function (BaseController, JSONModel, Filter, FilterOperator, Sorter, MessagePopover, MessagePopoverItem, MessageBox, FormattedText, mobileLibrary, Message) {
     "use strict";
 
     // shortcut for sap.m.URLHelper
@@ -32,10 +33,9 @@ sap.ui.define([
                 lineItemListTitle: this.getResourceBundle().getText("detailLineItemTableHeading"),
                 btnVisible: true,
                 aChangedSPath: [],
-                totalUnassignCap: 30,
+                totalUnassignCap: 0,
                 selectedView: "HOUR"
             });
-            debugger;
             this.getView().setModel(sap.ui.getCore().getMessageManager().getMessageModel(), "message");
             sap.ui.getCore().getMessageManager().registerObject(this.getView(), true);
             this.getRouter().getRoute("object").attachPatternMatched(this._onObjectMatched, this);
@@ -49,27 +49,25 @@ sap.ui.define([
 
         onChange: function (oEvent) {
             var oSource = oEvent.getSource(),
-                // oContext = oSource.getBindingInfo("value").binding.getContext(),
                 oContext = oSource.getBindingInfo("value").binding.aBindings[0].getContext(),
                 sPath = oContext.sPath,
                 aChangedSPath = oEvent.getSource().getModel("detailView").getProperty("/aChangedSPath");
             if (!oEvent.getParameter("newValue") && aChangedSPath.length > 0) {
-                var indexObj = aChangedSPath.findIndex(object => { return object.sPath === sPath; })
+                var indexObj = aChangedSPath.findIndex(object => {
+                    return object.sPath === sPath;
+                });
                 aChangedSPath.splice(indexObj, 1);
-                // oEvent.getSource().getModel("detailView").refresh(true);
+                oEvent.getSource().getModel("detailView").refresh(true);
                 return;
             }
-            // var bExist = aChangedSPath.some(obj => obj.sPath === sPath)
-            // if (bExist) {
-            //     return;
-            // }
             var aChanged = aChangedSPath.filter(obj => obj.sPath === sPath);
             if (aChanged.length > 0) {
                 aChanged[0].value = oEvent.getParameter("newValue");
                 return;
             }
             aChangedSPath.push({ sPath: sPath, value: oEvent.getParameter("newValue") });
-            // oEvent.getSource().getModel("detailView").refresh();
+            oEvent.getSource().getModel("detailView").setProperty(sPath + "/StaffedNew", oEvent.getParameter("newValue"));
+            oEvent.getSource().getModel("detailView").refresh(true);
         },
         onSave: function (oEvent) {
             var oDetailModel = oEvent.getSource().getModel("detailView"),
@@ -91,13 +89,14 @@ sap.ui.define([
             this.getModel("detailView").refresh(true);
         },
         onEmployeePress: function (oEvent, oDetailModel) {
-            debugger;
             this.getModel("appView").setProperty("/layout", "EndColumnFullScreen");
-            this.getOwnerComponent().getRouter().navTo("detailDetail", { object: encodeURIComponent(JSON.stringify(oDetailModel)) });
+            this.getOwnerComponent().getRouter().navTo("detailDetail", {
+                object: encodeURIComponent(JSON.stringify(oDetailModel))
+            });
         },
         /**
          * Set the full screen mode to false and navigate to list page
-        */
+         */
         onCloseDetailPress: function () {
             this.getModel("appView").setProperty("/actionButtonsInfo/midColumn/fullScreen", false);
             // No item should be selected on list after detail page is closed
@@ -143,10 +142,10 @@ sap.ui.define([
             }
             this._messagePopover.toggle(oMessagesButton);
         },
-		onExit: function () {
-			this.getRouter().getRoute("list").detachPatternMatched(this._onObjectMatched, this);
-			this.getRouter().getRoute("object").detachPatternMatched(this._onObjectMatched, this);
-		},
+        onExit: function () {
+            this.getRouter().getRoute("list").detachPatternMatched(this._onObjectMatched, this);
+            this.getRouter().getRoute("object").detachPatternMatched(this._onObjectMatched, this);
+        },
 
         /* =========================================================== */
         /* begin: internal methods                                     */
@@ -158,158 +157,152 @@ sap.ui.define([
          * @param {sap.ui.base.Event} oEvent pattern match event in route 'object'
          * @private
          */
-        // _onObjectMatched: function (oEvent) {
-        //     debugger;
-        //     var sObjectId = oEvent.getParameter("arguments").objectId;
-        //     this.getModel("appView").setProperty("/layout", "TwoColumnsMidExpanded");
-        //     this.getModel().metadataLoaded().then(function () {
-        //         var sObjectPath = this.getModel().createKey("ProjectSet", {
-        //             ProjectID: sObjectId
-        //         });
-        //         this._bindView("/" + sObjectPath);
-        //     }.bind(this));
-        // },
         _onObjectMatched: function (oEvent) {
-            debugger;
             var oArguments = oEvent.getParameter("arguments"),
                 oContextObj = JSON.parse(decodeURIComponent(oArguments.object)),
-                oParam = { "$expand": "PlanDataSet,PlanDataSet/ToStaffData" },
-                aFilter = [],
-                aSorts = [],
-                aComFilter = [];
+                oCurrPeriod = this._getCurrentPeriod();
+
             sap.ui.getCore().getMessageManager().removeAllMessages();
             this.getModel("appView").setProperty("/layout", "TwoColumnsMidExpanded");
-            this.getModel("detailView").setData(Object.assign(this.getModel("detailView").getData(), oContextObj,
-                {
-                    StartDate: new Date(oContextObj.StartDate),
-                    EndDate: new Date(oContextObj.EndDate)
-                }));
+            this.getModel("detailView").setData(Object.assign(this.getModel("detailView").getData(), oContextObj, {
+                StartDate: new Date(oContextObj.StartDate),
+                EndDate: new Date(oContextObj.EndDate)
+            }));
             this.getModel("detailView").setProperty("/busy", true);
-            aComFilter.push(new Filter("EngagementProject", FilterOperator.EQ, oContextObj.ProjectID));
-            aFilter.push(new Filter("ProjectID", FilterOperator.EQ, oContextObj.ProjectID));
-            Promise.all([
-                this._fetchResources(this.getView().getModel(), "/WorkpackageSet", aFilter, oParam, "", [new Sorter("WorkPackageID", false)]),
-                this._fetchResources(this.getView().getModel(), "/StaffingDataSet", aFilter, "", "", [new Sorter("StaffedEmployee", false), new Sorter("Period", false)] ),
-                this._fetchResources(this.getOwnerComponent().getModel("PROJ_ENGMT_UPDATE_SRV"), "/A_EngmntProjRsceSup", aComFilter),
-                this._fetchResources(this.getView().getModel("TimeSheet"), "/YY1_TIME_RECORDING", aFilter)
+            Promise.all([this.fetchResources({
+                oModel: this.getView().getModel(),
+                sPath: "/WorkpackageSet",
+                aFilters: [new Filter("ProjectID", FilterOperator.EQ, oContextObj.ProjectID)],
+                oParams: { "$select": "WorkPackageID,WorkPackageName" },
+                aSort: [new Sorter("WorkPackageID", false)]
+            }),
+            this.fetchResources({
+                oModel: this.getView().getModel("EmployeeCapacity"),
+                sPath: "/YY1_EMP_CAPACITY_API",
+                aFilters: [new Filter("EngagementProject", FilterOperator.EQ, oContextObj.ProjectID)],
+                aSort: [new Sorter("PersonWorkAgreement", false), new Sorter("YearMth", false)]
+            }),
+            this.fetchResources({
+                oModel: this.getOwnerComponent().getModel("PROJ_ENGMT_UPDATE_SRV"),
+                sPath: "/A_EngmntProjRsceSup",
+                oParams: { "$select": "WorkPackage,Version,Quantity" },
+                aFilters: [new Filter("EngagementProject", FilterOperator.EQ, oContextObj.ProjectID)]
+            }),
+            this.fetchResources({
+                oModel: this.getView().getModel("ProjectAssignmentDistr"),
+                sPath: "/YY1_PROJ_ASSIGNMENT_DISTR",
+                aFilters: [new Filter("Project", FilterOperator.EQ, oContextObj.ProjectID),
+                new Filter("YearMth", FilterOperator.BT, oCurrPeriod.nMinMth.toString(), oCurrPeriod.nMaxMth.toString(), true)],
+                aSort: [new Sorter("YearMth", false)]
+            })
             ]).then(function (oResp) {
                 var oTreeData = { Node: [] },
                     oDetailModel = this.getModel("detailView"),
-                    aStaffData = oResp[1].results,
+                    aEmpCapaciy = oResp[1].results,
                     aProjEng = oResp[2].results,
-                    oCurrPeriod = this._getCurrentPeriod();
+                    aProjAssignDistr = oResp[3].results;
+
                 oDetailModel.setProperty("/resourcesCount", oResp[0].results.length);
+
+                /* Workpackage level */
                 for (var wpIndex in oResp[0].results) {
-                    // Workpackage level
                     var oWpItem = oResp[0].results[wpIndex],
-                        nBaseLine = aProjEng.filter((a) => { if (a.Version === "2" && a.WorkPackage === oWpItem.WorkPackageID) { return a } }).
-                            map((m) => m.Quantity).reduce((prev, curr) => +prev + +curr, 0);
+                        nBaseLine = aProjEng.filter((a) => {
+                            if (a.Version === "2" && a.WorkPackage === oWpItem.WorkPackageID) {
+                                return a
+                            }
+                        }).map((m) => m.Quantity).reduce((prev, curr) => +prev + +curr, 0);
                     oTreeData.Node.push({
                         Name: [oWpItem.WorkPackageName, oWpItem.WorkPackageID].join(" "),
                         Baseline: (nBaseLine > 0) ? nBaseLine : null,
-                        Employee: false,
-                        inputVisible: false,
+                        bLink: false,
+                        bInputVisible: false,
                         Node: []
                     });
-                    if (aStaffData.length === 0) { continue; }
-                    // Employee Level
-                    var aStaff = [];
-                    // Remove duplication
-                    aStaff = aStaffData.filter(
-                        (item, index) => index === aStaffData.findIndex(
-                            other => item.StaffedEmployee === other.StaffedEmployee && item.WorkPackageID === other.WorkPackageID
-                        ));
-                    for (var stfIndex in aStaff) {
-                        var oStaff = aStaff[stfIndex],
-                            aEmpNode = oTreeData.Node[wpIndex].Node;
-                        if (oStaff.WorkPackageID !== oWpItem.WorkPackageID) {
-                            continue;
-                        }
-                        // Staffed
-                        var aFilStaff = aStaffData.filter(function (i) {
-                            if (i.WorkPackageID === oStaff.WorkPackageID && i.StaffedEmployee === oStaff.StaffedEmployee) { return i }
-                        });
-                        var nStaffed = aFilStaff.filter(function (a) { if (a.Version === "1") { return a } }).
-                            map(function (o) { return o.StaffedEffort }).reduce((prev, curr) => +prev + +curr, 0);
-                        var oWpNodeLine = oTreeData.Node[oTreeData.Node.length - 1];
-                        oWpNodeLine.Staffed = (nStaffed) ? +((oWpNodeLine.Staffed) ? oWpNodeLine.Staffed : 0) + +nStaffed : oWpNodeLine.Staffed;
-                        aEmpNode.push(Object.assign(oStaff, {
-                            Name: oStaff.StaffedEmployeeName,
-                            Staffed: nStaffed,
-                            StaffedDay: (nStaffed) ? nStaffed / 8 : nStaffed,
-                            Employee: true,
-                            inputVisible: false,
-                            Node: []
-                        }));
-                        // Get resource demand
-                        var aProjRes = aProjEng.filter((a) => {
-                            if (a.Version === "1" && a.WorkPackage === oWpItem.WorkPackageID && a.PersonWorkAgreement === oStaff.StaffedEmployee) { return a }
-                        }),
-                            oEmpNodeLine = aEmpNode[aEmpNode.length - 1];
-                        // Monthly Distribution Hours
-                        debugger;
-                        for (var indexMth in aFilStaff) {
-                            var oDist = aFilStaff[indexMth],
-                                aTimeRec = oResp[3].results.filter(function (obj) {
-                                    if (obj.MthYr === oDist.FcYear + oDist.Period.substring(1) && obj.WorkPackageID === oStaff.WorkPackageID) { return obj }
-                                });
-                            if (+[oDist.FcYear, oDist.Period.substring(1)].join("") < oCurrPeriod.nMinMth) {
-                                if (oEmpNodeLine.Node.filter((i) => (i.preMth)).length === 0) {
-                                    oEmpNodeLine.Node.push({ Name: "Sum of previous months", preMth: true, Employee: false, inputVisible: false, Node: [] });
-                                }
-                                var preMthLines = oEmpNodeLine.Node.filter((i) => (i.preMth)),
-                                    oPreNode = preMthLines[0].Node,
-                                    nStaffedNew = (aTimeRec.length > 0) ? +aTimeRec[0].RecordedQuantity : null;
-                                oPreNode.push(this._returnMthDist(oWpItem, oDist, aProjRes, aTimeRec, nStaffedNew, false, false));
-                            }
-                            else if (+[oDist.FcYear, oDist.Period.substring(1)].join("") > oCurrPeriod.nMaxMth) {
-                                if (oEmpNodeLine.Node.filter((i) => (i.upcomMth)).length === 0) {
-                                    oEmpNodeLine.Node.push({ Name: "Sum of upcoming months", upcomMth: true, Employee: false, inputVisible: false, Node: [] });
-                                }
-                                var upComMthLines = oEmpNodeLine.Node.filter((i) => (i.upcomMth)),
-                                    oUpcomNode = upComMthLines[0].Node,
-                                    nStaffedNew = (oDist.Version === "1") ? +oDist.StaffedEffort : null;
-                                oUpcomNode.push(this._returnMthDist(oWpItem, oDist, aProjRes, aTimeRec, nStaffedNew, false, true));
-                            } else {
-                                // var curMthLines = oEmpNodeLine.Node.filter((i) => (i.currMth)),
-                                //     oCurrNode = curMthLines[0].Node,
-                                var nStaffedNew = (aTimeRec.length > 0 && +[oDist.FcYear, oDist.Period.substring(1)].join("") === oCurrPeriod.nMinMth) ? +aTimeRec[0].RecordedQuantity
-                                    : (oDist.Version === "1" && +[oDist.FcYear, oDist.Period.substring(1)].join("") !== oCurrPeriod.nMinMth) ? +oDist.StaffedEffort : null;
-                                // binputVisible = (+[oDist.FcYear, oDist.Period.substring(1)].join("") === oCurrPeriod.nMinMth) ? false : true;
-                                oEmpNodeLine.Node.push(this._returnMthDist(oWpItem, oDist, aProjRes, aTimeRec, nStaffedNew, false, true));
-                            }
-                            oEmpNodeLine.TimeRecordings = (aTimeRec.length > 0) ? +((oEmpNodeLine.TimeRecordings) ? oEmpNodeLine.TimeRecordings : 0) + +aTimeRec[0].RecordedQuantity : oEmpNodeLine.TimeRecordings;
-                            // oEmpNodeLine.StaffedNew = (oEmpNodeLine.StaffedNew > 0 && nStaffedNew) ? +oEmpNodeLine.StaffedNew + +nStaffedNew : nStaffedNew;
-                        };
-                        
-                        // Sum of periods
-                        if (oPreNode && oPreNode.length > 0) {
-                            this._sumPeriodDist(preMthLines, oPreNode);
-                        }
-                        if (oUpcomNode && oUpcomNode.length > 0) {
-                            this._sumPeriodDist(upComMthLines, oUpcomNode);
-                        }
-                        oEmpNodeLine.StaffedNew = oEmpNodeLine.Node.map(function (o) { return o.StaffedNew }).reduce((prev, curr) => +prev + +curr, 0);
-                        oEmpNodeLine.StaffedNew = (oEmpNodeLine.StaffedNew) ? oEmpNodeLine.StaffedNew : null;
-                        oEmpNodeLine.StaffedNewDay = (oEmpNodeLine.StaffedNew > 0) ? oEmpNodeLine.StaffedNew / 8 : oEmpNodeLine.StaffedNew;
-                        oWpNodeLine.StaffedNew = (oEmpNodeLine.StaffedNew > 0) ? +(oWpNodeLine.StaffedNew ? oWpNodeLine.StaffedNew : 0) + +oEmpNodeLine.StaffedNew : oWpNodeLine.StaffedNew;
-                        oEmpNodeLine.TimeRecordingsDay = (oEmpNodeLine.TimeRecordings > 0) ? oEmpNodeLine.TimeRecordings / 8 : oEmpNodeLine.TimeRecordings;
-                        oWpNodeLine.TimeRecordings = (oEmpNodeLine.TimeRecordings > 0) ? +(oWpNodeLine.TimeRecordings ? oWpNodeLine.TimeRecordings : 0) + +oEmpNodeLine.TimeRecordings : oWpNodeLine.TimeRecordings;
-                        oEmpNodeLine.UnassignedCap = oEmpNodeLine.Node.map(function (o) { return o.UnassignedCap }).reduce((prev, curr) => +prev + +curr, 0);
-                        oEmpNodeLine.UnassignedCapDay = (oEmpNodeLine.UnassignedCap > 0) ? oEmpNodeLine.UnassignedCap / 8 : oEmpNodeLine.UnassignedCap;
+                    if (aEmpCapaciy.length === 0) {
+                        continue;
                     }
-                    // Convert from Hour to Day [WorkPackage level]
-                    oWpNodeLine.StaffedDay = (oWpNodeLine.Staffed > 0) ? oWpNodeLine.Staffed / 8 : oWpNodeLine.Staffed;
-                    oWpNodeLine.StaffedNewDay = (oWpNodeLine.StaffedDay > 0) ? oWpNodeLine.StaffedDay / 8 : oWpNodeLine.StaffedDay;
-                    oWpNodeLine.TimeRecordingsDay = (oWpNodeLine.TimeRecordings) ? +oWpNodeLine.TimeRecordings / 8 : oWpNodeLine.TimeRecordings;
-                    oWpNodeLine.BaselineDay = (oWpNodeLine.Baseline > 0) ? oWpNodeLine.Baseline / 8 : oWpNodeLine.Baseline;
+                    var aEmpCap = aEmpCapaciy.filter((Object) => {
+                        if (Object.WorkPackage === oWpItem.WorkPackageID) {
+                            return Object;
+                        }
+                    })
+                    var oWpNodeLine = oTreeData.Node[oTreeData.Node.length - 1],
+                        aEmpNode = oWpNodeLine.Node;
+
+                    /* Employee level */
+                    for (var nEmpIdx in aEmpCap) {
+                        var oEmpCapacity = aEmpCap[nEmpIdx];
+                        if (aEmpNode.length === 0 || !aEmpNode.some(i => i['WorkAgrementID'] === oEmpCapacity.PersonWorkAgreement)) {
+                            aEmpNode.push({
+                                ...oEmpCapacity, ...{
+                                    WorkAgrementID: oEmpCapacity.PersonWorkAgreement,
+                                    Name: oEmpCapacity.PersonFullName,
+                                    bLink: false,
+                                    bInputVisible: false,
+                                    Node: []
+                                }
+                            });
+                        }
+
+                        /* Employee distribution month */
+                        var oEmpNodeLine = aEmpNode[aEmpNode.length - 1];
+                        if (+oEmpCapacity.YearMth < oCurrPeriod.nMinMth) {
+                            if (!oEmpNodeLine.Node.some((objP) => !!objP.preMth)) {
+                                oEmpNodeLine.Node.push({
+                                    Name: "Sum of previous months",
+                                    preMth: true,
+                                    bLink: false,
+                                    bInputVisible: false,
+                                    Node: []
+                                });
+                            }
+                            var preMthLines = oEmpNodeLine.Node.filter((i) => (i.preMth)),
+                                aPreNode = preMthLines[0].Node;
+                            aPreNode.push(this._returnMthDist({ ...oEmpCapacity, ...{ bLink: true, bInputVisible: false } }));
+                            this._calculateValues(preMthLines[0]);
+                        } else if (+oEmpCapacity.YearMth > oCurrPeriod.nMaxMth) {
+                            if (!oEmpNodeLine.Node.some((objUp) => !!objUp.upcomMth)) {
+                                oEmpNodeLine.Node.push({
+                                    Name: "Sum of upcoming months",
+                                    upcomMth: true,
+                                    bLink: false,
+                                    bInputVisible: false,
+                                    Node: []
+                                });
+                            }
+                            var upComMthLines = oEmpNodeLine.Node.filter((i) => (i.upcomMth)),
+                                aUpcomNode = upComMthLines[0].Node;
+                            aUpcomNode.push(this._returnMthDist({ ...oEmpCapacity, ...{ bLink: true, bInputVisible: false } }));
+                            this._calculateValues(upComMthLines[0]);
+                        } else {
+                            if (!oEmpNodeLine.Node.some((objCur) => !!objCur.bCurMth)) {
+                                oEmpNodeLine.Node.push({
+                                    Name: "Sum of current months",
+                                    bCurMth: true,
+                                    bLink: false,
+                                    bInputVisible: false,
+                                    Node: []
+                                });
+                            }
+                            var aCurMthLines = oEmpNodeLine.Node.filter((i) => (i.bCurMth)),
+                                aCurMthNode = aCurMthLines[0].Node,
+                                oProjAssignDistr = aProjAssignDistr.find(o => o.ProjDmndRsceAssgmt === oEmpCapacity.PersonWorkAgreement && o.YearMth === oEmpCapacity.YearMth);
+                            aCurMthNode.push(this._returnMthDist({ ...oEmpCapacity, ...{ nStaffedNew: +oEmpCapacity.PlndEffortQty, bLink: true, bInputVisible: true, ProjDmndRsceAssgmtDistrUUID: oProjAssignDistr.ProjDmndRsceAssgmtDistrUUID } }));
+                            this._calculateValues(aCurMthLines[0]);
+                        }
+                        this._calculateValues(oEmpNodeLine);
+                    }
+                    this._calculateValues(oWpNodeLine);
                 }
+                this.getModel("detailView").setProperty("/totalUnassignCap", oTreeData.Node.map((o) => o.UnassignedCap).reduce((prev, curr) => +prev + +curr, 0));
                 this.getView().getModel("detailView").setProperty("/resource", oTreeData);
                 this.getView().getModel("detailView").refresh(true);
                 this.getModel("detailView").setProperty("/busy", false);
-                debugger;
                 // this.byId("idTreeTable").autoResizeColumn();
-            }.bind(this)).catch(function (oErr) { this.getModel("detailView").setProperty("/busy", false); }.bind(this));
+            }.bind(this)).catch(function (oErr) {
+                this.getModel("detailView").setProperty("/busy", false);
+            }.bind(this));
         },
 
         /**
@@ -361,35 +354,9 @@ sap.ui.define([
                 oViewModel = this.getModel("detailView");
 
             this.getOwnerComponent().oListSelector.selectAListItem(sPath);
-
-            oViewModel.setProperty("/shareSendEmailSubject",
-                oResourceBundle.getText("shareSendEmailObjectSubject", [sObjectId]));
-            oViewModel.setProperty("/shareSendEmailMessage",
-                oResourceBundle.getText("shareSendEmailObjectMessage", [sObjectName, sObjectId, location.href]));
         },
 
-        _onMetadataLoaded: function () {
-            // // Store original busy indicator delay for the detail view
-            // var iOriginalViewBusyDelay = this.getView().getBusyIndicatorDelay(),
-            //     oViewModel = this.getModel("detailView"),
-            //     oLineItemTable = this.byId("lineItemsList"),
-            //     iOriginalLineItemTableBusyDelay = oLineItemTable.getBusyIndicatorDelay();
-
-            // // Make sure busy indicator is displayed immediately when
-            // // detail view is displayed for the first time
-            // oViewModel.setProperty("/delay", 0);
-            // oViewModel.setProperty("/lineItemTableDelay", 0);
-
-            // oLineItemTable.attachEventOnce("updateFinished", function () {
-            //     // Restore original busy indicator delay for line item table
-            //     oViewModel.setProperty("/lineItemTableDelay", iOriginalLineItemTableBusyDelay);
-            // });
-
-            // // Binding the view will set it to not busy - so the view is always busy if it is not bound
-            // oViewModel.setProperty("/busy", true);
-            // // Restore original busy indicator delay for the detail view
-            // oViewModel.setProperty("/delay", iOriginalViewBusyDelay);
-        },
+        _onMetadataLoaded: function () { },
 
         /**
          * Toggle between full and non full screen mode.
@@ -406,118 +373,129 @@ sap.ui.define([
                 this.getModel("appView").setProperty("/layout", this.getModel("appView").getProperty("/previousLayout"));
             }
         },
-        _updateModel: function () {
+        fetchCsrfToken: function (oModel) {
+            return new Promise((resolve, reject) => {
+                try {
+                    oModel.refreshSecurityToken(function (oResp) {
+                        // Access the CSRF token value from the HTTP headers
+                        resolve(oModel.getSecurityToken());
+                    }.bind(this));
+                } catch (oError) {
+                    reject(oError);
+                    this.getModel("detailView").setProperty("/busy", false);
+                }
 
-            var oProjModel = this.getModel("PROJ_ENGMT_UPDATE_SRV"),
+            })
+        },
+        _updateModel: async function () {
+            this.getModel("detailView").setProperty("/busy", false);
+            var aProjDmdModel = this.getModel("ProjectDemand"),
                 oDetailModel = this.getView().getModel("detailView"),
-                aChangedSPath = oDetailModel.getProperty("/aChangedSPath");
+                aChangedSPath = oDetailModel.getProperty("/aChangedSPath"),
+                object = {};
+
             if (aChangedSPath.length === 0) {
                 return;
             }
-            oProjModel.setDeferredGroups(["BatchQuery"]);
             this.getModel("detailView").setProperty("/busy", true);
+            aProjDmdModel.setUseBatch(true);
+            aProjDmdModel.setDeferredGroups(["BatchQuery"]);
+            var csrfToken = await this.fetchCsrfToken(aProjDmdModel);
+            object.mParameters = {
+                groupId: "BatchQuery",
+                // changeSetId: "BatchQuery",
+                method: "PATCH",
+                headers: { "X-CSRF-Token": csrfToken }
+            };
             for (var index in aChangedSPath) {
                 var oChanged = aChangedSPath[index],
-                    oContext = this.getModel("detailView").getProperty(aChangedSPath[index].sPath),
-                    object = {};
-                object.oModel = oProjModel;
-                object.sKey = oProjModel.createKey("/A_EngmntProjRsceDmndDistr", {
-                    WorkPackage: oContext.WorkPackage,
-                    ResourceDemand: oContext.ResourceDemand,
-                    Version: '1',
-                    CalendarMonth: oContext.CalendarMonth,
-                    CalendarYear: oContext.CalendarYear
+                    oContext = this.getModel("detailView").getProperty(aChangedSPath[index].sPath);
+
+                object.oModel = aProjDmdModel;
+                object.sKey = aProjDmdModel.createKey("/A_ProjDmndRsceAssgmtDistr", {
+                    ProjDmndRsceAssgmtDistrUUID: oContext.ProjDmndRsceAssgmtDistrUUID
                 });
                 object.oPayload = {
-                    UnitOfMeasure: "H",
-                    Quantity: (oDetailModel.getProperty("/selectedView") === "DAY") ? (oChanged.value * 8).toString() : (oChanged.value).toString()
-                    // Quantity: (oDetailModel.getProperty("/selectedView") === "DAY") ? (oContext.StaffedNew * 8).toString() : (oContext.StaffedNew).toString()
+                    ProjDmndRsceAssgmtDistrQty: (oDetailModel.getProperty("/selectedView") === "DAY") ? (oChanged.value * 8).toString() : (oChanged.value).toString()
                 };
-                object.mParameters = { "groupId": "BatchQuery", "changeSetId": "BatchQuery", "method": "PATCH" }
                 this.updateModel(object);
-            }
-            oProjModel.submitChanges(Object.assign(object.mParameters, {
+            };
+            aProjDmdModel.submitChanges(Object.assign(object.mParameters, {
                 success: function (oResp) {
                     var oMsgModel = this.getModel("message"),
                         aChangedSPath = this.getModel("detailView").getProperty("/aChangedSPath");
-                    if (oMsgModel.getData()[0].type !== "Success") {
-                        for (var idx in aChangedSPath) {
-                            this.getModel("PROJ_ENGMT_UPDATE_SRV").resetChanges([aChangedSPath[idx].sPath], true);
-                        }
-                        this.getModel("detailView").setProperty("/busy", false);
-                        return;
-                    }
+                    // if (oMsgModel.getData()[0].type !== "Success") {
+                    //     for (var idx in aChangedSPath) {
+                    //         aProjDmdModel.resetChanges([aChangedSPath[idx].sPath], true);
+                    //     }
+                    //     aProjDmdModel.setUseBatch(false);
+                    //     this.getModel("detailView").setProperty("/busy", false);
+                    //     return;
+                    // }
+                    var oMessageManager = sap.ui.getCore().getMessageManager();
+                    var oMessage = new Message({
+                        message: "Updated successfully",
+                        type: sap.ui.core.MessageType.Success,
+                        // description: "Updated successfully",
+                        target: "/messagePath",
+                        processor: null
+                    });
+                    oMessageManager.addMessages(oMessage);
                     this.getModel("detailView").setProperty("/aChangedSPath", [])
                     // Run fetch resource
                     this.getModel("detailView").setProperty("/busy", false);
-                    // this.getModel("detailView").refresh(true);
+                    this.getModel("ProjectDemand").setUseBatch(false);
+                    this.getModel("detailView").refresh(true);
                 }.bind(this),
                 error: function (oErr) {
+                    for (var idx in aChangedSPath) {
+                        this.getModel("ProjectDemand").resetChanges([aChangedSPath[idx].sPath], true);
+                    }
+                    this.getModel("ProjectDemand").setUseBatch(false);
+                    this.getModel("ProjectDemand").setUseBatch(false);
                     this.getModel("detailView").setProperty("/busy", false);
                 }.bind(this)
-            }));
-        },
-        _fetchResources: function (oModel, sPath, aFilters, oParams, groupId, aSort) {
-            // @ts-ignore
-            return new Promise(
-                function (resolve, reject) {
-                    oModel.read(sPath, {
-                        filters: aFilters,
-                        sorters: aSort,
-                        urlParameters: oParams,
-                        groupId: groupId,
-                        // @ts-ignore
-                        success: function (oData, oResponse) {
-                            resolve(oData);
-                        }.bind(this),
-                        error: function (error) {
-                            reject(error);
-                        }.bind(this)
-                    });
-                });
+                }));
         },
         _getCurrentPeriod: function () {
-            var nMinMth = this.returnDataFormat("yyyyMM").format(new Date([new Date().getFullYear(), new Date().getMonth(), "01"].join("-"))),
-                nMaxMth = this.returnDataFormat("yyyyMM").format(new Date([new Date().getFullYear(), new Date().getMonth() + 3, "01"].join("-")));
-            return { nMinMth: +nMinMth, nMaxMth: +nMaxMth };
-        },
-        _returnMthDist: function (oWpItem, oDist, aProjRes, aTimeRec, nStaffedNew, bEmployee, binputVisible) {
-            // Temporary for unassign capacity
-            var nUnassign = +((Math.random() * 10) + -5),
-                nUnassignDay = (nUnassign) ? nUnassign / 8 : null;
+            var nMinMth = this.formatter.returnDataFormat("yyyyMM").format(new Date([new Date().getFullYear(), new Date().getMonth() + 1, "01"].join("-"))),
+                nMaxMth = this.formatter.returnDataFormat("yyyyMM").format(new Date([new Date().getFullYear(), new Date().getMonth() + 4, "01"].join("-")));
             return {
-                WorkPackage: oWpItem.WorkPackageID,
-                Name: this.returnDataFormat("MMM yyyy").format(new Date([oDist.FcYear, oDist.Period, "01"].join("-"))),
-                CalendarMonth: oDist.Period,
-                CalendarYear: oDist.FcYear,
-                ResourceDemand: aProjRes[0].ResourceDemand,
-                ResourceSupply: aProjRes[0].ResourceSupply,
-                TimeRecordings: (aTimeRec.length > 0) ? +aTimeRec[0].RecordedQuantity : null,
-                TimeRecordingsDay: (aTimeRec.length > 0 && aTimeRec[0].RecordedQuantity) ? +aTimeRec[0].RecordedQuantity / 8 : null,
-                Staffed: (oDist.Version === "1") ? +oDist.StaffedEffort : null,
-                StaffedDay: (oDist.Version === "1" && oDist.StaffedEffort) ? +oDist.StaffedEffort / 8 : null,
-                StaffedNew: nStaffedNew,
-                StaffedNewDay: (nStaffedNew) ? nStaffedNew / 8 : null,
-                UnassignedCap: nUnassign,
-                UnassignedCapDay: nUnassignDay,
-                Employee: bEmployee,
-                inputVisible: binputVisible
+                nMinMth: +nMinMth,
+                nMaxMth: +nMaxMth
+            };
+        },
+        _returnMthDist: function (Object) {
+            var nAssignedCap = +Object.AvailabilityInHours - +Object.PlndEffortQty;
+            return {
+                ...Object, ...{
+                    WorkPackage: Object.WorkPackage,
+                    Name: this.formatter.returnDataFormat("MMM yyyy").format(new Date([Object.YearMth.substr(0, 4), Object.YearMth.substr(4, 2), "01"].join("-"))),
+                    YearMth: Object.YearMth,
+                    // ResourceDemand: aProjRes[0].ResourceDemand,
+                    // ResourceSupply: aProjRes[0].ResourceSupply,
+                    // TimeRecordings: (aTimeRec.length > 0) ? +aTimeRec[0].RecordedQuantity : null,
+                    // TimeRecordingsDay: (aTimeRec.length > 0 && aTimeRec[0].RecordedQuantity) ? +aTimeRec[0].RecordedQuantity / 8 : null,
+                    Staffed: +Object.PlndEffortQty,
+                    StaffedDay: (Object.PlndEffortQty) ? +Object.PlndEffortQty / 8 : null,
+                    StaffedNew: (Object.nStaffedNew) ? +Object.nStaffedNew : null,
+                    StaffedNewDay: (Object.nStaffedNew && +Object.nStaffedNew > 0) ? +Object.nStaffedNew / 8 : null,
+                    UnassignedCap: nAssignedCap,
+                    UnassignedCapDay: (nAssignedCap) || (nAssignedCap !== 0) ? nAssignedCap / 8 : null,
+                    bLink: Object.bLink,
+                    bInputVisible: Object.bInputVisible
+                }
             }
         },
-        _sumPeriodDist: function (object, oNode) {
-            object[0].Staffed = oNode.map(function (o) { return o.Staffed }).reduce((prev, curr) => +prev + +curr, 0);
-            object[0].Staffed = (object[0].Staffed) ? object[0].Staffed : null;
-            object[0].StaffedDay = (object[0].StaffedDay) ? object[0].StaffedDay / 8 : object[0].StaffedDay;
-            object[0].StaffedNew = oNode.map(function (o) { return o.StaffedNew }).reduce((prev, curr) => +prev + +curr, 0);
-            object[0].StaffedNew = (object[0].StaffedNew) ? object[0].StaffedNew : null;
-            object[0].StaffedNewDay = (object[0].StaffedDay) ? object[0].StaffedDay / 8 : object[0].StaffedDay;
-            object[0].TimeRecordings = oNode.map(function (o) { return o.TimeRecordings }).reduce((prev, curr) => +prev + +curr, 0);
-            object[0].TimeRecordings = (object[0].TimeRecordings) ? object[0].TimeRecordings : null;
-            object[0].TimeRecordingsDay = (object[0].TimeRecordings) ? object[0].TimeRecordings / 8 : null;
-            object[0].UnassignedCap = oNode.map(function (o) { return o.UnassignedCap }).reduce((prev, curr) => +prev + +curr, 0);
-            object[0].UnassignedCap = (object[0].UnassignedCap) ? object[0].UnassignedCap / 8 : null;
-            object[0].UnassignedCapDay = (object[0].UnassignedCapDay) ? object[0].UnassignedCapDay / 8 : null;
+        _calculateValues: function (nodeLine) {
+            nodeLine.Staffed = nodeLine.Node.map((o) => o.Staffed).reduce((prev, curr) => +prev + +curr, 0);
+            nodeLine.Staffed = (nodeLine.Staffed > 0) ? nodeLine.Staffed : null;
+            nodeLine.StaffedDay = (nodeLine.Staffed > 0) ? nodeLine.Staffed / 8 : null;
+            nodeLine.StaffedNew = nodeLine.Node.map((o) => o.StaffedNew).reduce((prev, curr) => +prev + +curr, 0);
+            nodeLine.StaffedNew = (nodeLine.StaffedNew > 0) ? nodeLine.StaffedNew : null;
+            nodeLine.StaffedNewDay = (nodeLine.StaffedNew > 0) ? nodeLine.StaffedNew / 8 : null;
+            nodeLine.UnassignedCap = nodeLine.Node.map((o) => o.UnassignedCap).reduce((prev, curr) => +prev + +curr, 0);
+            nodeLine.UnassignedCapDay = (nodeLine.UnassignedCap !== 0) ? nodeLine.UnassignedCap / 8 : null;
         }
     });
-
 });

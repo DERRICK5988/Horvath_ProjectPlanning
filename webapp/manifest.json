@@ -42,6 +42,33 @@
                     "annotations": [],
                     "localUri": "localService/SC_PROJ_ENGMT_CREATE_UPD_SRV/metadata.xml"
                 }
+            },
+            "YY1_EMP_CAPACITY_API_CDS": {
+                "uri": "/sap/opu/odata/sap/YY1_EMP_CAPACITY_API_CDS/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "annotations": [],
+                    "localUri": "localService/YY1_EMP_CAPACITY_API_CDS/metadata.xml"
+                }
+            },
+            "YY1_PROJ_ASSIGNMENT_DISTR_CDS": {
+                "uri": "/sap/opu/odata/sap/YY1_PROJ_ASSIGNMENT_DISTR_CDS/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "annotations": [],
+                    "localUri": "localService/YY1_PROJ_ASSIGNMENT_DISTR_CDS/metadata.xml"
+                }
+            },
+            "API_PROJECTDEMAND": {
+                "uri": "/sap/opu/odata/sap/API_PROJECTDEMAND/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "annotations": [],
+                    "localUri": "localService/API_PROJECTDEMAND/metadata.xml"
+                }
             }
         }
     },
@@ -73,7 +100,8 @@
                 "sap.ui.comp": {},
                 "sap.ui.generic.app": {},
                 "sap.ui.table": {},
-                "sap.ushell": {}
+                "sap.ushell": {},
+                "sap.ui.layout": {}
             }
         },
         "config": {
@@ -120,6 +148,36 @@
                     "useBatch": false,
                     "disableHeadRequestForToken": true
                 }
+            },
+            "EmployeeCapacity": {
+                "dataSource": "YY1_EMP_CAPACITY_API_CDS",
+                "preload": true,
+                "settings": {
+                    "defaultBindingMode": "TwoWay",
+                    "defaultCountMode": "None",
+                    "refreshAfterChange": false,
+                    "useBatch": false
+                }
+            },
+            "ProjectAssignmentDistr": {
+                "dataSource": "YY1_PROJ_ASSIGNMENT_DISTR_CDS",
+                "preload": true,
+                "settings": {
+                    "defaultBindingMode": "TwoWay",
+                    "defaultCountMode": "None",
+                    "refreshAfterChange": false,
+                    "useBatch": false
+                }
+            },
+            "ProjectDemand": {
+                "dataSource": "API_PROJECTDEMAND",
+                "preload": true,
+                "settings": {
+                    "defaultBindingMode": "TwoWay",
+                    "defaultCountMode": "None",
+                    "refreshAfterChange": false,
+                    "useBatch": false
+                }
             }
         },
         "resources": {
@@ -139,7 +197,8 @@
                 },
                 "async": true
             },
-            "routes": [{
+            "routes": [
+                {
                     "pattern": "",
                     "name": "list",
                     "target": [

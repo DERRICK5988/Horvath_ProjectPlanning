@@ -75,8 +75,8 @@
                         <Label text="Name" />
                         <t:template>
                             <VBox>
-                                <Link text="{detailView>Name}" wrapping="false" press="onEmployeePress($event, ${detailView>})" visible="{detailView>Employee}" />
-                                <Text text="{detailView>Name}" wrapping="false" visible="{= !${detailView>Employee}}" />
+                                <Link text="{detailView>Name}" wrapping="false" press="onEmployeePress($event, ${detailView>})" visible="{detailView>bLink}" />
+                                <Text text="{detailView>Name}" wrapping="false" visible="{= !${detailView>bLink}}" />
                             </VBox>
                         </t:template>
                     </t:Column>
@@ -103,8 +103,10 @@
                         <Label text="Unassigned capacity" />
                         <t:template>
                             <!-- <Text text="{parts:['detailView>UnassignedCap', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'HOUR'}"/> -->
-                            <ObjectStatus text="{parts:['detailView>UnassignedCap', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" inverted="true" state="{= ${detailView>UnassignedCap} >= 0 ? 'Success' : 'Error'}" visible="{= ${detailView>/selectedView} === 'HOUR'}" />
-                            <!-- <Text text="{parts:['detailView>UnassignedCapDay', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'DAY'}"/> -->
+                            <VBox>
+                                <ObjectStatus text="{parts:['detailView>UnassignedCap', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" inverted="true" state="{= ${detailView>UnassignedCap} >= 0 ? 'Error' : 'Success'}" visible="{= ${detailView>/selectedView} === 'HOUR'}" />
+                                <ObjectStatus text="{parts:['detailView>UnassignedCapDay', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" inverted="true" state="{= ${detailView>UnassignedCapDay} >= 0 ? 'Error' : 'Success'}" visible="{= ${detailView>/selectedView} === 'DAY'}" />
+                            </VBox>
                         </t:template>
                     </t:Column>
                     <t:Column width="150px" hAlign="Right">
@@ -117,18 +119,18 @@
                                     change="onChange"
                                     placeholder="{= ${detailView>/selectedView} === 'HOUR' ? 'Hour(s)' : 'Day(s)'}"
                                     type="Number"
-                                    visible="{= ${detailView>inputVisible} &amp;&amp; ${detailView>/selectedView} === 'HOUR'}"
+                                    visible="{= ${detailView>bInputVisible} &amp;&amp; ${detailView>/selectedView} === 'HOUR'}"
                                 />
-                                <Text text="{parts:['detailView>StaffedNew', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" wrapping="false" visible="{= !${detailView>inputVisible} &amp;&amp; ${detailView>/selectedView} === 'HOUR'}" />
+                                <Text text="{parts:['detailView>StaffedNew', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" wrapping="false" visible="{= !${detailView>bInputVisible} &amp;&amp; ${detailView>/selectedView} === 'HOUR'}" />
                                 <Input
                                     value="{parts:['detailView>StaffedNewDay', 'detailView>/selectedView'], formatter: '.formatter.rounding'}"
                                     textAlign="Right"
                                     change="onChange"
                                     placeholder="{= ${detailView>/selectedView} === 'HOUR' ? 'Hour(s)' : 'Day(s)'}"
                                     type="Number"
-                                    visible="{= ${detailView>inputVisible} &amp;&amp; ${detailView>/selectedView} === 'DAY'}"
+                                    visible="{= ${detailView>bInputVisible} &amp;&amp; ${detailView>/selectedView} === 'DAY'}"
                                 />
-                                <Text text="{parts:['detailView>StaffedNewDay', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" wrapping="false" visible="{= !${detailView>inputVisible} &amp;&amp; ${detailView>/selectedView} === 'DAY'}" />
+                                <Text text="{parts:['detailView>StaffedNewDay', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" wrapping="false" visible="{= !${detailView>bInputVisible} &amp;&amp; ${detailView>/selectedView} === 'DAY'}" />
                             </VBox>
                         </t:template>
                     </t:Column>
@@ -166,7 +168,7 @@
             <semantic:MessagesIndicator press="onMessagesButtonPress" />
         </semantic:messagesIndicator>
         <semantic:footerCustomActions>
-            <Button text="Save" press="onSave" />
+            <Button text="Save" press="onSave" enabled="{= ${detailView>/aChangedSPath}.length > 0 }"/>
         </semantic:footerCustomActions>
     </semantic:SemanticPage>
 </mvc:View>

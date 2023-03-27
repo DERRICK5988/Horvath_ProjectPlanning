@@ -1,9 +1,8 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/core/routing/History",
-    "../model/formatter",
-    "sap/ui/core/format/DateFormat",
-], function (Controller, History, formatter, DateFormat) {
+    "../model/formatter"
+], function (Controller, History, formatter) {
     "use strict";
 
     return Controller.extend("StaffingApp.horvath.controller.BaseController", {
@@ -74,12 +73,24 @@ sap.ui.define([
         updateModel: function (Object) {
             Object.oModel.update(Object.sKey, Object.oPayload, Object.mParameters);
         },
-        returnDataFormat: function (sFormat) {
-            return DateFormat.getDateInstance({
-                pattern: sFormat
-            })
-        }
-
+        fetchResources: function (Object) {
+            // @ts-ignore
+            return new Promise(
+                function (resolve, reject) {
+                    Object.oModel.read(Object.sPath, {
+                        filters: Object.aFilters,
+                        sorters: Object.aSort,
+                        urlParameters: Object.oParams,
+                        // @ts-ignore
+                        success: function (oData, oResponse) {
+                            resolve(oData);
+                        }.bind(this),
+                        error: function (error) {
+                            reject(error);
+                        }.bind(this)
+                    });
+                });
+        },
     });
 
 });

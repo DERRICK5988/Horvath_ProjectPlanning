@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Aggregation.V1" Alias="Aggregation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ANALYTICS',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Analytics.v1" Alias="Analytics"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="Capabilities"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CODELIST',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.CodeList.v1" Alias="SAP__CodeList"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="Communication"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_MEASURES',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Measures.V1" Alias="Measures"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.PersonalData.v1" Alias="PersonalData"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_UI',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="UI"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_VALIDATION',Version='0001',SAP__Origin='')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Validation.V1" Alias="Validation"/>
+    </edmx:Reference>
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="YY1_EMP_CAPACITY_API_CDS" xml:lang="en" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="YY1_EMP_CAPACITY_APIType" sap:semantics="aggregate" sap:label="Employee Capacity API (Staffing App)" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.String" Nullable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="PersonWorkAgreement" Type="Edm.String" MaxLength="8" sap:attribute-for="PersonWorkAgreement" sap:display-format="NonNegative" sap:required-in-filter="false" sap:label="Personnel number" sap:quickinfo="Personnel Number"/>
+                <Property Name="YearMth" Type="Edm.String" MaxLength="6" sap:attribute-for="YearMth" sap:required-in-filter="false" sap:label="YearMth"/>
+                <Property Name="EngagementProject" Type="Edm.String" MaxLength="40" sap:attribute-for="EngagementProject" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Engmnt Project ID" sap:quickinfo="Engagement Project ID"/>
+                <Property Name="WorkPackage" Type="Edm.String" MaxLength="50" sap:attribute-for="WorkPackage" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Plan Item"/>
+                <Property Name="AvailabilityInHours" Type="Edm.Decimal" Precision="8" Scale="2" sap:aggregation-role="measure" sap:attribute-for="YearMth" sap:required-in-filter="false" sap:label="AvailabilityInHours" sap:filterable="false"/>
+                <Property Name="PlndEffortQty" Type="Edm.Decimal" Precision="15" Scale="3" sap:attribute-for="PlndEffortQty" sap:required-in-filter="false" sap:unit="UnitOfMeasure" sap:label="Staffed effort" sap:quickinfo="Total Quantity"/>
+                <Property Name="UnitOfMeasure" Type="Edm.String" MaxLength="3" sap:attribute-for="UnitOfMeasure" sap:required-in-filter="false" sap:label="Unit of Measure" sap:semantics="unit-of-measure"/>
+                <Property Name="PersonFullName" Type="Edm.String" MaxLength="80" sap:attribute-for="PersonFullName" sap:required-in-filter="false" sap:label="Full Name"/>
+                <Property Name="CustomerName" Type="Edm.String" MaxLength="220" sap:attribute-for="CustomerName" sap:display-format="UpperCase" sap:required-in-filter="false" sap:label="Customer Name" sap:quickinfo="Customer Full Name"/>
+                <Property Name="EngagementProjectName" Type="Edm.String" MaxLength="40" sap:attribute-for="EngagementProjectName" sap:required-in-filter="false" sap:label="Cust.Proj. Name" sap:quickinfo="Customer Project Name"/>
+                <Property Name="ProjectManager" Type="Edm.String" MaxLength="80" sap:attribute-for="ProjectManager" sap:required-in-filter="false" sap:label="Project Manager" sap:quickinfo="Full Name"/>
+                <Property Name="ProjectPartner" Type="Edm.String" MaxLength="80" sap:attribute-for="ProjectPartner" sap:required-in-filter="false" sap:label="Project Partner" sap:quickinfo="Full Name"/>
+            </EntityType>
+            <EntityContainer Name="YY1_EMP_CAPACITY_API_CDS_Entities" m:IsDefaultEntityContainer="true" sap:message-scope-supported="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="YY1_EMP_CAPACITY_API" EntityType="YY1_EMP_CAPACITY_API_CDS.YY1_EMP_CAPACITY_APIType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+            </EntityContainer>
+            <Annotation Term="Core.SchemaVersion" String="1.0.0" xmlns="http://docs.oasis-open.org/odata/ns/edm"/>
+            <Annotations Target="YY1_EMP_CAPACITY_API_CDS.YY1_EMP_CAPACITY_API_CDS_Entities" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.ApplyMultiUnitBehaviorForSortingAndFiltering" Bool="true"/>
+            </Annotations>
+            <Annotations Target="YY1_EMP_CAPACITY_API_CDS.YY1_EMP_CAPACITY_API_CDS_Entities/YY1_EMP_CAPACITY_API" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="NonFilterableProperties">
+                            <Collection>
+                                <PropertyPath>ID</PropertyPath>
+                                <PropertyPath>AvailabilityInHours</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.SortRestrictions">
+                    <Record>
+                        <PropertyValue Property="NonSortableProperties">
+                            <Collection>
+                                <PropertyPath>ID</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <atom:link rel="self" href="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/sap/YY1_EMP_CAPACITY_API_CDS/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="https://my308859-api.s4hana.ondemand.com/sap/opu/odata/sap/YY1_EMP_CAPACITY_API_CDS/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
