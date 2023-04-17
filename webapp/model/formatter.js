@@ -33,13 +33,18 @@ sap.ui.define(["sap/ui/core/format/DateFormat"], function (DateFormat) {
                 pattern: sFormat
             })
         },
-        convertHrDay: function(nStaffedEffort, sKey) {
-            debugger;
-            if (sKey === "DAY" && nStaffedEffort !== 0) { 
+        convertHrDay: function (nStaffedEffort, sKey, aChanged) {
+            if (nStaffedEffort && sKey === "DAY" && nStaffedEffort !== 0) {
                 return (+nStaffedEffort / 8).toFixed(1);
-             } else {
+            } else {
+                return null;
+            }
+        },
+        getButtonType: function (aMessageModel) {
+            if (aMessageModel.length === 0) {
                 return;
-             }
+            }
+            return aMessageModel.some(o => o.type === "Error") ? "Reject" : "Emphasized";
         }
     };
 });

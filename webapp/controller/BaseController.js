@@ -1,8 +1,12 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/core/routing/History",
-    "../model/formatter"
-], function (Controller, History, formatter) {
+    "../model/formatter",
+    "sap/ui/model/Filter",
+    "sap/ui/model/FilterOperator",
+    "sap/ui/model/Sorter",
+    "sap/ui/core/message/Message"
+], function (Controller, History, formatter, Filter, FilterOperator, Sorter, Message) {
     "use strict";
 
     return Controller.extend("StaffingApp.horvath.controller.BaseController", {
@@ -45,7 +49,6 @@ sap.ui.define([
         getResourceBundle: function () {
             return this.getOwnerComponent().getModel("i18n").getResourceBundle();
         },
-
         /**
          * Event handler for navigating back.
          * It there is a history entry we go one step back in the browser history
@@ -62,13 +65,46 @@ sap.ui.define([
                 this.getRouter().navTo("list", {}, true);
             }
         },
-        /**
-        * @public
-        */
-        injectMembers: function () {
-            this.oComponent = this.getOwnerComponent();
-            this.models = this.oComponent.models;
-            this.oControllers = this.oComponent.oControllers;
+        getCurrentPeriod: function () {
+            var nMinMth = this.formatter.returnDataFormat("yyyyMM").format(new Date([new Date().getFullYear(), new Date().getMonth() + 1, "01"].join("-"))),
+                nMaxMth = this.formatter.returnDataFormat("yyyyMM").format(new Date([new Date().getFullYear(), new Date().getMonth() + 4, "01"].join("-")));
+            return { nMinMth: +nMinMth, nMaxMth: +nMaxMth };
+        },
+        getResourcePath: function (oContextObj, oCurrPeriod) {
+            return [{
+                oModel: this.getView().getModel(), sPath: "/WorkpackageSet",
+                aFilters: [new Filter("ProjectID", FilterOperator.EQ, oContextObj.EngagementProject)],
+                oParams: { "$select": "WorkPackageID,WorkPackageName" },
+                aSort: [new Sorter("WorkPackageID", false)]
+            },
+            {
+                oModel: this.getView().getModel("EmployeeCapacity"),
+                sPath: "/YY1_EMP_CAPACITY_API",
+                aFilters: [new Filter("EngagementProject", FilterOperator.EQ, oContextObj.EngagementProject)],
+                aSort: [new Sorter("PersonWorkAgreement", false), new Sorter("YearMth", false)]
+            },
+            {
+                oModel: this.getOwnerComponent().getModel("PROJ_ENGMT_UPDATE_SRV"),
+                sPath: "/A_EngmntProjRsceSup",
+                oParams: { "$select": "WorkPackage,Version,Quantity,PersonWorkAgreement" },
+                aFilters: [new Filter("EngagementProject", FilterOperator.EQ, oContextObj.EngagementProject)]
+            },
+            {
+                oModel: this.getView().getModel("ProjectAssignmentDistr"),
+                sPath: "/YY1_PROJ_ASSIGNMENT_DISTR",
+                aFilters: [
+                    new Filter("Project", FilterOperator.EQ, oContextObj.EngagementProject),
+                    // new Filter("YearMth", FilterOperator.BT, oCurrPeriod.nMinMth.toString(), oCurrPeriod.nMaxMth.toString(), true)
+                    new Filter("YearMth", FilterOperator.LE, oCurrPeriod.nMaxMth.toString(), true)
+                ],
+                aSort: [new Sorter("YearMth", false)]
+            },
+            {
+                oModel: this.getView().getModel("TimeRecording"),
+                sPath: "/YY1_TIME_RECORDING",
+                aFilters: [new Filter("ProjectID", FilterOperator.EQ, oContextObj.EngagementProject)],
+                aSort: [new Sorter("YearMth", false)]
+            }];
         },
         updateModel: function (Object) {
             Object.oModel.update(Object.sKey, Object.oPayload, Object.mParameters);
@@ -91,6 +127,15 @@ sap.ui.define([
                     });
                 });
         },
+        addMessageManager: function (Object) {
+            var oMessage = new Message({
+                message: Object.message,
+                type: Object.type,
+                target: "/messagePath",
+                processor: null
+            });
+            sap.ui.getCore().getMessageManager().addMessages(oMessage);
+        }
     });
 
 });

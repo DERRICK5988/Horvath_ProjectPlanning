@@ -9,13 +9,12 @@ sap.ui.define([
 
 	return BaseController.extend("StaffingApp.horvath.controller.DetailDetail", {
 		onInit: function () {
-			debugger;
 			var oOwnerComponent = this.getOwnerComponent();
 			this.oRouter = oOwnerComponent.getRouter();
 			this.oModel = oOwnerComponent.getModel();
 			var oViewModel = new JSONModel({
 				busy: false,
-				selectedView: "HOUR"
+				selectedView: "DAY"
 			});
 			this.setModel(oViewModel, "empCapacity");
 			this.oRouter.getRoute("detailDetail").attachPatternMatched(this._onPatternMatch, this);
@@ -24,11 +23,13 @@ sap.ui.define([
 		_onPatternMatch: function (oEvent) {
 			var oArguments = oEvent.getParameter("arguments"),
 				oContextObj = JSON.parse(decodeURIComponent(oArguments.object));
+			debugger;
 			this.getModel("empCapacity").setProperty("/busy", true);
 			this.getModel("empCapacity").setData(Object.assign(this.getModel("empCapacity").getData(), {
 				oDetail: oContextObj,
+				nTotalAssignedCap: oContextObj.AvailabilityInHours,
+				nAbsence: oContextObj.AbsenceInHours
 			}));
-			debugger;
 			Promise.all([
 				this.fetchResources({
 					oModel: this.getView().getModel("EmployeeCapacity"),
@@ -38,16 +39,13 @@ sap.ui.define([
 						new Filter("YearMth", FilterOperator.EQ, oContextObj.YearMth)
 					],
 					aSort: [new Sorter("EngagementProject", false), new Sorter("YearMth", false)]
-				})]).then(function(oData) {
-					debugger;
+				})]).then(function (oData) {
 					var aEmpCapacity = oData[0].results,
-						nTotalAssignedCap = +aEmpCapacity.map((o) => o.AvailabilityInHours).reduce((prev, curr) => +prev + +curr, 0),
 						nTotalWorkCap = +aEmpCapacity.map((o) => o.PlndEffortQty).reduce((prev, curr) => +prev + +curr, 0);
 					this.getModel("empCapacity").setData(Object.assign(this.getModel("empCapacity").getData(), {
 						aItem: aEmpCapacity,
-						nTotalAssignedCap: nTotalAssignedCap,
 						nTotalWorkCap: nTotalWorkCap,
-						nTotalUnassignedCap: +nTotalAssignedCap - +nTotalWorkCap
+						nTotalUnassignedCap: +oContextObj.AvailabilityInHours - +oContextObj.AbsenceInHours - +nTotalWorkCap
 					}));
 					this.getView().getModel("empCapacity").refresh(true);
 					this.getView().getModel("empCapacity").setProperty("/busy", false);
@@ -59,7 +57,8 @@ sap.ui.define([
 		},
 
 		onEndColumnClose: function (oEvent) {
-			this.getModel("appView").setProperty("/layout", "TwoColumnsMidExpanded");
+			this.getModel("appView").setProperty("/layout", this.getModel("appView").getProperty("/previousLayout"));
+			
 		}
 	});
 });

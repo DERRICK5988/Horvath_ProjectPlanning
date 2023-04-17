@@ -16,7 +16,7 @@
             "toolsId": "77292265-f926-49e6-ac94-621d68dce025"
         },
         "dataSources": {
-            "TimeSheetService": {
+            "YY1_TIME_RECORDING_CDS": {
                 "uri": "/sap/opu/odata/sap/YY1_TIME_RECORDING_CDS/",
                 "type": "OData",
                 "settings": {
@@ -68,6 +68,15 @@
                     "odataVersion": "2.0",
                     "annotations": [],
                     "localUri": "localService/API_PROJECTDEMAND/metadata.xml"
+                }
+            },
+            "YY1_COMM_PROJECT_CDS": {
+                "uri": "/sap/opu/odata/sap/YY1_COMM_PROJECT_CDS/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "annotations": [],
+                    "localUri": "localService/YY1_COMM_PROJECT_CDS/metadata.xml"
                 }
             }
         }
@@ -128,11 +137,12 @@
                     "useBatch": false
                 }
             },
-            "TimeSheet": {
-                "dataSource": "TimeSheetService",
+            "TimeRecording": {
+                "dataSource": "YY1_TIME_RECORDING_CDS",
                 "preload": true,
                 "settings": {
                     "defaultOperationMode": "Server",
+                    "defaultCountMode": "None",
                     "defaultBindingMode": "TwoWay",
                     "refreshAfterChange": false,
                     "useBatch": false
@@ -177,6 +187,15 @@
                     "defaultCountMode": "None",
                     "refreshAfterChange": false,
                     "useBatch": false
+                }
+            },
+            "CommercialProject": {
+                "dataSource": "YY1_COMM_PROJECT_CDS",
+                "preload": true,
+                "settings": {
+                    "defaultBindingMode": "TwoWay",
+                    "defaultCountMode": "Inline",
+                    "refreshAfterChange": false
                 }
             }
         },

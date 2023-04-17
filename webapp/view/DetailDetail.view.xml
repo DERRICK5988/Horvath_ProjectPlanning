@@ -1,8 +1,17 @@
-<mvc:View controllerName="StaffingApp.horvath.controller.DetailDetail" xmlns="sap.m" xmlns:layout="sap.ui.layout" xmlns:semantic="sap.f.semantic" xmlns:mvc="sap.ui.core.mvc" xmlns:i18n="sap.ui.model.resource.ResourceModel">
+<mvc:View controllerName="StaffingApp.horvath.controller.DetailDetail"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:layout="sap.ui.layout"
+    xmlns:semantic="sap.f.semantic"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:i18n="sap.ui.model.resource.ResourceModel">
     <semantic:SemanticPage id="idEmpCapacityPage" busy="{empCapacity>/busy}" headerPinnable="true" toggleHeaderOnTitleClick="true" preserveHeaderStateOnScroll="false" titleAreaShrinkRatio="1:1.6:1.6" showFooter="false">
         <!-- Title Heading-->
         <semantic:titleHeading>
-            <Title text="{empCapacity>/oDetail/PersonFullName}" />
+            <HBox>
+                <Avatar src="https://sdk.openui5.org/{products>ProductPicUrl}" displaySize="S" displayShape="Square" class="sapUiTinyMarginEnd"/>
+                <Title text="{empCapacity>/oDetail/PersonFullName}" />
+            </HBox>
         </semantic:titleHeading>
 
         <!-- Title Breadcrumbs-->
@@ -23,9 +32,10 @@
         </semantic:titleSnappedOnMobile> -->
 
         <!-- Title Content-->
-        <!-- <semantic:titleContent>
-            <Image src="./test-resources/sap/f/images/KPI.png" tooltip="This is just a placeholder, not a real KPI control." height="2rem" width="3.5rem" />
-        </semantic:titleContent> -->
+        <semantic:titleContent>
+            <!-- <Title text="{empCapacity>/oDetail/PersonFullName}" /> -->
+
+        </semantic:titleContent>
 
         <!-- TitleExpanded content-->
         <!-- <semantic:titleSnappedContent>
@@ -36,8 +46,7 @@
         <semantic:headerContent>
             <layout:HorizontalLayout allowWrapping="true">
                 <layout:VerticalLayout class="sapUiMediumMarginEnd">
-                    <!-- <ObjectAttribute title="{i18n>Consultant}" text="{/objectDescription/category}" /> -->
-                    <ObjectAttribute title="{i18n>Level}" text="" />
+                    <ObjectAttribute title="{i18n>Level}" text="{empCapacity>/oDetail/Level}" />
                     <ObjectAttribute title="{i18n>Period}" text="{empCapacity>/oDetail/Name}" />
                 </layout:VerticalLayout>
 
@@ -49,17 +58,16 @@
 
         <!-- Content -->
         <semantic:content>
-            <Table id="idEmpCapacityTable" showFooter="false" inset="false" items="{path:'empCapacity>/aItem'}" 
-                   class="sapFSemanticPageAlignContent" width="auto">
+            <Table id="idEmpCapacityTable" inset="false" items="{path:'empCapacity>/aItem'}" class="sapFSemanticPageAlignContent" width="auto">
                 <headerToolbar>
                     <OverflowToolbar>
                         <content>
                             <ToolbarSpacer />
-                            <layout:VerticalLayout width="100px">
+                            <layout:VerticalLayout width="120px">
                                 <SegmentedButton selectedKey="{empCapacity>/selectedView}" selectionChange="onSegmentChanged">
                                     <items>
-                                        <SegmentedButtonItem text="Hour" key="HOUR" />
-                                        <SegmentedButtonItem text="Day" key="DAY" />
+                                        <SegmentedButtonItem text="{i18n>Hours}" key="HOUR" />
+                                        <SegmentedButtonItem text="{i18n>Days}" key="DAY" />
                                     </items>
                                 </SegmentedButton>
                             </layout:VerticalLayout>
@@ -72,7 +80,8 @@
                         <footer>
                             <layout:VerticalLayout class="sapUiMediumMarginEnd">
                                 <ObjectAttribute title="{i18n>TotalAssignedCap}" />
-                                <ObjectAttribute title="{i18n>TotalWorkCap}" />
+                                <ObjectAttribute title="{i18n>Absences}" />
+                                <ObjectAttribute title="{i18n>TotalWorkCap}"/>
                                 <ObjectAttribute title="{i18n>UnassignedCap}" />
                             </layout:VerticalLayout>
                         </footer>
@@ -82,11 +91,13 @@
                         <footer width="100px">
                             <layout:VerticalLayout class="sapUiMediumMarginEnd">
                                 <VBox>
-                                    <ObjectAttribute text="{empCapacity>/nTotalAssignedCap}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}"/>
+                                    <ObjectAttribute text="{parts:['empCapacity>/nTotalAssignedCap', 'empCapacity>/selectedView'], formatter: '.formatter.rounding'}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}"/>
                                     <ObjectAttribute text="{parts:['empCapacity>/nTotalAssignedCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" visible="{= ${empCapacity>/selectedView} === 'DAY'}"/>
-                                    <ObjectAttribute text="{empCapacity>/nTotalWorkCap}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}"/>
+                                    <ObjectAttribute text="{parts:['empCapacity>/nAbsence', 'empCapacity>/selectedView'], formatter: '.formatter.rounding'}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}"/>
+                                    <ObjectAttribute text="{parts:['empCapacity>/nAbsence', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" visible="{= ${empCapacity>/selectedView} === 'DAY'}"/>
+                                    <ObjectAttribute text="{parts:['empCapacity>/nTotalWorkCap', 'empCapacity>/selectedView'], formatter: '.formatter.rounding'}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}"/>
                                     <ObjectAttribute text="{parts:['empCapacity>/nTotalWorkCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" visible="{= ${empCapacity>/selectedView} === 'DAY'}"/>
-                                    <ObjectAttribute text="{empCapacity>/nTotalUnassignedCap}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}"/>
+                                    <ObjectAttribute text="{parts:['empCapacity>/nTotalUnassignedCap', 'empCapacity>/selectedView'], formatter: '.formatter.rounding'}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}"/>
                                     <ObjectAttribute text="{parts:['empCapacity>/nTotalUnassignedCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" visible="{= ${empCapacity>/selectedView} === 'DAY'}"/>
                                 </VBox>
                             </layout:VerticalLayout>
