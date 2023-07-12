@@ -31,7 +31,7 @@ sap.ui.define([
                 // taken care of by the list itself.
                 iOriginalBusyDelay = oList.getBusyIndicatorDelay();
             // oUserInfo = await this._getUserInfoService();
-            debugger;
+
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             var oHistory = sap.ui.core.routing.History.getInstance();
             this._oList = oList;
@@ -237,7 +237,6 @@ sap.ui.define([
         },
 
         _onMasterMatched: function () {
-            debugger;
             //Set the layout property of the FCL control to 'OneColumn'
             this.getModel("appView").setProperty("/layout", "OneColumn");
         },
@@ -301,11 +300,15 @@ sap.ui.define([
             oViewModel.setProperty("/isFilterBarVisible", (this._oListFilterState.aFilter.length > 0));
             oViewModel.setProperty("/filterBarLabel", this.getResourceBundle().getText("listFilterBarText", [sFilterBarText]));
         },
+
+        /**
+         * Testing
+         * @private
+         */
         _getUserInfoService: function () {
             return new Promise(resolve => sap.ui.require([
                 "sap/ushell/library"
             ], oSapUshellLib => {
-                debugger;
                 // var oContainer = oSapUshellLib.Container,
                 //     pService = oContainer.getServiceAsync("UserInfo"); // .getService is deprecated
                 resolve(oSapUshellLib);

@@ -18,12 +18,11 @@ sap.ui.define([
         /* =========================================================== */
         /* lifecycle methods                                           */
         /* =========================================================== */
-
         /**
          * Called when the list controller is instantiated. It sets up the event handling for the list/detail communication and other lifecycle tasks.
          * @public
          */
-        onInit: function () {
+        onInit: async function () {
             // Control state model
             var oList = this.byId("list"),
                 oViewModel = this._createViewModel(),
@@ -31,15 +30,16 @@ sap.ui.define([
                 // so it can be restored later on. Busy handling on the list is
                 // taken care of by the list itself.
                 iOriginalBusyDelay = oList.getBusyIndicatorDelay();
+            // oUserInfo = await this._getUserInfoService();
 
-
+            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+            var oHistory = sap.ui.core.routing.History.getInstance();
             this._oList = oList;
             // keeps the filter and search state
             this._oListFilterState = {
                 aFilter: [],
                 aSearch: []
             };
-
             this.setModel(oViewModel, "listView");
             // Make sure, busy indication is showing immediately so there is no
             // break after the busy indication for loading the view's meta data is
@@ -48,13 +48,11 @@ sap.ui.define([
                 // Restore original busy indicator delay for the list
                 oViewModel.setProperty("/delay", iOriginalBusyDelay);
             });
-
             this.getView().addEventDelegate({
                 onBeforeFirstShow: function () {
                     this.getOwnerComponent().oListSelector.setBoundMasterList(oList);
                 }.bind(this)
             });
-
             this.getRouter().getRoute("list").attachPatternMatched(this._onMasterMatched, this);
             this.getRouter().attachBypassed(this.onBypassed, this);
         },
@@ -93,8 +91,10 @@ sap.ui.define([
             }
 
             var sQuery = oEvent.getParameter("query");
-            this._oListFilterState.aSearch = (sQuery) ? [new Filter("ProjectName", FilterOperator.Contains, sQuery)] : [];
-            this._applyFilterSearch();
+            // this._oListFilterState.aSearch = (sQuery) ? [new Filter("ProjectName", FilterOperator.Contains, sQuery)] : [];
+            var aSearch = (sQuery) ? new Filter([new Filter("ProjectName", FilterOperator.Contains, sQuery), new Filter("EngagementProject", FilterOperator.Contains, sQuery)], false) : [];
+            this._oList.getBinding("items").filter(aSearch);
+            // this._applyFilterSearch();
         },
 
         /**
@@ -230,14 +230,13 @@ sap.ui.define([
                 filterBarLabel: "",
                 delay: 0,
                 title: this.getResourceBundle().getText("listTitleCount", [0]),
-                // noDataText: this.getResourceBundle().getText("listListNoDataText"),
+                noDataText: this.getResourceBundle().getText("listListNoDataText"),
                 sortBy: "ProjectName",
                 groupBy: "None"
             });
         },
 
         _onMasterMatched: function () {
-            debugger;
             //Set the layout property of the FCL control to 'OneColumn'
             this.getModel("appView").setProperty("/layout", "OneColumn");
         },
@@ -250,9 +249,8 @@ sap.ui.define([
          */
         _showDetail: function (oItem) {
             var bReplace = !Device.system.phone,
-                oContextObj = oItem.getBindingContext().getObject();
+                oContextObj = oItem.getBindingContext("CommercialProject").getObject();
             // set the layout property of FCL control to show two columns
-            debugger;
             this.getModel("appView").setProperty("/layout", "TwoColumnsMidExpanded");
             // Encode selected object for single quote or invalid character
             this.getRouter().navTo("object", {
@@ -279,7 +277,8 @@ sap.ui.define([
          * @private
          */
         _applyFilterSearch: function () {
-            var aFilters = this._oListFilterState.aSearch.concat(this._oListFilterState.aFilter),
+            // var aFilters = this._oListFilterState.aSearch.concat(this._oListFilterState.aFilter),
+            var aFilters = this._oListFilterState.aSearch,
                 oViewModel = this.getModel("listView");
             this._oList.getBinding("items").filter(aFilters, "Application");
             // changes the noDataText of the list in case there are no filter results
@@ -300,8 +299,21 @@ sap.ui.define([
             var oViewModel = this.getModel("listView");
             oViewModel.setProperty("/isFilterBarVisible", (this._oListFilterState.aFilter.length > 0));
             oViewModel.setProperty("/filterBarLabel", this.getResourceBundle().getText("listFilterBarText", [sFilterBarText]));
-        }
+        },
 
+        /**
+         * Testing
+         * @private
+         */
+        _getUserInfoService: function () {
+            return new Promise(resolve => sap.ui.require([
+                "sap/ushell/library"
+            ], oSapUshellLib => {
+                // var oContainer = oSapUshellLib.Container,
+                //     pService = oContainer.getServiceAsync("UserInfo"); // .getService is deprecated
+                resolve(oSapUshellLib);
+            }));
+        },
     });
 
 });

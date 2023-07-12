@@ -16,7 +16,7 @@
             "toolsId": "77292265-f926-49e6-ac94-621d68dce025"
         },
         "dataSources": {
-            "TimeSheetService": {
+            "YY1_TIME_RECORDING_CDS": {
                 "uri": "sap/opu/odata/sap/YY1_TIME_RECORDING_CDS/",
                 "type": "OData",
                 "settings": {
@@ -41,6 +41,60 @@
                     "odataVersion": "2.0",
                     "annotations": [],
                     "localUri": "localService/SC_PROJ_ENGMT_CREATE_UPD_SRV/metadata.xml"
+                }
+            },
+            "YY1_EMP_CAPACITY_API_CDS": {
+                "uri": "sap/opu/odata/sap/YY1_EMP_CAPACITY_API_CDS/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "annotations": [],
+                    "localUri": "localService/YY1_EMP_CAPACITY_API_CDS/metadata.xml"
+                }
+            },
+            "YY1_PROJ_ASSIGNMENT_DISTR_CDS": {
+                "uri": "sap/opu/odata/sap/YY1_PROJ_ASSIGNMENT_DISTR_CDS/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "annotations": [],
+                    "localUri": "localService/YY1_PROJ_ASSIGNMENT_DISTR_CDS/metadata.xml"
+                }
+            },
+            "API_PROJECTDEMAND": {
+                "uri": "sap/opu/odata/sap/API_PROJECTDEMAND/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "annotations": [],
+                    "localUri": "localService/API_PROJECTDEMAND/metadata.xml"
+                }
+            },
+            "YY1_COMM_PROJECT_CDS": {
+                "uri": "sap/opu/odata/sap/YY1_COMM_PROJECT_CDS/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "annotations": [],
+                    "localUri": "localService/YY1_COMM_PROJECT_CDS/metadata.xml"
+                }
+            },
+            "YY1_EMP_WRITEOFF_POSTP_API_CDS": {
+                "uri": "sap/opu/odata/sap/YY1_EMP_WRITEOFF_POSTP_API_CDS/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "annotations": [],
+                    "localUri": "localService/YY1_EMP_WRITEOFF_POSTP_API_CDS/metadata.xml"
+                }
+            },
+            "YY1_EMP_KPI_STAFF_CDS": {
+                "uri": "sap/opu/odata/sap/YY1_EMP_KPI_STAFF_CDS/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "annotations": [],
+                    "localUri": "localService/YY1_EMP_KPI_STAFF_CDS/metadata.xml"
                 }
             }
         }
@@ -73,7 +127,8 @@
                 "sap.ui.comp": {},
                 "sap.ui.generic.app": {},
                 "sap.ui.table": {},
-                "sap.ushell": {}
+                "sap.ushell": {},
+                "sap.ui.layout": {}
             }
         },
         "config": {
@@ -100,11 +155,12 @@
                     "useBatch": false
                 }
             },
-            "TimeSheet": {
-                "dataSource": "TimeSheetService",
+            "TimeRecording": {
+                "dataSource": "YY1_TIME_RECORDING_CDS",
                 "preload": true,
                 "settings": {
                     "defaultOperationMode": "Server",
+                    "defaultCountMode": "None",
                     "defaultBindingMode": "TwoWay",
                     "refreshAfterChange": false,
                     "useBatch": false
@@ -120,10 +176,71 @@
                     "useBatch": false,
                     "disableHeadRequestForToken": true
                 }
+            },
+            "EmployeeCapacity": {
+                "dataSource": "YY1_EMP_CAPACITY_API_CDS",
+                "preload": true,
+                "settings": {
+                    "defaultBindingMode": "TwoWay",
+                    "defaultCountMode": "None",
+                    "refreshAfterChange": false,
+                    "useBatch": false
+                }
+            },
+            "ProjectAssignmentDistr": {
+                "dataSource": "YY1_PROJ_ASSIGNMENT_DISTR_CDS",
+                "preload": true,
+                "settings": {
+                    "defaultBindingMode": "TwoWay",
+                    "defaultCountMode": "None",
+                    "refreshAfterChange": false,
+                    "useBatch": false
+                }
+            },
+            "ProjectDemand": {
+                "dataSource": "API_PROJECTDEMAND",
+                "preload": true,
+                "settings": {
+                    "defaultBindingMode": "TwoWay",
+                    "defaultCountMode": "None",
+                    "refreshAfterChange": false,
+                    "useBatch": false
+                }
+            },
+            "CommercialProject": {
+                "dataSource": "YY1_COMM_PROJECT_CDS",
+                "preload": true,
+                "settings": {
+                    "defaultBindingMode": "TwoWay",
+                    "defaultCountMode": "Inline",
+                    "refreshAfterChange": false
+                }
+            },
+            "EmpWriteOffPostpone": {
+                "dataSource": "YY1_EMP_WRITEOFF_POSTP_API_CDS",
+                "preload": true,
+                "settings": {
+                    "defaultBindingMode": "TwoWay",
+                    "defaultCountMode": "Inline",
+                    "refreshAfterChange": false
+                }
+            },
+            "EmpKPI": {
+                "dataSource": "YY1_EMP_KPI_STAFF_CDS",
+                "preload": true,
+                "settings": {
+                    "defaultBindingMode": "TwoWay",
+                    "defaultCountMode": "Inline",
+                    "refreshAfterChange": false
+                }
             }
         },
         "resources": {
-            "css": []
+            "css": [
+                {
+                    "uri": "css/style.css"
+                }
+            ]
         },
         "routing": {
             "config": {

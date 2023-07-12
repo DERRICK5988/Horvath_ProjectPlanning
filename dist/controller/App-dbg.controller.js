@@ -6,25 +6,25 @@ sap.ui.define([
 
     return BaseController.extend("StaffingApp.horvath.controller.App", {
 
-        onInit : function () {
+        onInit: async function () {
             var oViewModel,
                 fnSetAppNotBusy,
                 iOriginalBusyDelay = this.getView().getBusyIndicatorDelay();
 
             oViewModel = new JSONModel({
-                busy : true,
-                delay : 0,
-                layout : "OneColumn",
-                previousLayout : "",
-                actionButtonsInfo : {
-                    midColumn : {
-                        fullScreen : false
+                busy: true,
+                delay: 0,
+                layout: "OneColumn",
+                previousLayout: "",
+                actionButtonsInfo: {
+                    midColumn: {
+                        fullScreen: false
                     }
                 }
             });
             this.setModel(oViewModel, "appView");
 
-            fnSetAppNotBusy = function() {
+            fnSetAppNotBusy = function () {
                 oViewModel.setProperty("/busy", false);
                 oViewModel.setProperty("/delay", iOriginalBusyDelay);
             };

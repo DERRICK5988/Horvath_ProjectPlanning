@@ -13,44 +13,6 @@
                 <f:heading>
                     <Title text="{detailView>/ProjectName} ({detailView>/EngagementProject})"/>
                 </f:heading>
-                <!-- <f:breadcrumbs>
-                    <Breadcrumbs>
-                        <Link text="Home" />
-                        <Link text="Page 1" />
-                        <Link text="Page 2" />
-                        <Link text="Page 3" />
-                        <Link text="Page 4" />
-                        <Link text="Page 5" />
-                    </Breadcrumbs>
-                </f:breadcrumbs> -->
-                <!-- <f:expandedContent>
-                    <Label text="This is a subheading"/>
-                </f:expandedContent>
-                <f:snappedContent>
-                    <Label text="This is a subheading"/>
-                </f:snappedContent>
-                <f:snappedTitleOnMobile>
-                    <Title text="This is a subheading"/>
-                </f:snappedTitleOnMobile> -->
-                <!-- <f:content>
-                    <OverflowToolbar>
-                        <GenericTag text="SR" status="Error" press="onPressOpenPopover" design="StatusIconHidden">
-                            <ObjectNumber number="2" unit="M" emphasized="false" state="Error"/>
-                        </GenericTag>
-                    </OverflowToolbar>
-                </f:content> -->
-                <!-- <f:actions>
-                    <Button text="Edit" type="Emphasized" press="toggleAreaPriority"/>
-                    <Button text="Delete" type="Transparent"/>
-                    <Button text="Copy" type="Transparent"/>
-                    <Button text="Toggle Footer" type="Transparent" press="onToggleFooter"/>
-                    <Button icon="sap-icon://action" type="Transparent"/>
-                    <Button text="Button with layoutData" type="Transparent" press="onPressOpenPopover">
-                        <layoutData>
-                            <OverflowToolbarLayoutData priority="AlwaysOverflow" closeOverflowOnInteraction="false" />
-                        </layoutData>
-                    </Button>
-                </f:actions> -->
                 <f:navigationActions>
                     <Button icon="sap-icon://full-screen" id="enterFullScreen" visible="{= !${device>/system/phone} &amp;&amp; !${appView>/actionButtonsInfo/midColumn/fullScreen}}" press=".toggleFullScreen" type="Transparent" />
                     <Button id="exitFullScreen" icon="sap-icon://exit-full-screen" visible="{= !${device>/system/phone} &amp;&amp; ${appView>/actionButtonsInfo/midColumn/fullScreen}}" press=".toggleFullScreen" type="Transparent" />
@@ -69,11 +31,11 @@
                         <Label text="Project End Date: {path: 'detailView>/EndDate', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd.MM.yyyy', strictParsing: true , UTC: true }}" />
                     </HBox>
                 </l:VerticalLayout>
-                <l:VerticalLayout>
-                    <ObjectAttribute title="Unassign Capacity" />
-                    <ObjectStatus text="{parts:['detailView>/totalUnassignCap', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" inverted="true" state="{= ${detailView>/totalUnassignCap} > 0 ? 'Error' : 'Success'}" visible="{= ${detailView>/selectedView} === 'HOUR'}"/>
-                    <ObjectStatus text="{parts:['detailView>/totalUnassignCap', 'detailView>/selectedView'], formatter: '.formatter.convertHrDay'}" inverted="true" state="{= ${detailView>/totalUnassignCap} > 0 ? 'Error' : 'Success'}" visible="{= ${detailView>/selectedView} === 'DAY'}"/>
-                </l:VerticalLayout>
+                <!-- <l:VerticalLayout>
+                    <ObjectAttribute title="{= ${detailView>/selectedView} === 'HOUR' ? ${i18n>UnassignedCapDHours} : ${i18n>UnassignedCapDays} }" />
+                    <ObjectStatus text="{parts:['detailView>/totalUnassignCap', 'detailView>/selectedView'], formatter: '.formatter.convertHrDay'}" inverted="true" state="{= ${detailView>/totalUnassignCap} > 0 ? 'Success' : 'Error'}" visible="{= ${detailView>/selectedView} === 'HOUR'}"/>
+                    <ObjectStatus text="{parts:['detailView>/totalUnassignCap', 'detailView>/selectedView'], formatter: '.formatter.convertHrDay'}" inverted="true" state="{= ${detailView>/totalUnassignCap} > 0 ? 'Success' : 'Error'}" visible="{= ${detailView>/selectedView} === 'DAY'}"/>
+                </l:VerticalLayout> -->
             </f:DynamicPageHeader>
         </f:header>
         <f:content>
@@ -83,10 +45,10 @@
                 </t:rowSettingsTemplate>
                 <t:extension>
                     <OverflowToolbar id="idToolbar" height="auto">
-                        <Title text="Resource ({= ${detailView>/resourcesCount}})" />
+                        <!-- <Title text="Resource ({= ${detailView>/resourcesCount}})" /> -->
                         <ToolbarSpacer />
-                        <Button text="Collapse all" press="onCollapseAll"/>
-                        <Button text="Expand all" press="onExpandAll"/>
+                        <Button text="{i18n>CollapseAll}" press="onCollapseAll"/>
+                        <Button text="{i18n>ExpandAll}" press="onExpandAll"/>
                         <l:VerticalLayout width="120px">
                             <SegmentedButton selectedKey="{detailView>/selectedView}" selectionChange="onSegmentChanged">
                                 <items>
@@ -100,7 +62,7 @@
                 </t:extension>
                 <t:columns>
                     <t:Column width="250px" hAlign="Left">
-                        <Label text="Name" />
+                        <Label text="{i18n>Name}" />
                         <t:template>
                             <VBox>
                                 <Link text="{detailView>Name}" wrapping="false" press="onEmployeePress($event, ${detailView>})" visible="{detailView>bLink}" />
@@ -109,31 +71,38 @@
                         </t:template>
                     </t:Column>
                     <t:Column width="150px" hAlign="Right">
-                        <Label text="Time recordings" />
+                        <Label text="{i18n>TimeRecordings}" />
                         <t:template>
                             <VBox>
-                                <Text text="{parts:['detailView>TimeRecordings', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'HOUR'}" />
-                                <Text text="{parts:['detailView>TimeRecordings', 'detailView>/selectedView'], formatter: '.formatter.convertHrDay'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'DAY'}" />
+                                <Text text="{parts:['detailView>TimeRecordings', 'detailView>/selectedView'], formatter: '.formatter.convertHrDayZ'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'HOUR'}" />
+                                <Text text="{parts:['detailView>TimeRecordings', 'detailView>/selectedView'], formatter: '.formatter.convertHrDayZ'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'DAY'}" />
+                            </VBox>
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="150px" hAlign="Right">
+                        <Label text="{i18n>Writeoffs}" />
+                        <t:template>
+                            <VBox>
+                                <Text text="{parts:['detailView>Writeoffs', 'detailView>/selectedView'], formatter: '.formatter.convertHrDay'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'HOUR'}" />
+                                <Text text="{parts:['detailView>Writeoffs', 'detailView>/selectedView'], formatter: '.formatter.convertHrDay'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'DAY'}" />
                             </VBox>
                         </t:template>
                     </t:Column>
                     <t:Column width="70px" hAlign="Right">
-                        <Label text="Staffed" />
+                        <Label text="{i18n>Staffed}" />
                         <t:template>
                             <VBox>
-                                <Text text="{parts:['detailView>Staffed', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'HOUR'}" />
-                                <!-- <Text text="{path: 'detailView>StaffedDay', type: 'FloatType', formatOptions: { maxFractionDigits: 1}}" wrapping="false" visible="{= ${detailView>/selectedView} === 'DAY'}"/> -->
+                                <Text text="{parts:['detailView>Staffed', 'detailView>/selectedView'], formatter: '.formatter.convertHrDay'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'HOUR'}" />
                                 <Text text="{parts:['detailView>Staffed', 'detailView>/selectedView'], formatter: '.formatter.convertHrDay'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'DAY'}" />
                             </VBox>
                         </t:template>
                     </t:Column>
                     <t:Column width="150px" hAlign="Right">
-                        <Label text="{i18n>UnassignedCap}" />
+                        <Label text="{= ${detailView>/selectedView} === 'HOUR' ? ${i18n>UnassignedCapDHours} : ${i18n>UnassignedCapDays} }" />
                         <t:template>
-                            <!-- <Text text="{parts:['detailView>UnassignedCap', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'HOUR'}"/> -->
                             <VBox>
-                                <ObjectStatus press="onPress" text="{parts:['detailView>UnassignedCap', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" inverted="true" state="{= ${detailView>UnassignedCap} >= 0 ? 'Error' : 'Success'}" visible="{= ${detailView>/selectedView} === 'HOUR'}" />
-                                <ObjectStatus press="onPress" text="{parts:['detailView>UnassignedCap', 'detailView>/selectedView'], formatter: '.formatter.convertHrDay'}" inverted="true" state="{= ${detailView>UnassignedCap} >= 0 ? 'Error' : 'Success'}" visible="{= ${detailView>/selectedView} === 'DAY'}" />
+                                <ObjectStatus press="onPress" text="{parts:['detailView>UnassignedCap', 'detailView>/selectedView'], formatter: '.formatter.convertHrDay'}" inverted="true" state="{= ${detailView>UnassignedCap} >= 0 ? 'Success' : 'Error'}" visible="{= ${detailView>/selectedView} === 'HOUR'}" />
+                                <ObjectStatus press="onPress" text="{parts:['detailView>UnassignedCap', 'detailView>/selectedView'], formatter: '.formatter.convertHrDay'}" inverted="true" state="{= ${detailView>UnassignedCap} >= 0 ? 'Success' : 'Error'}" visible="{= ${detailView>/selectedView} === 'DAY'}" />
                             </VBox>
                         </t:template>
                     </t:Column>
@@ -141,10 +110,8 @@
                         <Label text="{i18n>StaffedNew}" />
                         <t:template>
                             <VBox>
-                                <Input change="onChange" textAlign="Right" visible="{= ${detailView>bInputVisible} }" placeholder="{= ${detailView>/selectedView} === 'HOUR' ? 'Hour(s)' : 'Day(s)'}" type="Number"/>
-                                <!-- <Input value="{parts:['detailView>StaffedNew', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" textAlign="Right" change="onChange" placeholder="{= ${detailView>/selectedView} === 'HOUR' ? 'Hour(s)' : 'Day(s)'}" type="Number" visible="{= ${detailView>bInputVisible} &amp;&amp; ${detailView>/selectedView} === 'HOUR'}" /> -->
-                                <Text text="{parts:['detailView>StaffedNew', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" wrapping="false" visible="{= !${detailView>bInputVisible} &amp;&amp; ${detailView>/selectedView} === 'HOUR'}" />
-                                <!-- <Input value="{parts:['detailView>StaffedNew', 'detailView>/selectedView', 'detailView>/aChangedSPath'], formatter: '.formatter.convertHrDay'}" textAlign="Right" change="onChange" placeholder="{= ${detailView>/selectedView} === 'HOUR' ? 'Hour(s)' : 'Day(s)'}" type="Number" visible="{= ${detailView>bInputVisible} &amp;&amp; ${detailView>/selectedView} === 'DAY'}" /> -->
+                                <Input change="onChange($event, ${detailView>})" textAlign="Right" visible="{= ${detailView>bInputVisible} &amp;&amp; ${detailView>Staffed} > 0 }" placeholder="{= ${detailView>/selectedView} === 'HOUR' ? 'Hour(s)' : 'Day(s)'}" type="Number"/>
+                                <Text text="{parts:['detailView>StaffedNew', 'detailView>/selectedView'], formatter: '.formatter.convertHrDay'}" wrapping="false" visible="{= !${detailView>bInputVisible} &amp;&amp; ${detailView>/selectedView} === 'HOUR'}" />
                                 <Text text="{parts:['detailView>StaffedNew', 'detailView>/selectedView'], formatter: '.formatter.convertHrDay'}" wrapping="false" visible="{= !${detailView>bInputVisible} &amp;&amp; ${detailView>/selectedView} === 'DAY'}" />
                             </VBox>
                         </t:template>
@@ -153,23 +120,38 @@
                         <Label text="{i18n>Baseline}" />
                         <t:template>
                             <VBox>
-                                <Text text="{parts:['detailView>Baseline', 'detailView>/selectedView'], formatter: '.formatter.rounding'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'HOUR'}" />
+                                <Text text="{parts:['detailView>Baseline', 'detailView>/selectedView'], formatter: '.formatter.convertHrDay'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'HOUR'}" />
                                 <Text text="{parts:['detailView>Baseline', 'detailView>/selectedView'], formatter: '.formatter.convertHrDay'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'DAY'}" />
                             </VBox>
                         </t:template>
                     </t:Column>
-                    <t:Column width="150px" hAlign="Right">
-                        <Label text="{i18n>Writeoffs}" />
+                    <t:Column width="200px" hAlign="Left">
+                        <Label text="{i18n>EstTillCompletion}" />
                         <t:template>
-                            <Text text="{detailView>Writeoffs}" wrapping="false" />
+                            <VBox>
+                                <Text text="{parts:['detailView>EstTillCompletion', 'detailView>/selectedView'], formatter: '.formatter.convertHrDay'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'HOUR'}" />
+                                <Text text="{parts:['detailView>EstTillCompletion', 'detailView>/selectedView'], formatter: '.formatter.convertHrDay'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'DAY'}" />
+                            </VBox>
                         </t:template>
                     </t:Column>
-                    <!-- <t:Column width="150px" hAlign="Right">
-                        <Label text="{i18n>Postponed}" />
+                    <t:Column width="200px" hAlign="Left">
+                        <Label text="{i18n>EstAtCompletion}" />
                         <t:template>
-                            <Text text="{detailView>Postponed}" wrapping="false" />
+                            <VBox>
+                                <Text text="{parts:['detailView>EstAtCompletion', 'detailView>/selectedView'], formatter: '.formatter.convertHrDay'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'HOUR'}" />
+                                <Text text="{parts:['detailView>EstAtCompletion', 'detailView>/selectedView'], formatter: '.formatter.convertHrDay'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'DAY'}" />
+                            </VBox>
                         </t:template>
-                    </t:Column> -->
+                    </t:Column>
+                    <t:Column width="200px" hAlign="Left">
+                        <Label text="{i18n>DeltaELPlanned}" />
+                        <t:template>
+                            <VBox>
+                                <Text text="{parts:['detailView>DeltaELPlanned', 'detailView>/selectedView'], formatter: '.formatter.convertHrDay'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'HOUR'}" />
+                                <Text text="{parts:['detailView>DeltaELPlanned', 'detailView>/selectedView'], formatter: '.formatter.convertHrDay'}" wrapping="false" visible="{= ${detailView>/selectedView} === 'DAY'}" />
+                            </VBox>
+                        </t:template>
+                    </t:Column>
                     <t:Column width="150px" hAlign="Left">
                         <Label text="{i18n>Contracttype}" />
                         <t:template>
@@ -188,9 +170,9 @@
         <!-- DynamicPage Footer -->
         <f:footer>
             <OverflowToolbar>
-                <Button icon="sap-icon://message-popup" text="{= ${message>/}.length}" type="{= ${path:'message>/', formatter: '.formatter.getButtonType'} }" press="onMessagesButtonPress" visible="{= ${message>/}.length > 0}"/>
+                <!-- <Button icon="sap-icon://message-popup" text="{= ${message>/}.length}" type="{= ${path:'message>/', formatter: '.formatter.getButtonType'} }" press="onMessagesButtonPress" visible="{= ${message>/}.length > 0}"/> -->
                 <ToolbarSpacer/>
-                <Button text="Save" type="Accept" press="onSave" enabled="{= ${detailView>/aChangedSPath}.length > 0 || ${detailView>/aTimeRecUpdate}.length > 0 }" />
+                <Button text="Save" type="Accept" press="onSave" enabled="{= ${detailView>/aChangedSPath}.length > 0 || ${detailView>/aTimeRecUpdate}.length > 0 || ${detailView>/aPlannedValueChanged}.length > 0 }" />
             </OverflowToolbar>
         </f:footer>
     </f:DynamicPage>

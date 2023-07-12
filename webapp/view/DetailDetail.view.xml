@@ -14,34 +14,11 @@
             </HBox>
         </semantic:titleHeading>
 
-        <!-- Title Breadcrumbs-->
-        <!-- <semantic:titleBreadcrumbs>
-			<Breadcrumbs>
-				<Link text="Home" />
-				<Link text="Page 1" />
-				<Link text="Page 2" />
-				<Link text="Page 3" />
-				<Link text="Page 4" />
-				<Link text="Page 5" />
-			</Breadcrumbs>
-		</semantic:titleBreadcrumbs> -->
-
-        <!-- Title Snapped On Mobile Content-->
-        <!-- <semantic:titleSnappedOnMobile>
-            <Title text="{/titleSnappedContent/text}" />
-        </semantic:titleSnappedOnMobile> -->
-
         <!-- Title Content-->
         <semantic:titleContent>
             <!-- <Title text="{empCapacity>/oDetail/PersonFullName}" /> -->
 
         </semantic:titleContent>
-
-        <!-- TitleExpanded content-->
-        <!-- <semantic:titleSnappedContent>
-            <Text text="{/titleSnappedContent/text}" />
-        </semantic:titleSnappedContent> -->
-
         <!-- Header Content -->
         <semantic:headerContent>
             <layout:HorizontalLayout allowWrapping="true">
@@ -78,28 +55,26 @@
                     <Column minScreenWidth="Tablet" demandPopin="true" width="450px">
                         <Text text="{i18n>Customer}" />
                         <footer>
-                            <layout:VerticalLayout class="sapUiMediumMarginEnd">
-                                <ObjectAttribute title="{i18n>TotalAssignedCap}" />
+                            <layout:VerticalLayout>
+                                <ObjectAttribute title="{= ${empCapacity>/selectedView} === 'HOUR' ? ${i18n>TotalAvailableHours} : ${i18n>TotalAvailableDays} }"/>
                                 <ObjectAttribute title="{i18n>Absences}" />
-                                <ObjectAttribute title="{i18n>TotalWorkCap}"/>
-                                <ObjectAttribute title="{i18n>UnassignedCap}" />
+                                <ObjectAttribute title="{i18n>ProjectAssigned}"/>
+                                <ObjectAttribute title="{= ${empCapacity>/selectedView} === 'HOUR' ? ${i18n>UnassignedCapDHours} : ${i18n>UnassignedCapDays} }" />
                             </layout:VerticalLayout>
                         </footer>
                     </Column>
                     <Column minScreenWidth="Tablet" demandPopin="true" width="100px">
                         <Text text="{i18n>Capacity}" />
                         <footer width="100px">
-                            <layout:VerticalLayout class="sapUiMediumMarginEnd">
-                                <VBox>
-                                    <ObjectAttribute text="{parts:['empCapacity>/nTotalAssignedCap', 'empCapacity>/selectedView'], formatter: '.formatter.rounding'}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}"/>
-                                    <ObjectAttribute text="{parts:['empCapacity>/nTotalAssignedCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" visible="{= ${empCapacity>/selectedView} === 'DAY'}"/>
-                                    <ObjectAttribute text="{parts:['empCapacity>/nAbsence', 'empCapacity>/selectedView'], formatter: '.formatter.rounding'}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}"/>
-                                    <ObjectAttribute text="{parts:['empCapacity>/nAbsence', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" visible="{= ${empCapacity>/selectedView} === 'DAY'}"/>
-                                    <ObjectAttribute text="{parts:['empCapacity>/nTotalWorkCap', 'empCapacity>/selectedView'], formatter: '.formatter.rounding'}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}"/>
-                                    <ObjectAttribute text="{parts:['empCapacity>/nTotalWorkCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" visible="{= ${empCapacity>/selectedView} === 'DAY'}"/>
-                                    <ObjectAttribute text="{parts:['empCapacity>/nTotalUnassignedCap', 'empCapacity>/selectedView'], formatter: '.formatter.rounding'}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}"/>
-                                    <ObjectAttribute text="{parts:['empCapacity>/nTotalUnassignedCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" visible="{= ${empCapacity>/selectedView} === 'DAY'}"/>
-                                </VBox>
+                            <layout:VerticalLayout>
+                                <ObjectAttribute text="{parts:['empCapacity>/nTotalAssignedCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}"/>
+                                <ObjectAttribute text="{parts:['empCapacity>/nTotalAssignedCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" visible="{= ${empCapacity>/selectedView} === 'DAY'}"/>
+                                <ObjectAttribute text="{parts:['empCapacity>/nAbsence', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDayZ'}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}"/>
+                                <ObjectAttribute text="{parts:['empCapacity>/nAbsence', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDayZ'}" visible="{= ${empCapacity>/selectedView} === 'DAY'}"/>
+                                <ObjectAttribute text="{parts:['empCapacity>/nTotalWorkCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}"/>
+                                <ObjectAttribute text="{parts:['empCapacity>/nTotalWorkCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" visible="{= ${empCapacity>/selectedView} === 'DAY'}"/>
+                                <ObjectAttribute text="{parts:['empCapacity>/nTotalUnassignedCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}"/>
+                                <ObjectAttribute text="{parts:['empCapacity>/nTotalUnassignedCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" visible="{= ${empCapacity>/selectedView} === 'DAY'}"/>
                             </layout:VerticalLayout>
                         </footer>
                     </Column>
@@ -121,8 +96,8 @@
                         <cells>
                             <Text text="{empCapacity>CustomerName}" />
                             <VBox>
-                                <Text text="{parts:['empCapacity>PlndEffortQty', 'empCapacity>/selectedView'], formatter: '.formatter.rounding'}" wrapping="false" visible="{= ${empCapacity>/selectedView} === 'HOUR'}" hAlign="Right" />
-                                <Text text="{parts:['empCapacity>PlndEffortQty', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" wrapping="false" visible="{= ${empCapacity>/selectedView} === 'DAY'}" hAlign="Right"/>
+                                <Text text="{parts:['empCapacity>PlndEffortQty', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" wrapping="false" visible="{= ${empCapacity>/selectedView} === 'HOUR'}" />
+                                <Text text="{parts:['empCapacity>PlndEffortQty', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" wrapping="false" visible="{= ${empCapacity>/selectedView} === 'DAY'}"/>
                             </VBox>
                             <Text text="{empCapacity>EngagementProjectName}" />
                             <Text text="{empCapacity>ProjectManager}" />
@@ -133,80 +108,8 @@
                 </items>
             </Table>
         </semantic:content>
-
-        <!-- <semantic:titleMainAction>
-			<semantic:TitleMainAction text="Edit"/>
-		</semantic:titleMainAction>
-
-		<semantic:addAction>
-			<semantic:AddAction />
-		</semantic:addAction>
-
-		<semantic:deleteAction>
-			<semantic:DeleteAction />
-		</semantic:deleteAction>
-
-		<semantic:copyAction>
-			<semantic:CopyAction />
-		</semantic:copyAction>
-
-		<semantic:editAction>
-			<semantic:EditAction />
-		</semantic:editAction>
-
-		<semantic:favoriteAction>
-			<semantic:FavoriteAction />
-		</semantic:favoriteAction>
-
-		<semantic:flagAction>
-			<semantic:FlagAction />
-		</semantic:flagAction> -->
-
         <semantic:closeAction>
             <semantic:CloseAction press="onEndColumnClose" />
         </semantic:closeAction>
-
-        <!-- <semantic:fullScreenAction>
-			<semantic:FullScreenAction visible="{/notMobile}"/>
-		</semantic:fullScreenAction>
-
-		<semantic:exitFullScreenAction>
-			<semantic:ExitFullScreenAction visible="{/notMobile}"/>
-		</semantic:exitFullScreenAction> -->
-
-        <!-- Custom Title Text Content-->
-        <!-- <semantic:titleCustomTextActions>
-            <Button text="ToggleFooter" press="showFooter" />
-        </semantic:titleCustomTextActions> -->
-
-        <!-- Custom Title Icon Content-->
-        <!-- <semantic:titleCustomIconActions>
-            <OverflowToolbarButton icon="sap-icon://cart" text="cart" />
-        </semantic:titleCustomIconActions> -->
-
-        <!-- Custom Share Actions -->
-        <!-- <semantic:customShareActions>
-			<Button icon= "sap-icon://bed" text="Bed" />
-			<Button icon= "sap-icon://flight" text="Flight" />
-		</semantic:customShareActions> -->
-
-        <!-- Semantic Footer Buttons -->
-        <!-- <semantic:positiveAction>
-            <semantic:PositiveAction />
-        </semantic:positiveAction>
-
-        <semantic:negativeAction>
-            <semantic:NegativeAction />
-        </semantic:negativeAction>
-
-        <semantic:messagesIndicator>
-            <semantic:MessagesIndicator press="onMessagesButtonPress" />
-        </semantic:messagesIndicator> -->
-
-        <!-- Custom Footer Content-->
-        <!-- <semantic:footerCustomActions>
-            <Button text="Save" />
-            <Button text="Cancel" />
-        </semantic:footerCustomActions> -->
     </semantic:SemanticPage>
 </mvc:View>

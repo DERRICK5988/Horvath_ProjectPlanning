@@ -27,11 +27,5 @@
       "service": "html5-apps-repo-rt",
       "authenticationType": "xsuaa"
     }
-  ],
-  "cors": {
-    "enabled": true,
-    "allowedOrigins": ["*"],
-    "allowedMethods": ["GET", "POST", "PUT", "DELETE"],
-    "allowCredentials": true
-  }
+  ]
 }

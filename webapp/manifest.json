@@ -78,7 +78,25 @@
                     "annotations": [],
                     "localUri": "localService/YY1_COMM_PROJECT_CDS/metadata.xml"
                 }
-            }
+            },
+            "YY1_EMP_WRITEOFF_POSTP_API_CDS": {
+                "uri": "/sap/opu/odata/sap/YY1_EMP_WRITEOFF_POSTP_API_CDS/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "annotations": [],
+                    "localUri": "localService/YY1_EMP_WRITEOFF_POSTP_API_CDS/metadata.xml"
+                }
+            },
+            "YY1_EMP_KPI_STAFF_CDS": {
+                "uri": "/sap/opu/odata/sap/YY1_EMP_KPI_STAFF_CDS/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0",
+                    "annotations": [],
+                    "localUri": "localService/YY1_EMP_KPI_STAFF_CDS/metadata.xml"
+                }
+            }           
         }
     },
     "sap.ui": {
@@ -197,10 +215,32 @@
                     "defaultCountMode": "Inline",
                     "refreshAfterChange": false
                 }
+            },
+            "EmpWriteOffPostpone": {
+                "dataSource": "YY1_EMP_WRITEOFF_POSTP_API_CDS",
+                "preload": true,
+                "settings": {
+                    "defaultBindingMode": "TwoWay",
+                    "defaultCountMode": "Inline",
+                    "refreshAfterChange": false
+                }
+            },
+            "EmpKPI": {
+                "dataSource": "YY1_EMP_KPI_STAFF_CDS",
+                "preload": true,
+                "settings": {
+                    "defaultBindingMode": "TwoWay",
+                    "defaultCountMode": "Inline",
+                    "refreshAfterChange": false
+                }
             }
         },
         "resources": {
-            "css": []
+            "css": [
+                {
+					"uri": "css/style.css"
+				}
+            ]
         },
         "routing": {
             "config": {

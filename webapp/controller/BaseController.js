@@ -5,8 +5,9 @@ sap.ui.define([
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
     "sap/ui/model/Sorter",
-    "sap/ui/core/message/Message"
-], function (Controller, History, formatter, Filter, FilterOperator, Sorter, Message) {
+    "sap/ui/core/message/Message",
+    "sap/m/MessageBox"
+], function (Controller, History, formatter, Filter, FilterOperator, Sorter, Message, MessageBox) {
     "use strict";
 
     return Controller.extend("StaffingApp.horvath.controller.BaseController", {
@@ -65,6 +66,10 @@ sap.ui.define([
                 this.getRouter().navTo("list", {}, true);
             }
         },
+        /**
+         * Set current period
+         * @public
+         */
         getCurrentPeriod: function () {
             var nMinMth = this.formatter.returnDataFormat("yyyyMM").format(new Date([new Date().getFullYear(), new Date().getMonth() + 1, "01"].join("-"))),
                 nMaxMth = this.formatter.returnDataFormat("yyyyMM").format(new Date([new Date().getFullYear(), new Date().getMonth() + 4, "01"].join("-")));
@@ -86,16 +91,18 @@ sap.ui.define([
             {
                 oModel: this.getOwnerComponent().getModel("PROJ_ENGMT_UPDATE_SRV"),
                 sPath: "/A_EngmntProjRsceSup",
-                oParams: { "$select": "WorkPackage,Version,Quantity,PersonWorkAgreement" },
+                oParams: {
+                    "$select": "WorkPackage,Version,Quantity,PersonWorkAgreement,to_ResourceSupplyDistribution,to_ResourceDemand",
+                    "$expand": "to_ResourceSupplyDistribution,to_ResourceDemand,to_ResourceDemand/to_ResourceDemandDistribution"
+                },
                 aFilters: [new Filter("EngagementProject", FilterOperator.EQ, oContextObj.EngagementProject)]
             },
             {
                 oModel: this.getView().getModel("ProjectAssignmentDistr"),
                 sPath: "/YY1_PROJ_ASSIGNMENT_DISTR",
                 aFilters: [
-                    new Filter("Project", FilterOperator.EQ, oContextObj.EngagementProject),
-                    // new Filter("YearMth", FilterOperator.BT, oCurrPeriod.nMinMth.toString(), oCurrPeriod.nMaxMth.toString(), true)
-                    new Filter("YearMth", FilterOperator.LE, oCurrPeriod.nMaxMth.toString(), true)
+                    new Filter("Project", FilterOperator.EQ, oContextObj.EngagementProject)
+                    // new Filter("YearMth", FilterOperator.GE, oCurrPeriod.nMinMth.toString(), true)
                 ],
                 aSort: [new Sorter("YearMth", false)]
             },
@@ -104,11 +111,35 @@ sap.ui.define([
                 sPath: "/YY1_TIME_RECORDING",
                 aFilters: [new Filter("ProjectID", FilterOperator.EQ, oContextObj.EngagementProject)],
                 aSort: [new Sorter("YearMth", false)]
+            },
+            {
+                oModel: this.getView().getModel("EmpWriteOffPostpone"),
+                sPath: "/YY1_EMP_WRITEOFF_POSTP_API",
+                aFilters: [new Filter("ProjectID", FilterOperator.EQ, oContextObj.EngagementProject)],
+                aSort: [new Sorter("YearMth", false)]
             }];
         },
-        updateModel: function (Object) {
+        /**
+         * Update projec resource
+         * @param {Object} Json model property for update request
+         * @public
+         */
+        updateResource: function (Object) {
             Object.oModel.update(Object.sKey, Object.oPayload, Object.mParameters);
         },
+        /**
+         * Delete projec resource
+         * @param {Object} Json model property for delete request
+         * @public
+         */
+        deleteResource: function (Object) {
+            Object.oModel.remove(Object.sKey, "", Object.mParameters);
+        },
+        /**
+         * Fetch project resources
+         * @param {Object} Json model property for read request
+         * @public
+         */
         fetchResources: function (Object) {
             // @ts-ignore
             return new Promise(
@@ -127,6 +158,30 @@ sap.ui.define([
                     });
                 });
         },
+        batchChange: function (object) {
+            return new Promise(function (resolve, reject) {
+                object.oModel.submitChanges(Object.assign(object.mParameters, {
+                    success: function (oResp, o) {
+                        if (!!this.getModel('message') && this.getModel('message').getData().some(o => o.type === "Error")) {
+                            MessageBox.error(this.getModel('message').getData().find(o => o.type === "Error").message);
+                            sap.ui.getCore().getMessageManager().removeAllMessages();
+                            this.getModel("detailView").setProperty("/busy", false);
+                            return;
+                        }
+                        resolve(oResp);
+                    }.bind(this),
+                    error: function (oErr) {
+                        object.oModel.setUseBatch(false);
+                        object.oDetailModel.setProperty("/busy", false);
+                        reject(oErr);
+                    }.bind(this)
+                }));
+            }.bind(this))
+        },
+        /**
+         * @param {Object} Object to add for message manager
+         * @public
+         */
         addMessageManager: function (Object) {
             var oMessage = new Message({
                 message: Object.message,

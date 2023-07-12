@@ -1,32 +1,60 @@
-sap.ui.define([], function () {
+sap.ui.define(["sap/ui/core/format/DateFormat", "sap/ui/core/format/NumberFormat"
+], function (DateFormat, NumberFormat) {
     "use strict";
 
     return {
         /**
-         * Rounds the currency value to 2 digits
-         *
-         * @public
-         * @param {string} sValue value to be formatted
-         * @returns {string} formatted currency value with 2 digits
-         */
-        currencyValue : function (sValue) {
-            if (!sValue) {
-                return "";
-            }
-
-            return parseFloat(sValue).toFixed(2);
+        * Format date
+        * @public
+        * @param {string} sFormat: date pattern, e.g ddMMyyyy
+        * @returns {string} formatted date
+        */
+        returnDataFormat: function (sFormat) {
+            return DateFormat.getDateInstance({
+                pattern: sFormat
+            })
         },
-        rounding: function (nValue, sKey) {
-            var nRound;
-            if (!nValue) {
-                return nValue;
-            }
+        /**
+         * Format currency
+         * @public
+         * @param {Object{Amount, Currency}} 
+         * @returns {string} formatted currency
+         */
+        returnCurrencyFormat: function (Object) {
+            return NumberFormat.getCurrencyInstance().format(Object.Amount, Object.Currency);
+        },
+        /**
+         * Convert hours and days format for display
+         * @public
+         * @param {number} nValue 
+         * @param {string} sKey: Segmented Hours/ Days from selectedView [detailView Model]
+         */
+        convertHrDay: function (nValue, sKey) {
+            var nVal;
             if (sKey === "DAY") {
-                nRound = +nValue.toFixed(1);
-            } else {
-                nRound = +nValue.toFixed(0);
+                nVal = (!!nValue && +nValue !== 0) ? (+nValue / 8).toFixed(1) : +nValue;
+            } else if (sKey === "HOUR") {
+                nVal = (!!nValue && +nValue !== 0) ? (+nValue).toFixed(0) : +nValue;
             }
-            return nRound;
+            // return (nVal || nVal === 0) ? nVal : null;
+            return (nVal) ? nVal : null;
+        },
+        /**
+         * Convert hours and days format for display
+         * If empty or null, display as zero
+         * @public
+         * @param {number} nValue 
+         * @param {string} sKey: Segmented Hours/ Days from selectedView [detailView Model]
+         */
+        convertHrDayZ: function (nValue, sKey) {
+            var nVal;
+            if (sKey === "DAY") {
+                nVal = (!!nValue && +nValue !== 0) ? (+nValue / 8).toFixed(1) : +nValue;
+            } else if (sKey === "HOUR") {
+                nVal = (!!nValue && +nValue !== 0) ? (+nValue).toFixed(0) : +nValue;
+            }
+            // return (nVal || nVal === 0) ? nVal : null;
+            return (nVal) ? nVal : '0';
         }
     };
 });
