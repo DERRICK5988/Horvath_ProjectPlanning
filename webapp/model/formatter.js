@@ -53,7 +53,7 @@ sap.ui.define(["sap/ui/core/format/DateFormat", "sap/ui/core/format/NumberFormat
             } else if (sKey === "HOUR") {
                 nVal = (!!nValue && +nValue !== 0) ? (+nValue).toFixed(0) : +nValue;
             }
-            // return (nVal || nVal === 0) ? nVal : null;
+            // return (nVal || nVal === 0) ? nVal : null;;
             return (nVal) ? nVal : '0';
         }
     };

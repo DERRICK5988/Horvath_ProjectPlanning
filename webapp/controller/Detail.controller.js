@@ -21,7 +21,7 @@ sap.ui.define([
         /* =========================================================== */
 
         /**
-        * Called when detail view is initantiated
+        * Called when detail view is initantiated 
         * @public
         */
         onInit: function () {

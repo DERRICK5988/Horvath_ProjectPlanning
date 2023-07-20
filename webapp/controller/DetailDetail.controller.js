@@ -14,7 +14,7 @@ sap.ui.define([
         /* =========================================================== */
 
         /**
-        * Called when empCapacity is initantiated
+        * Called when empCapacity is initantiated 
         * @public
         */
 		onInit: function () {
