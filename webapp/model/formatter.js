@@ -1,14 +1,13 @@
-sap.ui.define(["sap/ui/core/format/DateFormat", "sap/ui/core/format/NumberFormat"
-], function (DateFormat, NumberFormat) {
+sap.ui.define(["sap/ui/core/format/DateFormat", "sap/ui/core/format/NumberFormat"], function (DateFormat, NumberFormat) {
     "use strict";
 
     return {
         /**
-        * Format date
-        * @public
-        * @param {string} sFormat: date pattern, e.g ddMMyyyy
-        * @returns {string} formatted date
-        */
+         * Format date
+         * @public
+         * @param {string} sFormat: date pattern, e.g ddMMyyyy
+         * @returns {string} formatted date
+         */
         returnDataFormat: function (sFormat) {
             return DateFormat.getDateInstance({
                 pattern: sFormat
@@ -36,7 +35,6 @@ sap.ui.define(["sap/ui/core/format/DateFormat", "sap/ui/core/format/NumberFormat
             } else if (sKey === "HOUR") {
                 nVal = (!!nValue && +nValue !== 0) ? (+nValue).toFixed(0) : +nValue;
             }
-            // return (nVal || nVal === 0) ? nVal : null;
             return (nVal) ? nVal : null;
         },
         /**
@@ -53,8 +51,15 @@ sap.ui.define(["sap/ui/core/format/DateFormat", "sap/ui/core/format/NumberFormat
             } else if (sKey === "HOUR") {
                 nVal = (!!nValue && +nValue !== 0) ? (+nValue).toFixed(0) : +nValue;
             }
-            // return (nVal || nVal === 0) ? nVal : null;;
             return (nVal) ? nVal : '0';
+        },
+        /* Function to generate a UUID */
+        generateUUID: function () {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = Math.random() * 16 | 0,
+                    v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
         }
     };
 });

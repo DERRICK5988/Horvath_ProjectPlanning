@@ -31,11 +31,6 @@
                         <Label text="Project End Date: {path: 'detailView>/EndDate', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd.MM.yyyy', strictParsing: true , UTC: true }}" />
                     </HBox>
                 </l:VerticalLayout>
-                <!-- <l:VerticalLayout>
-                    <ObjectAttribute title="{= ${detailView>/selectedView} === 'HOUR' ? ${i18n>UnassignedCapDHours} : ${i18n>UnassignedCapDays} }" />
-                    <ObjectStatus text="{parts:['detailView>/totalUnassignCap', 'detailView>/selectedView'], formatter: '.formatter.convertHrDay'}" inverted="true" state="{= ${detailView>/totalUnassignCap} > 0 ? 'Success' : 'Error'}" visible="{= ${detailView>/selectedView} === 'HOUR'}"/>
-                    <ObjectStatus text="{parts:['detailView>/totalUnassignCap', 'detailView>/selectedView'], formatter: '.formatter.convertHrDay'}" inverted="true" state="{= ${detailView>/totalUnassignCap} > 0 ? 'Success' : 'Error'}" visible="{= ${detailView>/selectedView} === 'DAY'}"/>
-                </l:VerticalLayout> -->
             </f:DynamicPageHeader>
         </f:header>
         <f:content>
@@ -61,7 +56,7 @@
                     </OverflowToolbar>
                 </t:extension>
                 <t:columns>
-                    <t:Column width="250px" hAlign="Left">
+                    <t:Column width="200px" hAlign="Left">
                         <Label text="{i18n>Name}" />
                         <t:template>
                             <VBox>
@@ -70,7 +65,7 @@
                             </VBox>
                         </t:template>
                     </t:Column>
-                    <t:Column width="150px" hAlign="Right">
+                    <t:Column width="180px" hAlign="Right">
                         <Label text="{i18n>TimeRecordings}" />
                         <t:template>
                             <VBox>
@@ -88,7 +83,7 @@
                             </VBox>
                         </t:template>
                     </t:Column>
-                    <t:Column width="70px" hAlign="Right">
+                    <t:Column width="150px" hAlign="Right">
                         <Label text="{i18n>Staffed}" />
                         <t:template>
                             <VBox>
@@ -125,7 +120,7 @@
                             </VBox>
                         </t:template>
                     </t:Column>
-                    <t:Column width="200px" hAlign="Left">
+                    <t:Column width="250px" hAlign="Left">
                         <Label text="{i18n>EstTillCompletion}" />
                         <t:template>
                             <VBox>
@@ -134,7 +129,7 @@
                             </VBox>
                         </t:template>
                     </t:Column>
-                    <t:Column width="200px" hAlign="Left">
+                    <t:Column width="250px" hAlign="Left">
                         <Label text="{i18n>EstAtCompletion}" />
                         <t:template>
                             <VBox>

@@ -73,51 +73,66 @@ sap.ui.define([
         getCurrentPeriod: function () {
             var nMinMth = this.formatter.returnDataFormat("yyyyMM").format(new Date([new Date().getFullYear(), new Date().getMonth() + 1, "01"].join("-"))),
                 nMaxMth = this.formatter.returnDataFormat("yyyyMM").format(new Date([new Date().getFullYear(), new Date().getMonth() + 4, "01"].join("-")));
-            return { nMinMth: +nMinMth, nMaxMth: +nMaxMth };
+            return {
+                nMinMth: +nMinMth,
+                nMaxMth: +nMaxMth
+            };
         },
         getResourcePath: function (oContextObj, oCurrPeriod) {
             return [{
-                oModel: this.getView().getModel(), sPath: "/WorkpackageSet",
-                aFilters: [new Filter("ProjectID", FilterOperator.EQ, oContextObj.EngagementProject)],
-                oParams: { "$select": "WorkPackageID,WorkPackageName" },
-                aSort: [new Sorter("WorkPackageID", false)]
-            },
-            {
-                oModel: this.getView().getModel("EmployeeCapacity"),
-                sPath: "/YY1_EMP_CAPACITY_API",
-                aFilters: [new Filter("EngagementProject", FilterOperator.EQ, oContextObj.EngagementProject)],
-                aSort: [new Sorter("PersonWorkAgreement", false), new Sorter("YearMth", false)]
-            },
-            {
-                oModel: this.getOwnerComponent().getModel("PROJ_ENGMT_UPDATE_SRV"),
-                sPath: "/A_EngmntProjRsceSup",
-                oParams: {
-                    "$select": "WorkPackage,Version,Quantity,PersonWorkAgreement,to_ResourceSupplyDistribution,to_ResourceDemand",
-                    "$expand": "to_ResourceSupplyDistribution,to_ResourceDemand,to_ResourceDemand/to_ResourceDemandDistribution"
+                    oModel: this.getView().getModel(),
+                    sPath: "/WorkpackageSet",
+                    aFilters: [new Filter("ProjectID", FilterOperator.EQ, oContextObj.EngagementProject)],
+                    oParams: {
+                        "$select": "WorkPackageID,WorkPackageName"
+                    },
+                    aSort: [new Sorter("WorkPackageID", false)]
                 },
-                aFilters: [new Filter("EngagementProject", FilterOperator.EQ, oContextObj.EngagementProject)]
-            },
-            {
-                oModel: this.getView().getModel("ProjectAssignmentDistr"),
-                sPath: "/YY1_PROJ_ASSIGNMENT_DISTR",
-                aFilters: [
-                    new Filter("Project", FilterOperator.EQ, oContextObj.EngagementProject)
-                    // new Filter("YearMth", FilterOperator.GE, oCurrPeriod.nMinMth.toString(), true)
-                ],
-                aSort: [new Sorter("YearMth", false)]
-            },
-            {
-                oModel: this.getView().getModel("TimeRecording"),
-                sPath: "/YY1_TIME_RECORDING",
-                aFilters: [new Filter("ProjectID", FilterOperator.EQ, oContextObj.EngagementProject)],
-                aSort: [new Sorter("YearMth", false)]
-            },
-            {
-                oModel: this.getView().getModel("EmpWriteOffPostpone"),
-                sPath: "/YY1_EMP_WRITEOFF_POSTP_API",
-                aFilters: [new Filter("ProjectID", FilterOperator.EQ, oContextObj.EngagementProject)],
-                aSort: [new Sorter("YearMth", false)]
-            }];
+                {
+                    oModel: this.getView().getModel("EmployeeCapacity"),
+                    sPath: "/YY1_EMP_CAPACITY_API",
+                    aFilters: [new Filter("EngagementProject", FilterOperator.EQ, oContextObj.EngagementProject)],
+                    aSort: [new Sorter("PersonWorkAgreement", false), new Sorter("YearMth", false)]
+                },
+                {
+                    oModel: this.getOwnerComponent().getModel("SC_PROJ_ENGMT_CREATE_UPD_SRV"),
+                    sPath: "/A_EngmntProjRsceSup",
+                    oParams: {
+                        "$select": "WorkPackage,Version,Quantity,PersonWorkAgreement,to_ResourceSupplyDistribution,to_ResourceDemand",
+                        "$expand": "to_ResourceSupplyDistribution,to_ResourceDemand,to_ResourceDemand/to_ResourceDemandDistribution"
+                    },
+                    aFilters: [new Filter("EngagementProject", FilterOperator.EQ, oContextObj.EngagementProject)]
+                },
+                {
+                    oModel: this.getView().getModel("ProjectAssignmentDistr"),
+                    sPath: "/YY1_PROJ_ASSIGNMENT_DISTR",
+                    aFilters: [
+                        new Filter("Project", FilterOperator.EQ, oContextObj.EngagementProject)
+                        // new Filter("YearMth", FilterOperator.GE, oCurrPeriod.nMinMth.toString(), true)
+                    ],
+                    aSort: [new Sorter("ProjDmndRsceAssgmt", false), new Sorter("YearMth", false)]
+                },
+                {
+                    oModel: this.getView().getModel("TimeRecording"),
+                    sPath: "/YY1_TIME_RECORDING",
+                    aFilters: [new Filter("ProjectID", FilterOperator.EQ, oContextObj.EngagementProject)],
+                    aSort: [new Sorter("YearMth", false)]
+                },
+                {
+                    oModel: this.getView().getModel("EmpWriteOffPostpone"),
+                    sPath: "/YY1_EMP_WRITEOFF_POSTP_API",
+                    aFilters: [new Filter("ProjectID", FilterOperator.EQ, oContextObj.EngagementProject)],
+                    aSort: [new Sorter("YearMth", false)]
+                },
+                {
+                    oModel: this.getView().getModel("YY1_PROJ_RES_DISTR_CDS"),
+                    sPath: "/YY1_PROJ_RES_DISTR",
+                    aFilters: [
+                        new Filter("Project", FilterOperator.EQ, oContextObj.EngagementProject)
+                    ],
+                    aSort: [new Sorter("PersonWorkAgreement", false), new Sorter("YearMth", false)]
+                }
+            ];
         },
         /**
          * Update projec resource
@@ -132,8 +147,19 @@ sap.ui.define([
          * @param {Object} Json model property for delete request
          * @public
          */
-        deleteResource: function (Object) {
-            Object.oModel.remove(Object.sKey, "", Object.mParameters);
+        deleteResource: function (object) {
+            object.oModel.remove(object.sKey, {}, object.mParameters);
+            // object.oModel.remove(object.sKey);
+            // return new Promise(function (resolve, reject) {
+            //     object.oModel.remove(object.sKey, {
+            //         success: function (oResp) {
+            //             resolve(oResp);
+            //         }.bind(this),
+            //         error: function (oErr) {
+            //             reject(oErr);
+            //         }.bind(this)
+            //     })
+            // }.bind(this));
         },
         /**
          * Fetch project resources
@@ -162,17 +188,21 @@ sap.ui.define([
             return new Promise(function (resolve, reject) {
                 object.oModel.submitChanges(Object.assign(object.mParameters, {
                     success: function (oResp, o) {
+                        
                         if (!!this.getModel('message') && this.getModel('message').getData().some(o => o.type === "Error")) {
-                            MessageBox.error(this.getModel('message').getData().find(o => o.type === "Error").message);
+                            // MessageBox.error(this.getModel('message').getData().find(o => o.type === "Error").message);
+                           
                             sap.ui.getCore().getMessageManager().removeAllMessages();
-                            this.getModel("detailView").setProperty("/busy", false);
+                            // this.getModel("detailView").setProperty("/busy", false);
+                            resolve(JSON.parse(JSON.stringify(this.getModel('message'))));
                             return;
                         }
                         resolve(oResp);
                     }.bind(this),
                     error: function (oErr) {
-                        object.oModel.setUseBatch(false);
-                        object.oDetailModel.setProperty("/busy", false);
+                        
+                        // object.oModel.setUseBatch(false);
+                        // object.oDetailModel.setProperty("/busy", false);
                         reject(oErr);
                     }.bind(this)
                 }));

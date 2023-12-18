@@ -30,10 +30,7 @@ sap.ui.define([
                 // so it can be restored later on. Busy handling on the list is
                 // taken care of by the list itself.
                 iOriginalBusyDelay = oList.getBusyIndicatorDelay();
-            // oUserInfo = await this._getUserInfoService();
 
-            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-            var oHistory = sap.ui.core.routing.History.getInstance();
             this._oList = oList;
             // keeps the filter and search state
             this._oListFilterState = {
@@ -60,7 +57,6 @@ sap.ui.define([
         /* =========================================================== */
         /* event handlers                                              */
         /* =========================================================== */
-
         /**
          * After list data is available, this handler method updates the
          * list counter
@@ -299,20 +295,6 @@ sap.ui.define([
             var oViewModel = this.getModel("listView");
             oViewModel.setProperty("/isFilterBarVisible", (this._oListFilterState.aFilter.length > 0));
             oViewModel.setProperty("/filterBarLabel", this.getResourceBundle().getText("listFilterBarText", [sFilterBarText]));
-        },
-
-        /**
-         * Testing
-         * @private
-         */
-        _getUserInfoService: function () {
-            return new Promise(resolve => sap.ui.require([
-                "sap/ushell/library"
-            ], oSapUshellLib => {
-                // var oContainer = oSapUshellLib.Container,
-                //     pService = oContainer.getServiceAsync("UserInfo"); // .getService is deprecated
-                resolve(oSapUshellLib);
-            }));
         },
     });
 

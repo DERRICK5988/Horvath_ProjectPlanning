@@ -1,1 +1,2 @@
-sap.ui.define(["sap/ui/model/json/JSONModel","sap/ui/Device"],function(e,n){"use strict";return{createDeviceModel:function(){var i=new e(n);i.setDefaultBindingMode("OneWay");return i}}});
+sap.ui.define(["sap/ui/model/json/JSONModel","sap/ui/Device"],function(e,t){"use strict";return{createDeviceModel:function(){var n=new e(t);n.setDefaultBindingMode("OneWay");return n},getDetailModel:function(){return new e({resourcesCount:0,busy:false,delay:0,lineItemListTitle:this.getResourceBundle().getText("detailLineItemTableHeading"),btnVisible:true,aInputStaffed:[],totalUnassignCap:0,selectedView:"DAY"})},getDetailDetailModel:function(){return new e({busy:false,selectedView:"DAY"})}}});
+//# sourceMappingURL=models.js.map

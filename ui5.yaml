@@ -25,19 +25,22 @@ server:
           - path: /sap/opu/odata/CPD/SC_EXTERNAL_SERVICES_SRV/
             url: https://my308859-api.s4hana.ondemand.com
             destination: S4HC_StaffingApp
-          - path: /sap/opu/odata/CPD/SC_PROJ_ENGMT_CREATE_UPD_SRV
-            url: https://my308859-api.s4hana.ondemand.com
-            destination: S4HC_StaffingApp
           - path: /sap/opu/odata/sap/YY1_EMP_CAPACITY_API_CDS/
             url: https://my308859-api.s4hana.ondemand.com
             destination: S4HC_StaffingApp
           - path: /sap/opu/odata/sap/YY1_PROJ_ASSIGNMENT_DISTR_CDS/
             url: https://my308859-api.s4hana.ondemand.com
             destination: S4HC_StaffingApp
+          - path: /sap/opu/odata/sap/YY1_COMM_PROJECT_CDS/
+            url: https://my308859-api.s4hana.ondemand.com
+            destination: S4HC_StaffingApp
           - path: /sap/opu/odata/sap/API_PROJECTDEMAND/
             url: https://my308859-api.s4hana.ondemand.com
             destination: S4HC_StaffingApp
-          - path: /sap/opu/odata/sap/YY1_COMM_PROJECT_CDS/
+          - path: /sap/opu/odata/CPD/SC_PROJ_ENGMT_CREATE_UPD_SRV/
+            url: https://my308859-api.s4hana.ondemand.com
+            destination: S4HC_StaffingApp
+          - path: /sap/opu/odata/sap/YY1_PROJ_RES_DISTR_CDS/
             url: https://my308859-api.s4hana.ondemand.com
             destination: S4HC_StaffingApp
     - name: fiori-tools-appreload

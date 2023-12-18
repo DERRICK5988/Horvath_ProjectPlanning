@@ -98,7 +98,7 @@
                 <Property Name="ProjDmndRsceDistrRevenueAmtCur" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Currency" sap:semantics="currency-code"/>
                 <Property Name="ProjDmndRsceAssgmtDistrStrtDte" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Distr. Start Date" sap:quickinfo="Start Date of the Distribution Period"/>
                 <Property Name="ProjDmndRsceAssgmtDistrEndDte" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Distr. End Date" sap:quickinfo="End Date of the Distribution Period"/>
-                <Property Name="ProjDmndRsceDistrIsNotSupplied" Type="Edm.Boolean" sap:display-format="UpperCase" sap:label="Assgmt Is Confirmed" sap:quickinfo="Resource Assignment Is Confirmed" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ProjDmndRsceDistrIsNotSupplied" Type="Edm.Boolean" sap:label="Assgmt Is Confirmed" sap:quickinfo="Resource Assignment Is Confirmed" sap:creatable="false" sap:updatable="false"/>
                 <Property Name="CreatedByUser" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Created By" sap:quickinfo="Created By User"/>
                 <Property Name="CreationDateTime" Type="Edm.DateTimeOffset" Precision="7" sap:label="Created On" sap:quickinfo="Creation Date Time"/>
                 <Property Name="LastChangedByUser" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Changed By" sap:quickinfo="Last Changed By User"/>
@@ -206,7 +206,7 @@
                 <Property Name="PurchaseRequisition" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="PR Number" sap:quickinfo="Purchase Requisition Number" sap:creatable="false" sap:updatable="false"/>
                 <Property Name="FormattedPurRequisitionItem" Type="Edm.String" MaxLength="30" sap:label="Requisition/Item ID" sap:quickinfo="Formatted Purchase Requisition Item" sap:creatable="false" sap:updatable="false"/>
                 <Property Name="PurchaseRequisitionItem" Type="Edm.String" MaxLength="5" sap:display-format="NonNegative" sap:label="PR Item Number" sap:quickinfo="Purchase Requisition Item Number" sap:creatable="false" sap:updatable="false"/>
-                <Property Name="IsPurOrderAllwdForInbDeliv" Type="Edm.Boolean" sap:display-format="UpperCase" sap:label="TRUE" sap:quickinfo="Data element for domain BOOLE: TRUE (='X') and FALSE (=' ')" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="IsPurOrderAllwdForInbDeliv" Type="Edm.Boolean" sap:label="TRUE" sap:quickinfo="Data element for domain BOOLE: TRUE (='X') and FALSE (=' ')" sap:creatable="false" sap:updatable="false"/>
                 <Property Name="OrderedQuantity" Type="Edm.Decimal" Precision="13" Scale="3" sap:unit="BaseUnit" sap:creatable="false" sap:updatable="false"/>
                 <Property Name="StillToBeDeliveredQuantity" Type="Edm.Decimal" Precision="14" Scale="3" sap:unit="BaseUnit" sap:creatable="false" sap:updatable="false"/>
                 <Property Name="InvoiceReceiptAmount" Type="Edm.Decimal" Precision="21" Scale="3" sap:unit="DocumentCurrency" sap:variable-scale="true" sap:creatable="false" sap:updatable="false"/>
@@ -285,7 +285,7 @@
                 <Property Name="PurchaseContractItem" Type="Edm.String" MaxLength="5" sap:display-format="NonNegative" sap:label="Contract Item Numbr" sap:quickinfo="Item Number of Purchasing Document"/>
                 <Property Name="MaterialPlannedDeliveryDurn" Type="Edm.Decimal" Precision="3" Scale="0" sap:label="Planned Deliv. Time" sap:quickinfo="Planned Delivery Time in Days"/>
                 <Property Name="SchedLineStscDeliveryDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:creatable="false" sap:updatable="false"/>
-                <Property Name="IsPurOrderAllwdForInbDeliv" Type="Edm.Boolean" sap:display-format="UpperCase" sap:label="TRUE" sap:quickinfo="Data element for domain BOOLE: TRUE (='X') and FALSE (=' ')" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="IsPurOrderAllwdForInbDeliv" Type="Edm.Boolean" sap:label="TRUE" sap:quickinfo="Data element for domain BOOLE: TRUE (='X') and FALSE (=' ')" sap:creatable="false" sap:updatable="false"/>
                 <Property Name="BaseUnit" Type="Edm.String" MaxLength="3" sap:label="Unit of Measure" sap:quickinfo="Purchase requisition unit of measure" sap:creatable="false" sap:updatable="false" sap:semantics="unit-of-measure"/>
                 <Property Name="DocumentCurrency" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Currency" sap:quickinfo="Currency Key" sap:creatable="false" sap:updatable="false" sap:semantics="currency-code"/>
                 <Property Name="GoodsReceiptAmount" Type="Edm.Decimal" Precision="21" Scale="3" sap:unit="DocumentCurrency" sap:variable-scale="true" sap:creatable="false" sap:updatable="false"/>
@@ -700,6 +700,36 @@
                                             <PropertyValue Property="Insertable" Bool="true"/>
                                         </Record>
                                     </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
                                 </Record>
                             </Collection>
                         </PropertyValue>
@@ -721,9 +751,69 @@
                                             <PropertyValue Property="Insertable" Bool="true"/>
                                         </Record>
                                     </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
                                 </Record>
                                 <Record>
                                     <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_Material"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
                                     <PropertyValue Property="InsertRestrictions">
                                         <Record>
                                             <PropertyValue Property="Insertable" Bool="true"/>
@@ -737,9 +827,69 @@
                                             <PropertyValue Property="Insertable" Bool="true"/>
                                         </Record>
                                     </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
                                 </Record>
                                 <Record>
                                     <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_Work"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
                                     <PropertyValue Property="InsertRestrictions">
                                         <Record>
                                             <PropertyValue Property="Insertable" Bool="true"/>
@@ -766,6 +916,36 @@
                                             <PropertyValue Property="Insertable" Bool="true"/>
                                         </Record>
                                     </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
                                 </Record>
                             </Collection>
                         </PropertyValue>
@@ -782,6 +962,36 @@
                             <Collection>
                                 <Record>
                                     <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_MaterialSupply"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
                                     <PropertyValue Property="InsertRestrictions">
                                         <Record>
                                             <PropertyValue Property="Insertable" Bool="true"/>
@@ -808,9 +1018,69 @@
                                             <PropertyValue Property="Insertable" Bool="true"/>
                                         </Record>
                                     </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
                                 </Record>
                                 <Record>
                                     <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_ResourceRequest"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
                                     <PropertyValue Property="InsertRestrictions">
                                         <Record>
                                             <PropertyValue Property="Insertable" Bool="true"/>
@@ -837,6 +1107,36 @@
                                             <PropertyValue Property="Insertable" Bool="true"/>
                                         </Record>
                                     </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
                                 </Record>
                             </Collection>
                         </PropertyValue>
@@ -853,6 +1153,36 @@
                             <Collection>
                                 <Record>
                                     <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_ServiceSupply"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
                                     <PropertyValue Property="InsertRestrictions">
                                         <Record>
                                             <PropertyValue Property="Insertable" Bool="true"/>

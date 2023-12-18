@@ -1,6 +1,7 @@
 sap.ui.define([
     "./BaseController",
-    "sap/ui/model/json/JSONModel",
+    "../model/models",
+    "../model/formatter",
     'sap/m/MessagePopover',
     'sap/m/MessagePopoverItem',
     "sap/m/MessageBox",
@@ -9,11 +10,12 @@ sap.ui.define([
     "sap/ui/model/Sorter",
     "sap/ui/model/FilterOperator",
     "sap/m/library",
-], function (BaseController, JSONModel, MessagePopover, MessagePopoverItem, MessageBox, FormattedText, Filter, Sorter, FilterOperator, mobileLibrary) {
+], function (BaseController, models, formatter, MessagePopover, MessagePopoverItem, MessageBox, FormattedText, Filter, Sorter, FilterOperator, mobileLibrary) {
     "use strict";
 
     // shortcut for sap.m.URLHelper
     var URLHelper = mobileLibrary.URLHelper;
+    var formatter = formatter;
     return BaseController.extend("StaffingApp.horvath.controller.Detail", {
 
         /* =========================================================== */
@@ -21,27 +23,17 @@ sap.ui.define([
         /* =========================================================== */
 
         /**
-        * Called when detail view is initantiated 
-        * @public
-        */
+         * Called when detail view is initantiated
+         * @public
+         */
         onInit: function () {
             // Model used to manipulate control states. The chosen values make sure,
             // detail page is busy indication immediately so there is no break in
             // between the busy indication for loading the view's meta data
-            var oViewModel = new JSONModel({
-                resourcesCount: 0,
-                busy: false,
-                delay: 0,
-                lineItemListTitle: this.getResourceBundle().getText("detailLineItemTableHeading"),
-                btnVisible: true,
-                aInputStaffed: [],
-                totalUnassignCap: 0,
-                selectedView: "DAY"
-            });
             this.getView().setModel(sap.ui.getCore().getMessageManager().getMessageModel(), "message");
             sap.ui.getCore().getMessageManager().registerObject(this.getView(), true);
             this.getRouter().getRoute("object").attachPatternMatched(this._onObjectMatched, this);
-            this.setModel(oViewModel, "detailView");
+            this.setModel(models.getDetailModel.call(this), "detailView");
             this.getOwnerComponent().getModel().metadataLoaded().then(this._onMetadataLoaded.bind(this));
         },
         onExit: function () {
@@ -53,17 +45,18 @@ sap.ui.define([
         /* =========================================================== */
 
         /**
-        * @function Populate changed value into aChangedSPath for update later
-        * @param {sap.ui.base.Event} oEvent pattern match event in route 'object'
-        * @param {{}} Detail Model
-        * @public
-        */
+         * @function Populate changed value into aChangedSPath for update later
+         * @param {sap.ui.base.Event} oEvent pattern match event in route 'object'
+         * @param {{}} Detail Model
+         * @public
+         */
         onChange: function (oEvent, oDetailModel) {
             var oSource = oEvent.getSource(),
                 sPath = oSource.getBindingContext("detailView").sPath,
                 aChangedSPath = oEvent.getSource().getModel("detailView").getProperty("/aChangedSPath"),
                 aInputStaffed = oEvent.getSource().getModel("detailView").getProperty("/aInputStaffed");
 
+            oDetailModel.bUpdate = oEvent.getParameter("newValue") ? true : false;
             if (!oEvent.getParameter("newValue") && aChangedSPath.length > 0) {
                 var indexObj = aChangedSPath.findIndex(object => object.sPath === sPath);
                 aChangedSPath.splice(indexObj, 1);
@@ -72,27 +65,32 @@ sap.ui.define([
                 if (aChanged.length > 0) {
                     aChanged[0].value = oEvent.getParameter("newValue");
                 } else {
-                    aChangedSPath.push(Object.assign(oDetailModel, { sPath: sPath, value: oEvent.getParameter("newValue"), inputId: oEvent.getParameter("id") }));
+                    aChangedSPath.push(Object.assign(oDetailModel, {
+                        sPath: sPath,
+                        value: oEvent.getParameter("newValue"),
+                        inputId: oEvent.getParameter("id")
+                    }));
                 }
             }
             oEvent.getSource().getModel("detailView").refresh(true);
         },
         /**
-        * Validate value input before save
-        * @function
-        * @param {sap.ui.base.Event} oEvent pattern match event in route 'object'
-        * @public
-        */
+         * Validate value input before save
+         * @function
+         * @param {sap.ui.base.Event} oEvent pattern match event in route 'object'
+         * @public
+         */
         onSave: function (oEvent) {
             var detailModel = oEvent.getSource().getModel("detailView");
             var selectedView = detailModel.getProperty("/selectedView");
             var increment = (selectedView === "DAY") ? 0.5 : 4;
-            var message = new FormattedText("FormattedText_" + new Date().getTime(), { htmlText: this.getResourceBundle().getText("savedMessage", [selectedView]) });
+            var message = new FormattedText("FormattedText_" + new Date().getTime(), {
+                htmlText: this.getResourceBundle().getText("savedMessage", [selectedView])
+            });
 
             /*Only allow to input value based on increment value, e.g 4, 8, 12... for Hour, 0.5, 1, 1.5... for Days */
             for (var index in detailModel.getProperty("/aChangedSPath")) {
                 if (+detailModel.getProperty("/aChangedSPath")[index].value % increment !== 0) {
-                    // this.addMessageManager({ message: this.getResourceBundle().getText("errorHrDayText"), type: "Error" });
                     MessageBox.error(this.getResourceBundle().getText("errorHrDayText"));
                     return;
                 }
@@ -102,7 +100,7 @@ sap.ui.define([
                 emphasizedAction: MessageBox.Action.OK,
                 onClose: function (sAction) {
                     if (sAction === "CANCEL") return;
-                    this._updateModel();
+                    this._request();
                 }.bind(this)
             });
         },
@@ -111,11 +109,11 @@ sap.ui.define([
             this.getModel("detailView").refresh(true);
         },
         /**
-        * Navigate to employee detail page
-        * @param {sap.ui.base.Event} oEvent pattern match event in route 'object'
-        * @param {{}} Detail Model
-        * @public
-        */
+         * Navigate to employee detail page
+         * @param {sap.ui.base.Event} oEvent pattern match event in route 'object'
+         * @param {{}} Detail Model
+         * @public
+         */
         onEmployeePress: function (oEvent, oDetailModel) {
             this.getModel("appView").setProperty("/previousLayout", this.getModel("appView").getProperty("/layout"));
             this.getModel("appView").setProperty("/layout", "EndColumnFullScreen");
@@ -130,7 +128,6 @@ sap.ui.define([
         onCloseDetailPress: function () {
             this.getModel("appView").setProperty("/actionButtonsInfo/midColumn/fullScreen", false);
             // No item should be selected on list after detail page is closed
-            // this.getOwnerComponent().oListSelector.clearListListSelection();
             sap.ui.getCore().getMessageManager().removeAllMessages();
             this.getRouter().navTo("list");
         },
@@ -152,9 +149,9 @@ sap.ui.define([
         //     this._messagePopover.toggle(oMessagesButton);
         // },
         /**
-        * Toggle between full and non full screen mode.
-        * @public
-        */
+         * Toggle between full and non full screen mode.
+         * @public
+         */
         toggleFullScreen: function () {
             var bFullScreen = this.getModel("appView").getProperty("/actionButtonsInfo/midColumn/fullScreen");
             this.getModel("appView").setProperty("/actionButtonsInfo/midColumn/fullScreen", !bFullScreen);
@@ -168,16 +165,16 @@ sap.ui.define([
             }
         },
         /**
-        * Collapse all tree node
-        * @public
-        */
+         * Collapse all tree node
+         * @public
+         */
         onCollapseAll: function () {
             this.byId("idTreeTable").collapseAll();
         },
         /**
-        * Expand all tree node
-        * @public
-        */
+         * Expand all tree node
+         * @public
+         */
         onExpandAll: function () {
             this.byId("idTreeTable").expandToLevel(3);
         },
@@ -200,18 +197,20 @@ sap.ui.define([
             this.oContextObj = JSON.parse(decodeURIComponent(oArguments.object))
             sap.ui.getCore().getMessageManager().removeAllMessages();
             this.getModel("appView").setProperty("/layout", "TwoColumnsMidExpanded");
-            /* Clear last input field value from previous project before clearing aChangePath 
+            /* Clear last input field value from previous project before clearing aChangeSPath 
                Empty aChangedSPath, aTimeRecUpdate and aPlannedValueChanged */
-            aChanged.forEach((oChangedSPath) => { sap.ui.getCore().byId(oChangedSPath.inputId).setValue('') });
+            aChanged.forEach((oChangedSPath) => {
+                sap.ui.getCore().byId(oChangedSPath.inputId).setValue('')
+            });
             this.getModel("detailView").setData(Object.assign(this.getModel("detailView").getData(), this.oContextObj, {
                 StartDate: new Date(this.oContextObj.StartDate),
                 EndDate: new Date(this.oContextObj.EndDate),
                 aChangedSPath: [],
-                aTimeRecUpdate: [],
-                aPlannedValueChanged: []
+                aDeletion: []
             }));
             this.getModel("detailView").setProperty("/busy", true);
             await this._fetchResources(this.oContextObj);
+            this.getModel("detailView").setProperty("/busy", false);
         },
         /**
          * Fetch resources and bind into detailView model
@@ -224,11 +223,15 @@ sap.ui.define([
             var oCurrPeriod = this.getCurrentPeriod();
             return new Promise((resolve, reject) => {
                 Promise.all(this.getResourcePath(oContextObj, oCurrPeriod).map(resource => this.fetchResources(resource))).then(async function (oResp) {
-                    var oTreeData = { Node: [] },
+                    var oTreeData = {
+                            Node: []
+                        },
                         oDetailModel = this.getModel("detailView"),
-                        [, aEmpCapaciy, aProjEng, aProjAssignDistr, aTimeRec, aEmpWriteOffPost] = oResp.map(({ results }) => results);
-
+                        [, aEmpCapaciy, aProjEng, aProjAssignDistr, aTimeRec, aEmpWriteOffPost, aProjResDistr] = oResp.map(({
+                            results
+                        }) => results);
                     oDetailModel.setProperty("/resourcesCount", oResp[0].results.length);
+                    // this.getModel("detailView").setProperty("/resource", {});
                     /* Workpackage level */
                     for (var wpIndex in oResp[0].results) {
                         var oWpItem = oResp[0].results[wpIndex],
@@ -249,10 +252,10 @@ sap.ui.define([
                             continue;
                         }
                         var aEmpCap = aEmpCapaciy.filter((Object) => {
-                            if (Object.WorkPackage === oWpItem.WorkPackageID) {
-                                return Object;
-                            }
-                        }),
+                                if (Object.WorkPackage === oWpItem.WorkPackageID) {
+                                    return Object;
+                                }
+                            }),
                             oWpNodeLine = oTreeData.Node[oTreeData.Node.length - 1],
                             aEmpNode = oWpNodeLine.Node,
                             aRemaingDays = await this.fetchResources({
@@ -264,10 +267,15 @@ sap.ui.define([
 
                         /* Employee level */
                         for (var nEmpIdx in aEmpCap) {
-                            var oEmpCapacity = aEmpCap[nEmpIdx],
-                                oTimeRec = aTimeRec.find(o => o.PersonWorkAgreement === oEmpCapacity.PersonWorkAgreement && o.YearMth === oEmpCapacity.YearMth),
-                                oProjAssignDistr = aProjAssignDistr.find(o => o.ProjDmndRsceAssgmt === oEmpCapacity.PersonWorkAgreement && o.YearMth === oEmpCapacity.YearMth),
-                                { ContractTypeName, ...restOfEmpCapacity } = oEmpCapacity,
+
+                            var oEmpCapacity = aEmpCap[+nEmpIdx],
+                                oTimeRec = aTimeRec.find(o => o.PersonWorkAgreement === oEmpCapacity.PersonWorkAgreement && o.WorkPackageID === oWpItem.WorkPackageID && o.YearMth === oEmpCapacity.YearMth),
+                                oProjAssignDistr = aProjAssignDistr.find(o => o.ProjectElement === oWpItem.WorkPackageID && o.ProjDmndRsceAssgmt === oEmpCapacity.PersonWorkAgreement && o.YearMth === oEmpCapacity.YearMth),
+                                oProjResDistr = aProjResDistr.find(o => o.ProjectElement === oWpItem.WorkPackageID && o.PersonWorkAgreement === oEmpCapacity.PersonWorkAgreement && o.YearMth === oEmpCapacity.YearMth),
+                                {
+                                    ContractTypeName,
+                                    ...restOfEmpCapacity
+                                } = oEmpCapacity,
                                 oEmpWriteOffPost = aEmpWriteOffPost.find(o => o.PersonWorkAgreement === oEmpCapacity.PersonWorkAgreement && o.YearMth === oEmpCapacity.YearMth && o.WorkPackageID === oWpItem.WorkPackageID);
 
                             oWpNodeLine.ContractTypeName = oWpNodeLine.ContractTypeName || oEmpCapacity.ContractTypeName;
@@ -279,7 +287,8 @@ sap.ui.define([
                                     return acc;
                                 }, 0);
                                 aEmpNode.push({
-                                    ...restOfEmpCapacity, ...{
+                                    ...restOfEmpCapacity,
+                                    ...{
                                         WorkAgrementID: oEmpCapacity.PersonWorkAgreement,
                                         Name: oEmpCapacity.PersonFullName,
                                         Baseline: (nEmpBaseLine > 0) ? nEmpBaseLine : null,
@@ -292,7 +301,11 @@ sap.ui.define([
 
                             /* Employee distribution month */
                             var oEmpNodeLine = aEmpNode[aEmpNode.length - 1],
-                                { ServiceCostLevelName, ContractTypeName, ...restOfEmpCapacity } = oEmpCapacity;
+                                {
+                                    ServiceCostLevelName,
+                                    ContractTypeName,
+                                    ...restOfEmpCapacity
+                                } = oEmpCapacity;
                             /* Sum of previous month */
                             if (+oEmpCapacity.YearMth < oCurrPeriod.nMinMth) {
                                 if (!oEmpNodeLine.Node.some((objP) => !!objP.preMth)) {
@@ -304,24 +317,50 @@ sap.ui.define([
                                         Node: []
                                     });
                                 }
-                                /* Push time recording into aTimeRecUpdate for update later
+                                /* Push time recording for update later. Set bTimeRecUpdate as update indicator
                                    Only previous month
                                    If time recording value same as Staffed then ignore */
-                                (oTimeRec && +oTimeRec.RecordedQuantity > 0 && +oTimeRec.RecordedQuantity !== +oEmpCapacity.PlndEffortQty && oProjAssignDistr) ? oDetailModel.getProperty("/aTimeRecUpdate").push({
-                                    ProjDmndRsceAssgmtDistrUUID: oProjAssignDistr.ProjDmndRsceAssgmtDistrUUID,
-                                    value: oTimeRec.RecordedQuantity,
-                                    PersonWorkAgreement: oEmpCapacity.PersonWorkAgreement,
-                                    YearMth: oEmpCapacity.YearMth
-                                }) : "";
+                                // (oTimeRec && +oTimeRec.RecordedQuantity > 0 && +oTimeRec.RecordedQuantity !== +oEmpCapacity.PlndEffortQty && oProjAssignDistr) ? oDetailModel.getProperty("/aTimeRecUpdate").push({
+                                //     ProjDmndRsceAssgmtDistrUUID: oProjAssignDistr.ProjDmndRsceAssgmtDistrUUID,
+                                //     value: oTimeRec.RecordedQuantity,
+                                //     PersonWorkAgreement: oEmpCapacity.PersonWorkAgreement,
+                                //     YearMth: oEmpCapacity.YearMth
+                                // }): "";
+                                (oTimeRec && +oTimeRec.RecordedQuantity > 0 && +oTimeRec.RecordedQuantity !== +oEmpCapacity.PlndEffortQty && oProjAssignDistr) ?
+                                oDetailModel.getProperty("/aChangedSPath").push(Object.assign(oEmpCapacity, oProjAssignDistr, oProjResDistr, {
+                                    bTimeRecUpdate: true,
+                                    value: oTimeRec.RecordedQuantity
+                                })): "";
+
+                                /* Push to deletion for those time recording is zero or no time rec and staffed value is > zero  */
+                                ((!oTimeRec || +oTimeRec.RecordedQuantity === 0) && +oEmpCapacity.PlndEffortQty > 0 && oProjAssignDistr) ?
+                                oDetailModel.getProperty("/aDeletion").push(Object.assign(oEmpCapacity, oProjAssignDistr, oProjResDistr)): "";
                                 var preMthLines = oEmpNodeLine.Node.filter((i) => (i.preMth)),
                                     aEmpRemaingDays = aRemaingDays.results.filter(o => o.PersonWorkAgreement === oEmpCapacity.PersonWorkAgreement && o.YearMth === oEmpCapacity.YearMth),
-                                    aPreNode = preMthLines[0].Node,
-                                    oEmpResDmdByMonth = aProjEng.find(o => o.PersonWorkAgreement === oEmpCapacity.PersonWorkAgreement && o.Version === '1').to_ResourceDemand.to_ResourceDemandDistribution.results.find(o => (o.CalendarYear + o.CalendarMonth.padStart(2, '0')) === oEmpCapacity.YearMth);
-
-                                if (restOfEmpCapacity.PlndEffortQty > 0) {
-                                    oDetailModel.getProperty("/aPlannedValueChanged").push(Object.assign(oEmpResDmdByMonth, { PersonWorkAgreement: oEmpCapacity.PersonWorkAgreement, Quantity: oEmpCapacity.PlndEffortQty, YearMth: oEmpCapacity.YearMth }));
-                                }
-                                aPreNode.push(this._returnMthDist({ ...restOfEmpCapacity, Level: oEmpCapacity.ServiceCostLevelName, ...(oTimeRec ? oTimeRec : ""), ...{ bLink: false, bInputVisible: false, ProjDmndRsceAssgmtDistrUUID: (oProjAssignDistr) ? oProjAssignDistr.ProjDmndRsceAssgmtDistrUUID : "", WriteOffs: (oEmpWriteOffPost) ? oEmpWriteOffPost.WrittenOffQuantity : null, aEmpRemaingDays: aEmpRemaingDays }, aProjEng: aProjEng, preMth: true }));
+                                    aPreNode = preMthLines[0].Node;
+                                // oEmpResDmdByMonth = aProjEng.find(o => o.WorkPackage === oWpItem.WorkPackageID && o.PersonWorkAgreement === oEmpCapacity.PersonWorkAgreement && o.Version === '1').to_ResourceDemand.to_ResourceDemandDistribution.results.find(o => (o.CalendarYear + o.CalendarMonth.padStart(2, '0')) === oEmpCapacity.YearMth);
+                                // if (restOfEmpCapacity.PlndEffortQty > 0 && oEmpResDmdByMonth) {
+                                //     oDetailModel.getProperty("/aPlannedValueChanged").push(Object.assign(oEmpResDmdByMonth, {
+                                //         PersonWorkAgreement: oEmpCapacity.PersonWorkAgreement,
+                                //         Quantity: oEmpCapacity.PlndEffortQty,
+                                //         YearMth: oEmpCapacity.YearMth
+                                //     }));
+                                // }
+                                aPreNode.push(this._returnMthDist({
+                                    ...restOfEmpCapacity,
+                                    Level: oEmpCapacity.ServiceCostLevelName,
+                                    ...(oTimeRec ? oTimeRec : ""),
+                                    ...{
+                                        bLink: false,
+                                        bInputVisible: false,
+                                        ProjDmndRsceAssgmtDistrUUID: (oProjAssignDistr) ? oProjAssignDistr.ProjDmndRsceAssgmtDistrUUID : "",
+                                        ProjDmndRsceReqDistrUUID: (oProjResDistr) ? oProjResDistr.ProjDmndRsceReqDistrUUID : "",
+                                        WriteOffs: (oEmpWriteOffPost) ? oEmpWriteOffPost.WrittenOffQuantity : null,
+                                        aEmpRemaingDays: aEmpRemaingDays
+                                    },
+                                    aProjEng: aProjEng,
+                                    preMth: true
+                                }));
                                 this._calculateValues(preMthLines[0]);
                             } else {
                                 /* Sum of upcoming month */
@@ -337,11 +376,30 @@ sap.ui.define([
                                 var upComMthLines = oEmpNodeLine.Node.filter((i) => (i.upcomMth)),
                                     aEmpRemaingDays = aRemaingDays.results.filter(o => o.PersonWorkAgreement === oEmpCapacity.PersonWorkAgreement && o.YearMth === oEmpCapacity.YearMth),
                                     aUpcomNode = upComMthLines[0].Node,
-                                    oEmpResDmdByMonth = aProjEng.find(o => o.PersonWorkAgreement === oEmpCapacity.PersonWorkAgreement && o.Version === '1').to_ResourceDemand.to_ResourceDemandDistribution.results.find(o => (o.CalendarYear + o.CalendarMonth.padStart(2, '0')) === oEmpCapacity.YearMth);
-                                if (restOfEmpCapacity.PlndEffortQty > 0) {
-                                    oDetailModel.getProperty("/aPlannedValueChanged").push(Object.assign(oEmpResDmdByMonth, { PersonWorkAgreement: oEmpCapacity.PersonWorkAgreement, Quantity: oEmpCapacity.PlndEffortQty, YearMth: oEmpCapacity.YearMth }));
-                                }
-                                aUpcomNode.push(this._returnMthDist({ ...restOfEmpCapacity, Level: oEmpCapacity.ServiceCostLevelName, ...(oTimeRec ? oTimeRec : ""), ...{ nStaffedNew: +oEmpCapacity.PlndEffortQty, bLink: true, bInputVisible: true, ProjDmndRsceAssgmtDistrUUID: (oProjAssignDistr) ? oProjAssignDistr.ProjDmndRsceAssgmtDistrUUID : "", WriteOffs: (oEmpWriteOffPost) ? oEmpWriteOffPost.WrittenOffQuantity : null, aEmpRemaingDays: aEmpRemaingDays, aProjEng: aProjEng, preMth: false } }));
+                                    oEmpResDmdByMonth = aProjEng.find(o => o.WorkPackage === oWpItem.WorkPackageID && o.PersonWorkAgreement === oEmpCapacity.PersonWorkAgreement && o.Version === '1').to_ResourceDemand.to_ResourceDemandDistribution.results.find(o => (o.CalendarYear + o.CalendarMonth.padStart(2, '0')) === oEmpCapacity.YearMth);
+                                // if (restOfEmpCapacity.PlndEffortQty > 0 && oEmpResDmdByMonth) {
+                                //     oDetailModel.getProperty("/aPlannedValueChanged").push(Object.assign(oEmpResDmdByMonth, {
+                                //         PersonWorkAgreement: oEmpCapacity.PersonWorkAgreement,
+                                //         Quantity: oEmpCapacity.PlndEffortQty,
+                                //         YearMth: oEmpCapacity.YearMth
+                                //     }));
+                                // }
+                                aUpcomNode.push(this._returnMthDist({
+                                    ...restOfEmpCapacity,
+                                    Level: oEmpCapacity.ServiceCostLevelName,
+                                    ...(oTimeRec ? oTimeRec : ""),
+                                    ...{
+                                        nStaffedNew: +oEmpCapacity.PlndEffortQty,
+                                        bLink: true,
+                                        bInputVisible: true,
+                                        ProjDmndRsceAssgmtDistrUUID: (oProjAssignDistr) ? oProjAssignDistr.ProjDmndRsceAssgmtDistrUUID : "",
+                                        ProjDmndRsceReqDistrUUID: (oProjResDistr) ? oProjResDistr.ProjDmndRsceReqDistrUUID : "",
+                                        WriteOffs: (oEmpWriteOffPost) ? oEmpWriteOffPost.WrittenOffQuantity : null,
+                                        aEmpRemaingDays: aEmpRemaingDays,
+                                        aProjEng: aProjEng,
+                                        preMth: false
+                                    }
+                                }));
                                 this._calculateValues(upComMthLines[0]);
                             }
                             this._calculateValues(oEmpNodeLine);
@@ -349,15 +407,23 @@ sap.ui.define([
                         /* Calculate Employe's KPI */
                         for (var iEmpIndx in oWpNodeLine.Node) {
                             var oEmpNode = oWpNodeLine.Node[iEmpIndx];
-                            oEmpNode = Object.assign(oEmpNode, { EstTillCompletion: +oEmpNode.Staffed - +oEmpNode.TimeRecordings, EstAtCompletion: +oEmpNode.Staffed, DeltaELPlanned: +oEmpNode.Staffed - +oEmpNode.Baseline });
+                            oEmpNode = Object.assign(oEmpNode, {
+                                EstTillCompletion: +oEmpNode.Staffed - +oEmpNode.TimeRecordings,
+                                EstAtCompletion: +oEmpNode.Staffed,
+                                DeltaELPlanned: +oEmpNode.Staffed - +oEmpNode.Baseline
+                            });
                         }
                         this._calculateValues(oWpNodeLine);
-                        oWpNodeLine = Object.assign(oWpNodeLine, { EstTillCompletion: +oWpNodeLine.Staffed - +oWpNodeLine.TimeRecordings, EstAtCompletion: +oWpNodeLine.Staffed, DeltaELPlanned: +oWpNodeLine.Staffed - +oWpNodeLine.Baseline });
+                        oWpNodeLine = Object.assign(oWpNodeLine, {
+                            EstTillCompletion: +oWpNodeLine.Staffed - +oWpNodeLine.TimeRecordings,
+                            EstAtCompletion: +oWpNodeLine.Staffed,
+                            DeltaELPlanned: +oWpNodeLine.Staffed - +oWpNodeLine.Baseline
+                        });
                     }
                     this.getModel("detailView").setProperty("/totalUnassignCap", oTreeData.Node.map((o) => o.UnassignedCap).reduce((prev, curr) => +prev + +curr, 0));
                     this.getModel("detailView").setProperty("/resource", oTreeData);
+                    // this.getModel("detailView").setProperty("/busy", false);
                     this.getModel("detailView").refresh(true);
-                    this.getModel("detailView").setProperty("/busy", false);
                     resolve(this.getModel("detailView").getProperty("/resource"));
                 }.bind(this)).catch(function (oErr) {
                     this.getModel("detailView").setProperty("/busy", false);
@@ -365,7 +431,7 @@ sap.ui.define([
                 }.bind(this));
             });
         },
-        _onMetadataLoaded: function () { },
+        _onMetadataLoaded: function () {},
         /**
          * Refresh csrf token
          * @param {Object} Dynamic model
@@ -385,136 +451,142 @@ sap.ui.define([
             })
         },
         /**
-        * Update saved value from aChangedSPath/ aTimeRecUpdate/ aPlannedValueChanged [detailView model]
-        * @private
-        */
-        _updateModel: async function () {
+         * Update saved value from aChangedSPath and delete previous month from aDeletion
+         * @private
+         */
+        _request: async function () {
             this.getModel("detailView").setProperty("/busy", false);
             var oProjDmdModel = this.getModel("ProjectDemand"),
-                oProjEngmtUpdModel = this.getModel("PROJ_ENGMT_UPDATE_SRV"),
                 oDetailModel = this.getModel("detailView"),
                 aChangedSPath = oDetailModel.getProperty("/aChangedSPath"),
-                aTimeRecUpdate = oDetailModel.getProperty("/aTimeRecUpdate"),
-                aPlannedValueChanged = oDetailModel.getProperty("/aPlannedValueChanged"),
+                aDeletion = oDetailModel.getProperty("/aDeletion"),
                 object = {};
 
-            if (aChangedSPath.length === 0 && aTimeRecUpdate.length === 0 && aPlannedValueChanged.length === 0) {
+            // if (aChangedSPath.length === 0 && aTimeRecUpdate.length === 0 && aPlannedValueChanged.length === 0) {
+            if (aChangedSPath.length === 0 && aDeletion.length === 0) {
                 return;
             }
             this.getModel("detailView").setProperty("/busy", true);
-            /************************************************ */
-            // oProjDmdModel.setUseBatch(true);
-            // oProjDmdModel.setDeferredGroups(["BatchQuery"]);
-            // oProjEngmtUpdModel.setUseBatch(true);
-            // oProjEngmtUpdModel.setDeferredGroups(["BatchQuery"]);
-            // var object = {
-            //     oModel: oProjDmdModel,
-            //     mParameters: { groupId: "BatchQuery", changeSetId: "changeSet_" + new Date().getTime(), method: "PATCH", headers: { "X-CSRF-Token": await this._fetchCsrfToken(this.getModel("ProjectDemand")) } },
-            //     sProperty: "/aChangedSPath",
-            //     sKeyPath: "/A_ProjDmndRsceAssgmtDistr"
-            // };
-            // this._batchRun(object);
-            // object.sProperty = "/aTimeRecUpdate";
-            // this._batchRun(object);
-            // var oProjDmdUpd = await this.batchChange(object);
-            // object = Object.assign(object, { oModel: oProjEngmtUpdModel, sProperty: "/aPlannedValueChanged", mParameters: Object.assign({ changeSetId: "changeSet_" + new Date().getTime() }), sKeyPath: "/A_EngmntProjRsceDmndDistr" })
-            // this._batchRun(object);
-            // var oProjEngmtUpd = await this.batchChange(object);
-            /************************************************ */
-            oProjDmdModel.setUseBatch(true);
-            oProjDmdModel.setDeferredGroups(["BatchQuery"]);
-            oProjEngmtUpdModel.setUseBatch(true);
-            oProjEngmtUpdModel.setDeferredGroups(["BatchQuery"]);
-            object.oDetailModel = oDetailModel;
+            oProjDmdModel.attachBatchRequestCompleted(this._batchRequestCompleted, this);
+            this.csrfToken = await this._fetchCsrfToken(oProjDmdModel);
+            if (aDeletion.length > 0) {
+                object.mParameters = {
+                    groupId: "BatchDelete",
+                    changeSetId: "changeSetId1",
+                    headers: {
+                        "X-CSRF-Token": this.csrfToken
+                    }
+                };
+                oProjDmdModel.setDeferredGroups(["BatchDelete"]);
+                object.oModel = oProjDmdModel;
+                for (var index in aDeletion) {
+                    var oContext = aDeletion[index];
+                    /*Delete staffed effort*/
+                    object.sKey = oProjDmdModel.createKey("/A_ProjDmndRsceAssgmtDistr", {
+                        ProjDmndRsceAssgmtDistrUUID: oContext.ProjDmndRsceAssgmtDistrUUID
+                    });
+                    this.deleteResource.call(this, object);
+                    /*Delete planned effort*/
+                    if (oContext.ProjDmndRsceReqDistrUUID) {
+                        object.sKey = oProjDmdModel.createKey("/A_ProjDmndRsceReqDistribution", {
+                            ProjDmndRsceReqDistrUUID: oContext.ProjDmndRsceReqDistrUUID
+                        });
+                        this.deleteResource.call(this, object);
+                    }
+                }
+                await this.batchChange({
+                    oModel: oProjDmdModel,
+                    mParameters: {
+                        groupId: "BatchDelete"
+                    }
+                });
+            } else if (aChangedSPath.length > 0) {
+                this._updateRequest();
+            }
+        },
+        /**
+         * Fire when batch run is completed regardless success or not
+         * Refresh data by calling this._fetchResources
+         * @private
+         */
+        _batchRequestCompleted: async function (oEvent) {
+            var oProjDmdModel = this.getModel("ProjectDemand");
+
+            if (oEvent.getSource().getDeferredGroups()[0] === "BatchDelete") {
+                this._updateRequest();
+            } else if (oEvent.getSource().getDeferredGroups()[0] === "BatchUpdate") {
+                oProjDmdModel.detachBatchRequestCompleted(this._batchRequestCompleted, this);
+                var oMessageModel = this.getModel("message"),
+                    oMessageData = oMessageModel.getData()[oMessageModel.getData().length - 1],
+                    aChangedSPath = this.getModel("detailView").getProperty("/aChangedSPath"),
+                    bSuccess = oEvent.getParameters().success;
+
+                for (var index in aChangedSPath) {
+                    var oChangedSPath = aChangedSPath[index];
+                    if (!oChangedSPath.bTimeRecUpdate) {
+                        sap.ui.getCore().byId(oChangedSPath.inputId).setValue('');
+                    }
+                }
+                this.getModel("detailView").setProperty("/aChangedSPath", []);
+                this.getModel("detailView").setProperty("/aDeletion", [])
+                /* Re-fetch resource to display updated resource */
+                await this._fetchResources(this.oContextObj);
+                this.getView().getModel("detailView").refresh(true);
+                if (bSuccess) {
+                    MessageBox.success("Record saved");
+                } else {
+                    MessageBox.error("Failed to update");
+                }
+                this.getModel("detailView").setProperty("/busy", false);
+            }
+        },
+        /**
+         * @private
+         */
+        _updateRequest: async function () {
+            var oProjDmdModel = this.getModel("ProjectDemand"),
+                oDetailModel = this.getModel("detailView"),
+                object = {},
+                aChangedSPath = oDetailModel.getProperty("/aChangedSPath");
+
             object.mParameters = {
-                groupId: "BatchQuery",
-                method: "PATCH",
-                headers: { "X-CSRF-Token": await this._fetchCsrfToken(oProjDmdModel) }
+                groupId: "BatchUpdate",
+                changeSetId: "changeSetId2",
+                headers: {
+                    "X-CSRF-Token": this.csrfToken
+                }
             };
             object.oModel = oProjDmdModel;
-            /* Updating staffed value */
+            oProjDmdModel.setDeferredGroups(["BatchUpdate"]);
             for (var index in aChangedSPath) {
                 var oContext = aChangedSPath[index],
-                    oEmpResDmdByMonth = oContext.aProjEng.find(o => o.PersonWorkAgreement === oContext.PersonWorkAgreement && o.Version === '1').to_ResourceDemand.to_ResourceDemandDistribution.results.find(o => (o.CalendarYear + o.CalendarMonth.padStart(2, '0')) === oContext.YearMth),
-                    sStaffedEffort = (oDetailModel.getProperty("/selectedView") === "DAY") ? Math.round(oContext.value * 8).toString() : oContext.value.toString();
+                    /* No required to convert day/hr for time rec since the value is already in hour */
+                    sStaffedEffort = (oDetailModel.getProperty("/selectedView") === "DAY" && !oContext.bTimeRecUpdate) ? Math.round(oContext.value * 8).toString() : oContext.value.toString();
 
-                if (aPlannedValueChanged.length > 0 && !!aPlannedValueChanged.some(o => o.PersonWorkAgreement === oContext.PersonWorkAgreement && o.YearMth === oContext.YearMth)) {
-                    var oPlannedValueChanged = aPlannedValueChanged.find(o => o.PersonWorkAgreement === oContext.PersonWorkAgreement && o.YearMth === oContext.YearMth);
-                    oPlannedValueChanged.Quantity = sStaffedEffort;
-                } else {
-                    aPlannedValueChanged.push(Object.assign(oEmpResDmdByMonth, { PersonWorkAgreement: oContext.PersonWorkAgreement, Quantity: sStaffedEffort, YearMth: oContext.YearMth }));
-                }
                 object.sKey = oProjDmdModel.createKey("/A_ProjDmndRsceAssgmtDistr", {
                     ProjDmndRsceAssgmtDistrUUID: oContext.ProjDmndRsceAssgmtDistrUUID
                 });
                 object.oPayload = {
                     ProjDmndRsceAssgmtDistrQty: sStaffedEffort
                 };
-                /* Generate new changeSet avoid same request crash */
-                object.mParameters.changeSetId = "changeSet_" + new Date().getTime();
                 this.updateResource(object);
-            };
-            /* Overwriting staffed value from time recording
-               Only application for previous month */
-            for (var index in aTimeRecUpdate) {
-                var oContext = aTimeRecUpdate[index];
-                object.sKey = oProjDmdModel.createKey("/A_ProjDmndRsceAssgmtDistr", {
-                    ProjDmndRsceAssgmtDistrUUID: oContext.ProjDmndRsceAssgmtDistrUUID
-                });
-                /* Time Recording not required to convert hour/day because the value is already in hour */
-                object.oPayload = {
-                    ProjDmndRsceAssgmtDistrQty: oContext.value.toString()
-                };
-                object.mParameters.changeSetId = "changeSet_" + new Date().getTime();
-                this.updateResource(object);
-            };
-            var oProjDmdUpd = await this.batchChange(object);
-            object.oModel = oProjEngmtUpdModel;
-            /* Updating planned value */
-            for (var index in aPlannedValueChanged) {
-                var oContext = aPlannedValueChanged[index];
-                object.sKey = oProjEngmtUpdModel.createKey("/A_EngmntProjRsceDmndDistr", {
-                    WorkPackage: oContext.WorkPackage,
-                    ResourceDemand: oContext.ResourceDemand,
-                    Version: oContext.Version,
-                    CalendarMonth: oContext.CalendarMonth.toString().padStart(3, '0'),
-                    CalendarYear: oContext.CalendarYear
-                });
-                object.oPayload = {
-                    UnitOfMeasure: 'H',
-                    Quantity: oContext.Quantity
-                };
-                object.mParameters.changeSetId = "changeSet_" + new Date().getTime();
-                this.updateResource(object);
-            };
-            var oProjEngmtUpd = await this.batchChange(object);
-            /* Promisified batch update */
-            Promise.all([oProjDmdUpd, oProjEngmtUpd]).then(async function (oResp) {
-                var oMessageModel = this.getModel("message"),
-                    oMessageData = oMessageModel.getData()[oMessageModel.getData().length - 1],
-                    aChangedSPath = this.getModel("detailView").getProperty("/aChangedSPath");
-
-                // this.addMessageManager({ message: this.getResourceBundle().getText("UpdateSuccessMsg", +(aChangedSPath.length + aTimeRecUpdate.length)), type: sap.ui.core.MessageType.Success });
-                aChangedSPath.forEach(function (oChangedSPath) {
-                    sap.ui.getCore().byId(oChangedSPath.inputId).setValue('');
-                });
-                this.getModel("detailView").setProperty("/aChangedSPath", []);
-                this.getModel("detailView").setProperty("/aTimeRecUpdate", [])
-                this.getModel("detailView").setProperty("/aPlannedValueChanged", [])
-                this.getModel("ProjectDemand").setUseBatch(false);
-                this.getModel("PROJ_ENGMT_UPDATE_SRV").setUseBatch(false);
-                /* Re-fetch resource to display updated resource */
-                await this._fetchResources(this.oContextObj);
-                this.getModel("detailView").refresh(true);
-                MessageBox.success(oMessageData.message);
-            }.bind(this)).catch(function (oErr) {
-                for (var idx in aChangedSPath) {
-                    this.getModel("ProjectDemand").resetChanges([aChangedSPath[idx].sPath], true);
+                /* Time rec not required to update planned value */
+                if (!oContext.bTimeRecUpdate) {
+                    object.sKey = oProjDmdModel.createKey("/A_ProjDmndRsceReqDistribution", {
+                        ProjDmndRsceReqDistrUUID: oContext.ProjDmndRsceReqDistrUUID
+                    });
+                    object.oPayload = {
+                        ProjDmndRsceReqDistrQuantity: sStaffedEffort
+                    };
+                    this.updateResource(object);
                 }
-                this.getModel("ProjectDemand").setUseBatch(false);
-                this.getModel("PROJ_ENGMT_UPDATE_SRV").setUseBatch(false);
-                this.getModel("detailView").setProperty("/busy", false);
-            }.bind(this));
+            };
+            await this.batchChange({
+                oModel: oProjDmdModel,
+                mParameters: {
+                    groupId: "BatchUpdate"
+                }
+            });
         },
         /**
          * Caluclation for monthly distribution
@@ -525,14 +597,16 @@ sap.ui.define([
             var nStaffedEffort = +Object.aEmpRemaingDays.reduce((sum, current) => sum + +current.PlndEffortQty, 0);
             // nAssignedCap = +Object.AvailabilityInHours - +Object.AbsenceInHours - nStaffedEffort;
             return {
-                ...Object, ...{
+                ...Object,
+                ...{
                     WorkPackage: Object.WorkPackage,
                     Name: this.formatter.returnDataFormat("MMM yyyy").format(new Date([Object.YearMth.substr(0, 4), Object.YearMth.substr(4, 2), "01"].join("-"))),
                     YearMth: Object.YearMth,
                     TimeRecordings: (+Object.RecordedQuantity > 0) ? +Object.RecordedQuantity : null,
                     Staffed: +Object.PlndEffortQty,
                     // UnassignedCap: nAssignedCap,
-                    UnassignedCap: (!Object.preMth) ? +Object.AvailabilityInHours - +Object.AbsenceInHours - nStaffedEffort : null,
+                    // UnassignedCap: (!Object.preMth) ? +Object.AvailabilityInHours - +Object.AbsenceInHours - nStaffedEffort : null,
+                    UnassignedCap: (!Object.preMth) ? +Object.AvailabilityInHours - nStaffedEffort : null,
                     Writeoffs: Object.WriteOffs,
                     bLink: Object.bLink,
                     bInputVisible: Object.bInputVisible,
@@ -549,50 +623,6 @@ sap.ui.define([
             nodeLine.TimeRecordings = nodeLine.Node.map((o) => o.TimeRecordings).reduce((prev, curr) => +prev + +curr, 0) || null;
             nodeLine.UnassignedCap = nodeLine.Node.map((o) => o.UnassignedCap).reduce((prev, curr) => +prev + +curr, 0);
             nodeLine.Writeoffs = nodeLine.Node.map((o) => o.Writeoffs).reduce((prev, curr) => +prev + +curr, 0) || null;
-        },
-        /* Modulize update resource logic
-           ** Not in use at the moment
-        */
-        _batchRun: function (object) {
-            // if (!object.oModel.bUseBatch) {
-            //     object.oModel.setUseBatch(true);
-            //     object.oModel.setDeferredGroups(["BatchQuery"]);
-            // }
-            var aStaffUpd = this.getModel("detailView").getProperty(object.sProperty),
-                aPlannedUpd = (object.sProperty !== "/aPlannedValueChanged") ? this.getModel("detailView").getProperty("/aPlannedValueChanged") : undefined;
-            for (var index in aStaffUpd) {
-                var oContext = aStaffUpd[index];
-
-                if (object.sProperty === "/aChangedSPath") {
-                    var oEmpResDmdByMonth = oContext.aProjEng.find(o => o.PersonWorkAgreement === oContext.PersonWorkAgreement && o.Version === '1').to_ResourceDemand.to_ResourceDemandDistribution.results.find(o => (o.CalendarYear + o.CalendarMonth.padStart(2, '0')) === oContext.YearMth),
-                        sStaffedEffort = (this.getModel("detailView").getProperty("/selectedView") === "DAY" && object.sProperty === "/aChangedSPath") ? Math.round(oContext.value * 8).toString() : oContext.value.toString();
-                    if (aPlannedUpd.length > 0 && !!aPlannedUpd.some(o => o.PersonWorkAgreement === oContext.PersonWorkAgreement && o.YearMth === oContext.YearMth)) {
-                        var oPlannedValueChanged = aPlannedUpd.find(o => o.PersonWorkAgreement === oContext.PersonWorkAgreement && o.YearMth === oContext.YearMth);
-                        oPlannedValueChanged.Quantity = sStaffedEffort;
-                    } else {
-                        aPlannedUpd.push(Object.assign(oEmpResDmdByMonth, { PersonWorkAgreement: oContext.PersonWorkAgreement, Quantity: sStaffedEffort, YearMth: oContext.YearMth }));
-                    }
-                }
-                if (object.sProperty === "/aChangedSPath" || object.sProperty === "/aTimeRecUpdate") {
-                    object.sKey = object.oModel.createKey(object.sKeyPath, { ProjDmndRsceAssgmtDistrUUID: oContext.ProjDmndRsceAssgmtDistrUUID });
-                    object.oPayload = {
-                        ProjDmndRsceAssgmtDistrQty: sStaffedEffort
-                    };
-                } else {
-                    object.sKey = object.oModel.createKey(object.sKeyPath, {
-                        WorkPackage: oContext.WorkPackage,
-                        ResourceDemand: oContext.ResourceDemand,
-                        Version: oContext.Version,
-                        CalendarMonth: oContext.CalendarMonth.toString().padStart(3, '0'),
-                        CalendarYear: oContext.CalendarYear
-                    });
-                    object.oPayload = {
-                        UnitOfMeasure: 'H',
-                        Quantity: oContext.Quantity
-                    };
-                }
-                this.updateResource(object);
-            };
         }
     });
 });

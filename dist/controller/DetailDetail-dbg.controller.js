@@ -1,10 +1,8 @@
 sap.ui.define([
 	"./BaseController",
-	"sap/ui/model/json/JSONModel",
-	"sap/ui/model/Filter",
-	"sap/ui/model/FilterOperator",
-	"sap/ui/model/Sorter",
-], function (BaseController, JSONModel, Filter, FilterOperator, Sorter) {
+	"../model/models",
+	"sap/ui/model/json/JSONModel"
+], function (BaseController, models, JSONModel) {
 	"use strict";
 
 	return BaseController.extend("StaffingApp.horvath.controller.DetailDetail", {
@@ -21,11 +19,7 @@ sap.ui.define([
 			var oOwnerComponent = this.getOwnerComponent();
 			this.oRouter = oOwnerComponent.getRouter();
 			this.oModel = oOwnerComponent.getModel();
-			var oViewModel = new JSONModel({
-				busy: false,
-				selectedView: "DAY"
-			});
-			this.setModel(oViewModel, "empCapacity");
+			this.setModel(models.getDetailDetailModel.call(this), "empCapacity");
 			this.oRouter.getRoute("detailDetail").attachPatternMatched(this._onPatternMatch, this);
 		},
 
@@ -50,7 +44,8 @@ sap.ui.define([
 				nAbsence: oContextObj.AbsenceInHours,
 				aItem: oContextObj.aEmpRemaingDays,
 				nTotalWorkCap: oContextObj.nProjectAssigned,
-				nTotalUnassignedCap: +oContextObj.AvailabilityInHours - +oContextObj.AbsenceInHours - +oContextObj.nProjectAssigned
+				// nTotalUnassignedCap: +oContextObj.AvailabilityInHours - +oContextObj.AbsenceInHours - +oContextObj.nProjectAssigned
+				nTotalUnassignedCap: +oContextObj.AvailabilityInHours - +oContextObj.nProjectAssigned
 			}));
 			this.getView().getModel("empCapacity").refresh(true);
 			this.getView().getModel("empCapacity").setProperty("/busy", false);

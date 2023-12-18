@@ -75,8 +75,8 @@
                 <Property Name="RestrictTimePosting" Type="Edm.String" MaxLength="1" sap:unicode="false" sap:label="Restrict time post" sap:sortable="false"/>
                 <Property Name="CreatedOn" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Created On" sap:creatable="false" sap:updatable="false"/>
                 <Property Name="ChangedOn" Type="Edm.DateTimeOffset" Precision="7" sap:unicode="false" sap:label="Changed On" sap:creatable="false" sap:updatable="false"/>
-                <NavigationProperty Name="WorkPackageSet" Relationship="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.ToWorkPackage" FromRole="FromRole_ToWorkPackage" ToRole="ToRole_ToWorkPackage"/>
                 <NavigationProperty Name="ProjectRoleSet" Relationship="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.ToProjectRole" FromRole="FromRole_ToProjectRole" ToRole="ToRole_ToProjectRole"/>
+                <NavigationProperty Name="WorkPackageSet" Relationship="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.ToWorkPackage" FromRole="FromRole_ToWorkPackage" ToRole="ToRole_ToWorkPackage"/>
             </EntityType>
             <EntityType Name="WorkPackage" sap:label="Work Packages" sap:content-version="1">
                 <Key>
@@ -95,11 +95,11 @@
                 <Property Name="UnitId" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Resource ID" sap:updatable="false"/>
                 <Property Name="CreatedOn" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Created On" sap:creatable="false" sap:updatable="false"/>
                 <Property Name="ChangedOn" Type="Edm.DateTimeOffset" Precision="7" sap:unicode="false" sap:label="Changed On" sap:creatable="false" sap:updatable="false"/>
-                <NavigationProperty Name="WorkPackageFunctionSet" Relationship="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.ToWorkPackageFunction" FromRole="FromRole_ToWorkPackageFunction" ToRole="ToRole_ToWorkPackageFunction"/>
-                <NavigationProperty Name="DemandSet" Relationship="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.ToDemand" FromRole="FromRole_ToDemand" ToRole="ToRole_ToDemand"/>
-                <NavigationProperty Name="WorkItemSet" Relationship="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.ToWorkItem" FromRole="FromRole_ToWorkItem" ToRole="ToRole_ToWorkItem"/>
-                <NavigationProperty Name="to_Project" Relationship="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.ToProject" FromRole="FromRole_ToProject" ToRole="ToRole_ToProject"/>
                 <NavigationProperty Name="to_ResourceDemand" Relationship="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.ToResourceDemand" FromRole="FromRole_ToResourceDemand" ToRole="ToRole_ToResourceDemand"/>
+                <NavigationProperty Name="to_Project" Relationship="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.ToProject" FromRole="FromRole_ToProject" ToRole="ToRole_ToProject"/>
+                <NavigationProperty Name="WorkItemSet" Relationship="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.ToWorkItem" FromRole="FromRole_ToWorkItem" ToRole="ToRole_ToWorkItem"/>
+                <NavigationProperty Name="DemandSet" Relationship="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.ToDemand" FromRole="FromRole_ToDemand" ToRole="ToRole_ToDemand"/>
+                <NavigationProperty Name="WorkPackageFunctionSet" Relationship="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.ToWorkPackageFunction" FromRole="FromRole_ToWorkPackageFunction" ToRole="ToRole_ToWorkPackageFunction"/>
             </EntityType>
             <EntityType Name="WorkItem" sap:label="Work Items" sap:content-version="1">
                 <Key>
@@ -156,13 +156,13 @@
                 <Property Name="CustomerProject" Type="Edm.String" Nullable="false" MaxLength="40" sap:display-format="UpperCase" sap:label="Customer Project ID" sap:quickinfo="Commercial Project ID"/>
                 <Property Name="SalesOrder" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Sales Order" sap:creatable="false" sap:updatable="false"/>
                 <Property Name="SoldToParty" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Sold-to Party" sap:creatable="false" sap:updatable="false"/>
-                <Property Name="TotalNetAmount" Type="Edm.Decimal" Precision="16" Scale="3" sap:unit="TransactionCurrency" sap:label="Net Value" sap:quickinfo="Net Value of the Sales Order in Document Currency" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="TotalNetAmount" Type="Edm.Decimal" Precision="16" Scale="3" sap:unit="TransactionCurrency" sap:label="Net Value" sap:quickinfo="Net Value of the Sales Document in Document Currency" sap:creatable="false" sap:updatable="false"/>
                 <Property Name="TransactionCurrency" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Document Currency" sap:quickinfo="SD Document Currency" sap:semantics="currency-code"/>
                 <Property Name="PurchaseOrderByCustomer" Type="Edm.String" MaxLength="35" sap:label="Customer Reference"/>
                 <Property Name="CustomerPurchaseOrderDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Customer Ref. Date" sap:quickinfo="Customer Reference Date"/>
                 <Property Name="SalesOffice" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Sales Office"/>
                 <Property Name="SalesGroup" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="Sales Group"/>
-                <Property Name="CustomerPaymentTerms" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Terms of Payment" sap:quickinfo="Terms of Payment Key"/>
+                <Property Name="CustomerPaymentTerms" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Terms of Payment" sap:quickinfo="Key for Terms of Payment"/>
                 <Property Name="PaymentMethod" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Payment Method"/>
                 <Property Name="CustomerAccountAssignmentGroup" Type="Edm.String" MaxLength="2" sap:display-format="UpperCase" sap:label="Acct Assmt Grp Cust." sap:quickinfo="Account Assignment Group for Customer"/>
                 <Property Name="HeaderBillingBlockReason" Type="Edm.String" MaxLength="2" sap:display-format="UpperCase" sap:label="Billing Block" sap:quickinfo="Billing Block in SD Document"/>
@@ -188,7 +188,7 @@
                 <Property Name="CappedNetAmount" Type="Edm.Decimal" Precision="16" Scale="3" sap:unit="TransactionCurrency" sap:label="Net Amount Cap"/>
                 <Property Name="CappedNetAmtAlertThldInPct" Type="Edm.String" MaxLength="3" sap:display-format="NonNegative" sap:label="Cap Notif. Threshold" sap:quickinfo="Notification Threshold (in Pct) for Exceeded Net Amount Cap"/>
                 <Property Name="MaterialByCustomer" Type="Edm.String" MaxLength="35" sap:display-format="UpperCase" sap:label="Customer Material" sap:quickinfo="Material Number Used by Customer"/>
-                <Property Name="NetAmount" Type="Edm.Decimal" Precision="16" Scale="3" sap:unit="TransactionCurrency" sap:label="Net Value" sap:quickinfo="Net Value of the Order Item in Document Currency" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="NetAmount" Type="Edm.Decimal" Precision="16" Scale="3" sap:unit="TransactionCurrency" sap:label="Net Value" sap:quickinfo="Net Value of the Document Item in Document Currency" sap:creatable="false" sap:updatable="false"/>
                 <Property Name="ExpectedNetAmount" Type="Edm.Decimal" Precision="16" Scale="3" sap:unit="TransactionCurrency" sap:label="Expected Net Amount" sap:sortable="false" sap:filterable="false"/>
                 <Property Name="TotalStandAloneSellingPrice" Type="Edm.Decimal" Precision="16" Scale="3" sap:unit="TransactionCurrency" sap:label="SSP" sap:quickinfo="IFRS 15: Standalone Selling Price"/>
                 <Property Name="TransactionCurrency" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Document Currency" sap:quickinfo="SD Document Currency" sap:semantics="currency-code"/>
@@ -205,6 +205,7 @@
                 <NavigationProperty Name="to_CustProjSlsOrdItemPartner" Relationship="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.assoc_CF5B06D3E697E6C6FF0DFDD50CE68665" FromRole="FromRole_assoc_CF5B06D3E697E6C6FF0DFDD50CE68665" ToRole="ToRole_assoc_CF5B06D3E697E6C6FF0DFDD50CE68665"/>
                 <NavigationProperty Name="to_CustProjSlsOrdItemText" Relationship="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.assoc_E5F33567B7B6A1E00B169A34A529B4FF" FromRole="FromRole_assoc_E5F33567B7B6A1E00B169A34A529B4FF" ToRole="ToRole_assoc_E5F33567B7B6A1E00B169A34A529B4FF"/>
                 <NavigationProperty Name="to_CustProjSlsOrdItemWorkPckg" Relationship="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.assoc_F0AAB5B93FC9D5AF6CFB4EF954F3406C" FromRole="FromRole_assoc_F0AAB5B93FC9D5AF6CFB4EF954F3406C" ToRole="ToRole_assoc_F0AAB5B93FC9D5AF6CFB4EF954F3406C"/>
+                <NavigationProperty Name="to_CustProjSlsOrdItmPrcgElement" Relationship="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.assoc_633B6BF0FFBDAA5F114616387BE59B54" FromRole="FromRole_assoc_633B6BF0FFBDAA5F114616387BE59B54" ToRole="ToRole_assoc_633B6BF0FFBDAA5F114616387BE59B54"/>
                 <NavigationProperty Name="to_CustProjSOIBillgPlnItm" Relationship="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.assoc_D71D804BEDC38C2C40DF9295A6779888" FromRole="FromRole_assoc_D71D804BEDC38C2C40DF9295A6779888" ToRole="ToRole_assoc_D71D804BEDC38C2C40DF9295A6779888"/>
             </EntityType>
             <EntityType Name="A_CustProjSlsOrdItemPartnerType" sap:label="Sales Order Item Partner" sap:content-version="1">
@@ -258,13 +259,65 @@
                 <Property Name="BillingPlanItem" Type="Edm.String" Nullable="false" MaxLength="6" sap:display-format="NonNegative" sap:label="Item" sap:quickinfo="Item for billing plan/invoice plan/payment cards" sap:creatable="false" sap:updatable="false"/>
                 <Property Name="SalesOrder" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Sales Order" sap:creatable="false" sap:updatable="false"/>
                 <Property Name="BillingPlanBillingDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Billing Date"/>
-                <Property Name="BillingPlanRelatedBillgStatus" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Billing Status" sap:quickinfo="Billing Status for Billing Plan/Invoice Plan Date" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="BillingPlanRelatedBillgStatus" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Billing Status" sap:quickinfo="Billing Status for Billing/Invoicing Plan Date" sap:creatable="false" sap:updatable="false"/>
                 <Property Name="BillingPlanAmount" Type="Edm.Decimal" Precision="16" Scale="3" sap:unit="TransactionCurrency" sap:label="Billing Value" sap:quickinfo="Value to be billed/calc. on date in billing/invoice plan"/>
                 <Property Name="TransactionCurrency" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Currency" sap:quickinfo="Currency Key" sap:semantics="currency-code"/>
                 <Property Name="BillingPlanItemUsage" Type="Edm.String" MaxLength="2" sap:display-format="UpperCase" sap:label="Usage" sap:quickinfo="Billing Plan Item Usage"/>
                 <Property Name="BillingPlanItemDescription" Type="Edm.String" MaxLength="255" sap:label="Description" sap:quickinfo="Billing Plan Item Description"/>
                 <Property Name="BillingPlanServiceStartDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Settlement Start Date" sap:quickinfo="Settlement Start Date of Billing/Invoicing Date"/>
                 <Property Name="BillingPlanServiceEndDate" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Settlement End Date" sap:quickinfo="Settlement End Date of Billing/Invoicing Date"/>
+            </EntityType>
+            <EntityType Name="A_CustProjSlsOrdItmPrcgElementType" sap:label="Sales Order Item Pricing Element" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="CustomerProject"/>
+                    <PropertyRef Name="SalesOrderItem"/>
+                    <PropertyRef Name="PricingProcedureStep"/>
+                    <PropertyRef Name="PricingProcedureCounter"/>
+                </Key>
+                <Property Name="CustomerProject" Type="Edm.String" Nullable="false" MaxLength="40" sap:display-format="UpperCase" sap:label="Customer Project ID" sap:quickinfo="Commercial Project ID" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="SalesOrderItem" Type="Edm.String" Nullable="false" MaxLength="6" sap:display-format="NonNegative" sap:label="Item" sap:quickinfo="Sales Order Item" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PricingProcedureStep" Type="Edm.String" Nullable="false" MaxLength="3" sap:display-format="NonNegative" sap:label="Step Number"/>
+                <Property Name="PricingProcedureCounter" Type="Edm.String" Nullable="false" MaxLength="3" sap:display-format="NonNegative" sap:label="Counter" sap:quickinfo="Condition Counter"/>
+                <Property Name="SalesOrder" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Sales Order"/>
+                <Property Name="ConditionType" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Condition Type"/>
+                <Property Name="PriceConditionDeterminationDte" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Cndn Pricing Date" sap:quickinfo="Condition Pricing Date" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionCalculationType" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="Calculation Type" sap:quickinfo="Calculation Type for Condition" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionBaseValue" Type="Edm.Decimal" Precision="24" Scale="9" sap:label="Condition Basis" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionRateValue" Type="Edm.Decimal" Precision="24" Scale="9" sap:label="Amount" sap:quickinfo="Condition Amount or Percentage"/>
+                <Property Name="ConditionCurrency" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Currency" sap:quickinfo="Currency Key" sap:semantics="currency-code"/>
+                <Property Name="ConditionQuantity" Type="Edm.Decimal" Precision="5" Scale="0" sap:unit="ConditionQuantitySAPUnit" sap:label="Pricing Unit" sap:quickinfo="Condition Pricing Unit"/>
+                <Property Name="ConditionQuantityUnit" Type="Edm.String" MaxLength="3" sap:label="Condition Unit" sap:quickinfo="Condition Unit in the Document" sap:semantics="unit-of-measure"/>
+                <Property Name="ConditionQuantitySAPUnit" Type="Edm.String" MaxLength="3" sap:label="SAP Condition Qty" sap:quickinfo="SAP Unit Code for Condition Quantity" sap:semantics="unit-of-measure"/>
+                <Property Name="ConditionQuantityISOUnit" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="ISO Condition Qty" sap:quickinfo="ISO Unit Code for Condition Quantity"/>
+                <Property Name="ConditionCategory" Type="Edm.String" MaxLength="1" sap:label="Condition Category" sap:quickinfo="Condition Category (Examples: Tax, Freight, Price, Cost)" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionIsForStatistics" Type="Edm.Boolean" sap:label="Statistical" sap:quickinfo="Condition is used for statistics" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PricingScaleType" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Scale Type" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="IsRelevantForAccrual" Type="Edm.Boolean" sap:label="Accruals" sap:quickinfo="Condition is Relevant for Accrual  (e.g. Freight)" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="CndnIsRelevantForInvoiceList" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Invoice List Cond." sap:quickinfo="Condition for Invoice List" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionOrigin" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Condition Origin" sap:quickinfo="Origin of the Condition" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="IsGroupCondition" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Group Condition" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionRecord" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Condition Record No." sap:quickinfo="Number of Condition Record" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionSequentialNumber" Type="Edm.String" MaxLength="3" sap:display-format="NonNegative" sap:label="Sequent.No. of Cond." sap:quickinfo="Sequential Number of the Condition" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="TaxCode" Type="Edm.String" MaxLength="2" sap:display-format="UpperCase" sap:label="Tax Code" sap:quickinfo="Tax on Sales/Purchases Code" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="WithholdingTaxCode" Type="Edm.String" MaxLength="2" sap:display-format="UpperCase" sap:label="W/Tax Code" sap:quickinfo="Withholding Tax Code" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="CndnRoundingOffDiffAmount" Type="Edm.Decimal" Precision="6" Scale="3" sap:unit="TransactionCurrency" sap:label="Cond.Rounding Diff." sap:quickinfo="Rounding-Off Difference of the Condition" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionAmount" Type="Edm.Decimal" Precision="16" Scale="3" sap:unit="TransactionCurrency" sap:label="Condition Value" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="TransactionCurrency" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Document Currency" sap:quickinfo="SD Document Currency" sap:semantics="currency-code"/>
+                <Property Name="ConditionControl" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Condition Control" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionInactiveReason" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Inactive Condition" sap:quickinfo="Condition is Inactive" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionClass" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Condition Class" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PrcgProcedureCounterForHeader" Type="Edm.String" MaxLength="3" sap:display-format="NonNegative" sap:label="Counter" sap:quickinfo="Condition Counter (Header)" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="FactorForConditionBasisValue" Type="Edm.Double" sap:label="Condition Factor" sap:quickinfo="Factor for Condition Base Value" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="StructureCondition" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:label="Structure Condition" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PeriodFactorForCndnBasisValue" Type="Edm.Double" sap:label="Condition Factor" sap:quickinfo="Factor for Condition Basis (Period)" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="PricingScaleBasis" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="Scale Basis" sap:quickinfo="Scale Basis Indicator" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionScaleBasisValue" Type="Edm.Decimal" Precision="24" Scale="9" sap:label="Scale Base Val." sap:quickinfo="Scale Base Value" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionScaleBasisUnit" Type="Edm.String" MaxLength="3" sap:label="Scale Unit of Meas." sap:quickinfo="Condition Scale Unit of Measure" sap:creatable="false" sap:updatable="false" sap:semantics="unit-of-measure"/>
+                <Property Name="ConditionScaleBasisCurrency" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Scale Currency" sap:creatable="false" sap:updatable="false" sap:semantics="currency-code"/>
+                <Property Name="CndnIsRelevantForIntcoBilling" Type="Edm.Boolean" sap:label="Intercomp.Billing" sap:quickinfo="Condition for Intercompany Billing" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionIsManuallyChanged" Type="Edm.Boolean" sap:label="Changed Manually" sap:quickinfo="Condition Changed Manually" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="ConditionIsForConfiguration" Type="Edm.Boolean" sap:label="UsedforVariantConfig" sap:quickinfo="Condition Used for Variant Configuration" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="VariantCondition" Type="Edm.String" MaxLength="26" sap:label="Variant Key" sap:quickinfo="Variant Condition Key" sap:creatable="false" sap:updatable="false"/>
             </EntityType>
             <EntityType Name="A_CustProjSlsOrdPartnerType" sap:label="Sales Order Header Partner" sap:content-version="1">
                 <Key>
@@ -298,6 +351,7 @@
                 <Property Name="ResourceDemand" Type="Edm.String" Nullable="false" MaxLength="24" sap:display-format="UpperCase" sap:label="Resource Demand" sap:quickinfo="Resource Demand ID"/>
                 <Property Name="Version" Type="Edm.String" Nullable="false" MaxLength="28" sap:display-format="UpperCase" sap:label="Plan Version ID"/>
                 <Property Name="EngagementProject" Type="Edm.String" MaxLength="40" sap:display-format="UpperCase" sap:label="Engmnt Project ID" sap:quickinfo="Engagement Project ID"/>
+                <Property Name="ResourceDemandUUID" Type="Edm.Guid" sap:label="Demand Key" sap:creatable="false" sap:updatable="false"/>
                 <Property Name="WorkItem" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Work Item ID"/>
                 <Property Name="BillingControlCategory" Type="Edm.String" MaxLength="8" sap:display-format="UpperCase" sap:label="Billing Category" sap:quickinfo="Billing Control Category"/>
                 <Property Name="DeliveryOrganization" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Delivery Organization"/>
@@ -402,6 +456,9 @@
                 <Property Name="Code" Type="Edm.String" Nullable="false" MaxLength="3" sap:text="Description" sap:label="Billing Form"/>
                 <Property Name="Description" Type="Edm.String" MaxLength="60" sap:label="Billing Form (Desc.)"/>
             </EntityType>
+            <ComplexType Name="updateSOIMaterialResult">
+                <Property Name="Boolean" Type="Edm.Boolean" Nullable="false" sap:label="Indicator" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </ComplexType>
             <Association Name="assoc_527EF5D402A3142624383503C46E5BFE" sap:content-version="1">
                 <End Type="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.A_EngmntProjRsceDmndDistrType" Multiplicity="1" Role="FromRole_assoc_527EF5D402A3142624383503C46E5BFE"/>
                 <End Type="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.A_EngmntProjRsceDmndType" Multiplicity="1" Role="ToRole_assoc_527EF5D402A3142624383503C46E5BFE"/>
@@ -466,6 +523,10 @@
                 <End Type="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.A_CustProjSlsOrdItemType" Multiplicity="1" Role="FromRole_assoc_F0AAB5B93FC9D5AF6CFB4EF954F3406C"/>
                 <End Type="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.A_CustProjSlsOrdItemWorkPckgType" Multiplicity="*" Role="ToRole_assoc_F0AAB5B93FC9D5AF6CFB4EF954F3406C"/>
             </Association>
+            <Association Name="assoc_633B6BF0FFBDAA5F114616387BE59B54" sap:content-version="1">
+                <End Type="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.A_CustProjSlsOrdItemType" Multiplicity="1" Role="FromRole_assoc_633B6BF0FFBDAA5F114616387BE59B54"/>
+                <End Type="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.A_CustProjSlsOrdItmPrcgElementType" Multiplicity="*" Role="ToRole_assoc_633B6BF0FFBDAA5F114616387BE59B54"/>
+            </Association>
             <Association Name="assoc_D71D804BEDC38C2C40DF9295A6779888" sap:content-version="1">
                 <End Type="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.A_CustProjSlsOrdItemType" Multiplicity="1" Role="FromRole_assoc_D71D804BEDC38C2C40DF9295A6779888"/>
                 <End Type="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.A_CustProjSlsOrdItmBillgPlnItmType" Multiplicity="*" Role="ToRole_assoc_D71D804BEDC38C2C40DF9295A6779888"/>
@@ -499,14 +560,14 @@
                 <End Type="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.WorkPackageFunction" Multiplicity="*" Role="ToRole_ToWorkPackageFunction"/>
                 <ReferentialConstraint>
                     <Principal Role="FromRole_ToWorkPackageFunction">
-                        <PropertyRef Name="WorkPackageID"/>
-                        <PropertyRef Name="ProjectID"/>
                         <PropertyRef Name="WorkPackageName"/>
+                        <PropertyRef Name="ProjectID"/>
+                        <PropertyRef Name="WorkPackageID"/>
                     </Principal>
                     <Dependent Role="ToRole_ToWorkPackageFunction">
-                        <PropertyRef Name="WorkPackageID"/>
-                        <PropertyRef Name="ProjectID"/>
                         <PropertyRef Name="WorkPackageName"/>
+                        <PropertyRef Name="ProjectID"/>
+                        <PropertyRef Name="WorkPackageID"/>
                     </Dependent>
                 </ReferentialConstraint>
             </Association>
@@ -527,14 +588,14 @@
                 <End Type="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.WorkItem" Multiplicity="*" Role="ToRole_ToWorkItem"/>
                 <ReferentialConstraint>
                     <Principal Role="FromRole_ToWorkItem">
-                        <PropertyRef Name="WorkPackageID"/>
-                        <PropertyRef Name="WorkPackageName"/>
                         <PropertyRef Name="ProjectID"/>
+                        <PropertyRef Name="WorkPackageName"/>
+                        <PropertyRef Name="WorkPackageID"/>
                     </Principal>
                     <Dependent Role="ToRole_ToWorkItem">
-                        <PropertyRef Name="WorkPackageID"/>
-                        <PropertyRef Name="WorkPackageName"/>
                         <PropertyRef Name="ProjectID"/>
+                        <PropertyRef Name="WorkPackageName"/>
+                        <PropertyRef Name="WorkPackageID"/>
                     </Dependent>
                 </ReferentialConstraint>
             </Association>
@@ -543,14 +604,14 @@
                 <End Type="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.Demand" Multiplicity="*" Role="ToRole_ToDemand"/>
                 <ReferentialConstraint>
                     <Principal Role="FromRole_ToDemand">
-                        <PropertyRef Name="WorkPackageID"/>
-                        <PropertyRef Name="WorkPackageName"/>
                         <PropertyRef Name="ProjectID"/>
+                        <PropertyRef Name="WorkPackageName"/>
+                        <PropertyRef Name="WorkPackageID"/>
                     </Principal>
                     <Dependent Role="ToRole_ToDemand">
-                        <PropertyRef Name="WorkPackageID"/>
-                        <PropertyRef Name="WorkPackageName"/>
                         <PropertyRef Name="ProjectID"/>
+                        <PropertyRef Name="WorkPackageName"/>
+                        <PropertyRef Name="WorkPackageID"/>
                     </Dependent>
                 </ReferentialConstraint>
             </Association>
@@ -573,6 +634,7 @@
                 <EntitySet Name="A_CustProjSlsOrdItemText" EntityType="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.A_CustProjSlsOrdItemTextType" sap:content-version="1"/>
                 <EntitySet Name="A_CustProjSlsOrdItemWorkPckg" EntityType="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.A_CustProjSlsOrdItemWorkPckgType" sap:updatable="false" sap:content-version="1"/>
                 <EntitySet Name="A_CustProjSlsOrdItmBillgPlnItm" EntityType="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.A_CustProjSlsOrdItmBillgPlnItmType" sap:content-version="1"/>
+                <EntitySet Name="A_CustProjSlsOrdItmPrcgElement" EntityType="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.A_CustProjSlsOrdItmPrcgElementType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="A_CustProjSlsOrdPartner" EntityType="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.A_CustProjSlsOrdPartnerType" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="A_CustProjSlsOrdText" EntityType="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.A_CustProjSlsOrdTextType" sap:content-version="1"/>
                 <EntitySet Name="A_EngmntProjRsceDmnd" EntityType="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.A_EngmntProjRsceDmndType" sap:content-version="1"/>
@@ -610,6 +672,10 @@
                 <AssociationSet Name="assoc_2997FBC0F783CA5DB0F0DCD7C8071AD5" Association="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.assoc_2997FBC0F783CA5DB0F0DCD7C8071AD5" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
                     <End EntitySet="A_EngmntProjRsceDmnd" Role="FromRole_assoc_2997FBC0F783CA5DB0F0DCD7C8071AD5"/>
                     <End EntitySet="A_EngmntProjRsceDmndDistr" Role="ToRole_assoc_2997FBC0F783CA5DB0F0DCD7C8071AD5"/>
+                </AssociationSet>
+                <AssociationSet Name="assoc_633B6BF0FFBDAA5F114616387BE59B54" Association="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.assoc_633B6BF0FFBDAA5F114616387BE59B54" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="A_CustProjSlsOrdItem" Role="FromRole_assoc_633B6BF0FFBDAA5F114616387BE59B54"/>
+                    <End EntitySet="A_CustProjSlsOrdItmPrcgElement" Role="ToRole_assoc_633B6BF0FFBDAA5F114616387BE59B54"/>
                 </AssociationSet>
                 <AssociationSet Name="assoc_B9ED833E6208D4E96446AF9CDC26C996" Association="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.assoc_B9ED833E6208D4E96446AF9CDC26C996" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
                     <End EntitySet="A_EngmntProjRsceSup" Role="FromRole_assoc_B9ED833E6208D4E96446AF9CDC26C996"/>
@@ -675,6 +741,11 @@
                     <End EntitySet="ProjectSet" Role="FromRole_ToProjectRole"/>
                     <End EntitySet="ProjectRoleSet" Role="ToRole_ToProjectRole"/>
                 </AssociationSet>
+                <FunctionImport Name="updateCustProjSlsOrdItemMaterial" ReturnType="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.updateSOIMaterialResult" m:HttpMethod="POST">
+                    <Parameter Name="CustomerProject" Type="Edm.String" Mode="In" MaxLength="40"/>
+                    <Parameter Name="SalesOrderItem" Type="Edm.String" Mode="In" MaxLength="6"/>
+                    <Parameter Name="Material" Type="Edm.String" Mode="In" MaxLength="40"/>
+                </FunctionImport>
             </EntityContainer>
             <Annotation Term="Core.SchemaVersion" String="1.0.0" xmlns="http://docs.oasis-open.org/odata/ns/edm"/>
             <Annotations Target="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.CPD_SC_PROJ_ENGMT_CREATE_UPD_SRV_Entities" xmlns="http://docs.oasis-open.org/odata/ns/edm">
@@ -833,6 +904,14 @@
                                     <PropertyValue Property="InsertRestrictions">
                                         <Record>
                                             <PropertyValue Property="Insertable" Bool="true"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_CustProjSlsOrdItmPrcgElement"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="false"/>
                                         </Record>
                                     </PropertyValue>
                                 </Record>
@@ -1061,6 +1140,9 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+            </Annotations>
+            <Annotations Target="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.A_CustProjSlsOrdItmPrcgElementType/ConditionQuantity" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Measures.UNECEUnit" Path="ConditionQuantityISOUnit"/>
             </Annotations>
             <Annotations Target="/CPD/SC_PROJ_ENGMT_CREATE_UPD_SRV.A_CustProjSlsOrdItemType/YY1_BillingForm_SDIF" xmlns="http://docs.oasis-open.org/odata/ns/edm">
                 <Annotation Term="com.sap.vocabularies.UI.v1.Hidden"/>
@@ -1524,6 +1606,15 @@
                         <PropertyValue Property="RestrictedProperties">
                             <Collection>
                                 <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="A_CustProjSlsOrdItmPrcgElement"/>
+                                    <PropertyValue Property="ReadRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Description" String="Reads the pricing elements of a sales order item in a customer project."/>
+                                            <PropertyValue Property="LongDescription" String="Reads the pricing element data for a sales order item in a customer project. Consumers must pass the following key fields: customer project ID, sales order item number, pricing procedure step, and pricing procedure counter."/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
                                     <PropertyValue Property="NavigationProperty" NavigationPropertyPath="to_CustProjSOIBillgPlnItm"/>
                                     <PropertyValue Property="ReadRestrictions">
                                         <Record>
@@ -1713,6 +1804,20 @@
                     <Record>
                         <PropertyValue Property="Description" String="Deletes a specific billing plan item in a customer project."/>
                         <PropertyValue Property="LongDescription" String="Deletes a billing plan item of a specific sales order item in a customer project. Consumers must pass the following key fields: customer project ID, sales order item number, and billing plan item number."/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CPD.SC_PROJ_ENGMT_CREATE_UPD_SRV.CPD_SC_PROJ_ENGMT_CREATE_UPD_SRV_Entities/A_CustProjSlsOrdItmPrcgElement" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Capabilities.ReadRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="Reads the item pricing elements for all sales orders in customer projects."/>
+                        <PropertyValue Property="LongDescription" String="Reads the pricing element data from the items of all sales orders in customer projects in the system."/>
+                        <PropertyValue Property="ReadByKeyRestrictions">
+                            <Record>
+                                <PropertyValue Property="Description" String="Reads specific item pricing element data of a sales order in a customer project."/>
+                                <PropertyValue Property="LongDescription" String="Reads the pricing element data of a specific sales order item in a customer project. Consumers must pass the following key fields: customer project ID, sales order item number, pricing procedure step, and pricing procedure counter."/>
+                            </Record>
+                        </PropertyValue>
                     </Record>
                 </Annotation>
             </Annotations>

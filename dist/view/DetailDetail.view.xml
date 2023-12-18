@@ -4,6 +4,7 @@
     xmlns:layout="sap.ui.layout"
     xmlns:semantic="sap.f.semantic"
     xmlns:mvc="sap.ui.core.mvc"
+    xmlns:form="sap.ui.layout.form"
     xmlns:i18n="sap.ui.model.resource.ResourceModel">
     <semantic:SemanticPage id="idEmpCapacityPage" busy="{empCapacity>/busy}" headerPinnable="true" toggleHeaderOnTitleClick="true" preserveHeaderStateOnScroll="false" titleAreaShrinkRatio="1:1.6:1.6" showFooter="false">
         <!-- Title Heading-->
@@ -57,24 +58,30 @@
                         <footer>
                             <layout:VerticalLayout>
                                 <ObjectAttribute title="{= ${empCapacity>/selectedView} === 'HOUR' ? ${i18n>TotalAvailableHours} : ${i18n>TotalAvailableDays} }"/>
-                                <ObjectAttribute title="{i18n>Absences}" />
-                                <ObjectAttribute title="{i18n>ProjectAssigned}"/>
+                                <!-- <ObjectAttribute title="{i18n>Absences}" />
+                                <ObjectAttribute title="{path: 'i18n>ProjectAssigned'}"/> -->
+                                <ObjectStatus text="{i18n>Absences}" state="Warning"/>
+                                <ObjectStatus text="{i18n>ProjectAssigned}" state="Warning"/>
                                 <ObjectAttribute title="{= ${empCapacity>/selectedView} === 'HOUR' ? ${i18n>UnassignedCapDHours} : ${i18n>UnassignedCapDays} }" />
                             </layout:VerticalLayout>
                         </footer>
                     </Column>
-                    <Column minScreenWidth="Tablet" demandPopin="true" width="100px">
-                        <Text text="{i18n>Capacity}" />
-                        <footer width="100px">
+                    <Column minScreenWidth="Tablet" demandPopin="true" width="100px" hAlign="End" >
+                        <Text text="{i18n>Capacity}"/>
+                        <footer>
                             <layout:VerticalLayout>
-                                <ObjectAttribute text="{parts:['empCapacity>/nTotalAssignedCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}"/>
-                                <ObjectAttribute text="{parts:['empCapacity>/nTotalAssignedCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" visible="{= ${empCapacity>/selectedView} === 'DAY'}"/>
-                                <ObjectAttribute text="{parts:['empCapacity>/nAbsence', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDayZ'}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}"/>
+                                <ObjectAttribute text="{parts:['empCapacity>/nTotalAssignedCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDayZ'}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}" textDirection="RTL" />
+                                <ObjectAttribute text="{parts:['empCapacity>/nTotalAssignedCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDayZ'}" visible="{= ${empCapacity>/selectedView} === 'DAY'}" textDirection="RTL"/>
+                                <!-- <ObjectAttribute text="{parts:['empCapacity>/nAbsence', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDayZ'}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}"/>
                                 <ObjectAttribute text="{parts:['empCapacity>/nAbsence', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDayZ'}" visible="{= ${empCapacity>/selectedView} === 'DAY'}"/>
-                                <ObjectAttribute text="{parts:['empCapacity>/nTotalWorkCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}"/>
-                                <ObjectAttribute text="{parts:['empCapacity>/nTotalWorkCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" visible="{= ${empCapacity>/selectedView} === 'DAY'}"/>
-                                <ObjectAttribute text="{parts:['empCapacity>/nTotalUnassignedCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}"/>
-                                <ObjectAttribute text="{parts:['empCapacity>/nTotalUnassignedCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" visible="{= ${empCapacity>/selectedView} === 'DAY'}"/>
+                                <ObjectAttribute text="{parts:['empCapacity>/nTotalWorkCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDayZ'}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}"/>
+                                <ObjectAttribute text="{parts:['empCapacity>/nTotalWorkCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDayZ'}" visible="{= ${empCapacity>/selectedView} === 'DAY'}"/> -->
+                                <ObjectStatus text="{parts:['empCapacity>/nAbsence', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDayZ'}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}" state="Warning" textDirection="RTL"/>
+                                <ObjectStatus text="{parts:['empCapacity>/nAbsence', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDayZ'}" visible="{= ${empCapacity>/selectedView} === 'DAY'}" state="Warning" textDirection="RTL"/>
+                                <ObjectStatus text="{parts:['empCapacity>/nTotalWorkCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDayZ'}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}" state="Warning" textDirection="RTL"/>
+                                <ObjectStatus text="{parts:['empCapacity>/nTotalWorkCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDayZ'}" visible="{= ${empCapacity>/selectedView} === 'DAY'}" state="Warning" textDirection="RTL"/>
+                                <ObjectAttribute text="{parts:['empCapacity>/nTotalUnassignedCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDayZ'}" visible="{= ${empCapacity>/selectedView} === 'HOUR'}" textDirection="RTL"/>
+                                <ObjectAttribute text="{parts:['empCapacity>/nTotalUnassignedCap', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDayZ'}" visible="{= ${empCapacity>/selectedView} === 'DAY'}" textDirection="RTL"/>
                             </layout:VerticalLayout>
                         </footer>
                     </Column>
@@ -96,8 +103,8 @@
                         <cells>
                             <Text text="{empCapacity>CustomerName}" />
                             <VBox>
-                                <Text text="{parts:['empCapacity>PlndEffortQty', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" wrapping="false" visible="{= ${empCapacity>/selectedView} === 'HOUR'}" />
-                                <Text text="{parts:['empCapacity>PlndEffortQty', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" wrapping="false" visible="{= ${empCapacity>/selectedView} === 'DAY'}"/>
+                                <Text text="{parts:['empCapacity>PlndEffortQty', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" wrapping="false" visible="{= ${empCapacity>/selectedView} === 'HOUR'}" textAlign="Right"/>
+                                <Text text="{parts:['empCapacity>PlndEffortQty', 'empCapacity>/selectedView'], formatter: '.formatter.convertHrDay'}" wrapping="false" visible="{= ${empCapacity>/selectedView} === 'DAY'}" textAlign="Right"/>
                             </VBox>
                             <Text text="{empCapacity>EngagementProjectName}" />
                             <Text text="{empCapacity>ProjectManager}" />
